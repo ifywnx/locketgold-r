@@ -75,10 +75,10 @@
       if(safe)link.href=data.checkoutUrl;
       const messages={
         DEMO_PENDING:['Chưa hoàn tất thử nghiệm','Đây là đơn thử. Bấm “Giả lập thanh toán thành công” để kiểm tra giao diện và trạng thái. Không cần chuyển tiền.','pending'],
-        DEMO_COMPLETED:['Giả lập thành công','Luồng test đã hoàn thành. Không có giao dịch ngân hàng hay mã kích hoạt nào được cấp.','done'],
+        DEMO_COMPLETED:['Giả lập thành công','Luồng test đã hoàn thành. File Caption Only mẫu (1 caption mỗi nhóm) hiện phía dưới; không có giao dịch ngân hàng hoặc quyền Gold nào được cấp.','done'],
         CREATING:['Đang tạo link','Máy chủ đang chuẩn bị đơn. Chờ một chút rồi kiểm tra lại.','pending'],
         PENDING:['Đang chờ thanh toán','Nếu bạn đang thử chế độ LIVE, chỉ chuyển tiền trên trang payOS chính thức. Quay lại và bấm kiểm tra trạng thái.','pending'],
-        PAID_AWAITING_DELIVERY:['Đã xác minh nhận tiền','Máy chủ đã xác minh thanh toán payOS. Sản phẩm đang chờ khâu giao quyền; chưa có mã/module tự động.','done'],
+        PAID_AWAITING_DELIVERY:['Đã xác minh nhận tiền','Máy chủ đã xác minh thanh toán payOS. Link tải riêng cho từng bộ caption trong đơn đã sẵn sàng phía dưới; khả năng tích hợp vào Locket vẫn cần kiểm thử.','done'],
         CANCELLED:['Đơn đã hủy','Bạn có thể quay lại cửa hàng để tạo đơn mới.','warning'],
         EXPIRED:['Đơn hết hạn','Bạn có thể quay lại cửa hàng để tạo đơn mới.','warning'],
         ERROR:['Không thể xử lý đơn','Không chuyển tiền; vui lòng liên hệ chủ cửa hàng.','warning']
