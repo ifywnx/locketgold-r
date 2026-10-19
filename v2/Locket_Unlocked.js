@@ -8053,7 +8053,7 @@
             "data": "🤠"
           },
           "max_lines": 1,
-          "text": "Tây vậy ní",
+          "text": "tây nha ní",
           "text_color": "#FFFFFF",
           "type": "static_content"
         }
