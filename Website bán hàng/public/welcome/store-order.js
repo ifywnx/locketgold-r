@@ -17,6 +17,37 @@
     $('order-refresh').disabled=true;return;
   }
   const headers=()=>({Authorization:'Bearer '+token});
+  async function loadDelivery(){
+    const area=$('an-order-downloads'),container=$('an-download-products'),note=$('an-download-note');
+    if(!area||!container||!note)return;
+    try{
+      const res=await fetch('/api/store/files?order='+encodeURIComponent(id),{headers:headers(),cache:'no-store'});
+      const data=await res.json();
+      if(!res.ok||!Array.isArray(data.packs))throw Error(data.error||'Liên kết chưa sẵn sàng.');
+      note.textContent=data.note||'Các file bên dưới gắn với đơn này.';
+      const fragment=document.createDocumentFragment();
+      for(const pack of data.packs){
+        const section=document.createElement('div');
+        section.className='an-download-product';
+        const title=document.createElement('h3');title.textContent=pack.name;section.append(title);
+        const links=document.createElement('div');links.className='an-download-links';
+        for(const [kind,title] of [['sgmodule','Module .sgmodule'],['conf','Cấu hình .conf'],['js','Script .js'],['json','Dữ liệu .json']]){
+          const href=pack.links?.[kind];
+          if(typeof href!=='string')continue;
+          const parsed=new URL(href,location.origin);
+          if(parsed.origin!==location.origin)continue;
+          const link=document.createElement('a');link.href=parsed.href;link.textContent='↓ '+title;
+          link.rel='noreferrer';link.referrerPolicy='no-referrer';
+          links.append(link);
+        }
+        section.append(links);fragment.append(section);
+      }
+      container.replaceChildren(fragment);area.hidden=false;
+    }catch(error){
+      note.textContent=error?.message||'Chưa tạo được link tải';
+      area.hidden=false;
+    }
+  }
   async function reload(){
     $('order-refresh').disabled=true;
     try{
@@ -54,6 +85,8 @@
       };
       const [name,msg,state]=messages[data.status]||['Đang chờ xác minh','Máy chủ chưa có kết luận cho đơn này.','warning'];
       $('order-state').textContent=name;report(msg,state);
+      if(['DEMO_COMPLETED','PAID_AWAITING_DELIVERY'].includes(data.status))await loadDelivery();
+      else if($('an-order-downloads'))$('an-order-downloads').hidden=true;
     }catch(error){
       $('order-state').textContent='Lỗi kết nối';
       report(error.message||'Không tải được đơn.','warning');
