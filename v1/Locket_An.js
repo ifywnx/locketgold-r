@@ -8,7 +8,7 @@ const mapping = {
   'Locket': ['Gold']
 };
 // =========   Phần cố định  ========= // 
-// =========  @ifywnx ========= //
+// =========  @An ========= //
 var ua = $request.headers["User-Agent"] || $request.headers["user-agent"] || "",
   obj = JSON.parse($response.body);
 if (!ua.includes("Locket") || !obj || !obj.subscriber ||
