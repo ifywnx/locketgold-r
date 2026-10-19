@@ -49,7 +49,7 @@ export function productGroups(sku:StoreProductId,demo:boolean){
 export function productScript(sku:StoreProductId,demo:boolean){
   const groups=JSON.stringify(productGroups(sku,demo));
   // Only overlay_items is changed; no entitlement, subscription, video or Gold flags.
-  return \`/* An Feature Store · \${sku} · \${demo?'DEMO sample':'Caption Only'}
+  return `/* An Feature Store · ${sku} · ${demo?'DEMO sample':'Caption Only'}
  * Independent caption overlay experiment. No Locket affiliation or Gold unlock.
  * Do not combine with another rule that modifies the same Remote Config response.
  */
@@ -58,7 +58,10 @@ export function productScript(sku:StoreProductId,demo:boolean){
   var original=($response&&typeof $response.body==='string')?$response.body:'';
   var result={body:original};
   try{
-    if(!$request||!/^https:\\\\/\\\\/firebaseremoteconfig\\\\.googleapis\\\\.com\\\\/v1\\\\/projects\\\\/locket-4252a\\\\//i.test($request.url||''))return $done(result);
+    if(!$request||!$request.url)return $done(result);
+    var endpoint=new URL($request.url);
+    if(endpoint.protocol!=='https:'||endpoint.hostname!=='firebaseremoteconfig.googleapis.com'||
+       endpoint.pathname.indexOf('/v1/projects/locket-4252a/')!==0)return $done(result);
     var data=JSON.parse(original);
     if(!data||typeof data!=='object'||Array.isArray(data)||!data.entries||typeof data.entries!=='object'||Array.isArray(data.entries))return $done(result);
     var value=data.entries.overlay_items;
@@ -69,7 +72,7 @@ export function productScript(sku:StoreProductId,demo:boolean){
       if(!group||!Array.isArray(group.items))return;
       group.items.forEach(function(item){if(item&&typeof item.overlay_id==='string')ids[item.overlay_id]=true;});
     });
-    var packs=\${groups};
+    var packs=${groups};
     packs.forEach(function(group){
       var incoming=group.items.filter(function(item){
         if(ids[item.overlay_id])return false;
@@ -84,7 +87,7 @@ export function productScript(sku:StoreProductId,demo:boolean){
     result.body=JSON.stringify(data);
   }catch(error){result={body:original};}
   $done(result);
-})();\`;
+})();`;
 }
 export function productConfig(sku:StoreProductId,scriptUrl:string,kind:'sgmodule'|'conf',demo:boolean){
   const note=demo?'TEST — 1 caption mẫu mỗi nhóm; không kích hoạt tài khoản.':'Caption Only — chưa xác nhận tương thích mọi phiên bản Locket.';
