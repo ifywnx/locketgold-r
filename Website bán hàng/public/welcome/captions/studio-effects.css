@@ -59,3 +59,5 @@ a{color:#7a58c0}
 @media(max-width:700px){main{padding:20px 14px 65px}h1{letter-spacing:-1.8px;font-size:clamp(38px,10vw,54px)}.studio-eyebrow{margin-top:26px!important}.panel{padding:18px;border-radius:23px}.editor{grid-template-columns:1fr;gap:15px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card{padding:9px;border-radius:18px}.card .preview{min-height:99px;font-size:12px;border-radius:14px}.card .meta{font-size:10px;min-height:29px}.tools{gap:7px}.tools input[type=search],.tools select{min-width:100%;flex-basis:100%}.colors input{width:65px}.studio-stats span{font-size:10px}.preview{padding:15px}.card:hover{transform:none}}
 @media(max-width:360px){.grid{gap:8px}.card .preview{font-size:11px;padding:9px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.preview,button{transition:none!important;animation:none!important}.card:hover,#live:hover{transform:none}}
+
+.third-color-label{display:flex;align-items:center;gap:8px;white-space:nowrap}.third-color-label input{width:auto;height:auto;margin:0;accent-color:#9b7ddc}.colors label[hidden]{display:none!important}
