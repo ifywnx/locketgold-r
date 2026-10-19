@@ -11,15 +11,15 @@
 <section id="packages"><div class="sectionhead"><div><p class="eyebrow">BẮT ĐẦU TỪ ĐÂY</p><h2>Chọn gói phù hợp.</h2></div><p>Chọn gói phù hợp để bắt đầu.</p></div><div class="plans" aria-label="Ba gói Locket">
   <div class="plan-shell">
     <button type="button" class="plan selected" data-plan="standard" aria-pressed="true"><span class="pill">V1 · CƠ BẢN</span><h3>Locket V1</h3><strong>49.000<span>đ / gói</span></strong><p>Bộ V1 dành cho người đã có Shadowrocket.</p><ul><li>Bộ cấu hình V1</li><li>Module, DNS cũ & hướng dẫn</li><li>Tự sử dụng Shadowrocket</li></ul><span class="choose">● Đang chọn</span></button>
-    <button type="button" class="plan-more" data-detail="standard" aria-haspopup="dialog" aria-controls="plan-dialog">Xem chi tiết V1 <span aria-hidden="true">↗</span></button>
+    <button type="button" class="plan-more" data-detail="standard" aria-haspopup="dialog" aria-controls="plan-dialog">Xem gói & caption V1 <span aria-hidden="true">↗</span></button>
   </div>
   <div class="plan-shell featured-plan">
     <button type="button" class="plan" data-plan="v2" aria-pressed="false"><span class="pill">V2 · NHIỀU CAPTION</span><h3>Locket V2</h3><strong>89.000<span>đ / gói</span></strong><p>Bản V15 với caption mở rộng, icon và gradient.</p><ul><li>Bộ cấu hình V2</li><li>Caption V15 & khung widget</li><li>Tự sử dụng Shadowrocket</li></ul><span class="choose">○ Chọn gói này</span></button>
-    <button type="button" class="plan-more" data-detail="v2" aria-haspopup="dialog" aria-controls="plan-dialog">Xem caption & quyền lợi V2 <span aria-hidden="true">↗</span></button>
+    <button type="button" class="plan-more" data-detail="v2" aria-haspopup="dialog" aria-controls="plan-dialog">Xem gói & 705 caption V2 <span aria-hidden="true">↗</span></button>
   </div>
   <div class="plan-shell">
     <button type="button" class="plan" data-plan="plus" aria-pressed="false"><span class="pill">V2 + TÀI KHOẢN SHADOWROCKET</span><h3>V2 + Shadowrocket</h3><strong>129.000<span>đ / gói</span></strong><p>Chính là bộ V2 89k, thêm tài khoản tải Shadowrocket.</p><ul><li>Đầy đủ bộ V2 như gói 89k</li><li>Thêm tài khoản tải Shadowrocket</li><li>Hướng dẫn đăng nhập & đăng xuất</li></ul><span class="choose">○ Chọn gói này</span></button>
-    <button type="button" class="plan-more" data-detail="plus" aria-haspopup="dialog" aria-controls="plan-dialog">Xem gói 129k khác gì? <span aria-hidden="true">↗</span></button>
+    <button type="button" class="plan-more" data-detail="plus" aria-haspopup="dialog" aria-controls="plan-dialog">Xem gói & 705 caption V2 <span aria-hidden="true">↗</span></button>
   </div>
 </div>
 <dialog id="plan-dialog" class="plan-dialog" aria-labelledby="plan-dialog-title" aria-describedby="plan-dialog-subtitle">
@@ -27,9 +27,18 @@
     <button type="button" class="plan-dialog-close" id="plan-dialog-close" aria-label="Đóng chi tiết gói">✕</button>
     <div class="plan-dialog-header"><p class="eyebrow" id="plan-dialog-kicker">CHI TIẾT GÓI</p><h2 id="plan-dialog-title">Chi tiết gói</h2><p id="plan-dialog-subtitle"></p></div>
     <div class="plan-dialog-price" id="plan-dialog-price"></div>
+    <button type="button" class="plan-library-jump" id="plan-library-jump">Xem thư viện caption của gói ↓</button>
     <h3 class="detail-heading">Trong gói gồm những gì?</h3>
     <ul class="plan-detail-list" id="plan-dialog-features"></ul>
-    <div id="plan-samples" class="plan-samples" hidden><div class="sample-head"><h3 class="detail-heading">Một vài caption Trend trong bản xem trước V2</h3><span>Giữ đúng màu & icon</span></div><div class="sample-grid" id="plan-sample-grid"></div></div>
+    <section id="plan-samples" class="plan-samples full-caption-library" aria-labelledby="plan-caption-title">
+      <div class="sample-head"><div><p class="eyebrow">THƯ VIỆN CAPTION THEO GÓI</p><h3 id="plan-caption-title" class="detail-heading">Xem caption trong gói</h3><p id="plan-caption-description" class="library-description"></p></div><span id="plan-caption-total" class="library-total"></span></div>
+      <div class="library-controls">
+        <label>Tìm caption<input id="plan-caption-search" type="search" autocomplete="off" placeholder="Tìm câu chữ, icon, chủ đề…"></label>
+        <label>Chủ đề<select id="plan-caption-category"><option value="">Tất cả chủ đề</option></select></label>
+      </div>
+      <div id="plan-caption-grid" class="plan-caption-grid" aria-live="off"></div>
+      <div class="library-bottom"><p id="plan-caption-count" role="status" aria-live="polite">Đang tải dữ liệu caption…</p><button type="button" id="plan-caption-more" class="library-more" hidden>Xem thêm caption ↓</button></div>
+    </section>
     <p class="plan-dialog-note" id="plan-dialog-note"></p>
     <button type="button" class="plan-dialog-pick" id="plan-dialog-pick">Chọn gói này →</button>
   </div>
