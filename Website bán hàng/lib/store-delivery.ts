@@ -59,9 +59,8 @@ export function productScript(sku:StoreProductId,demo:boolean){
   var result={body:original};
   try{
     if(!$request||!$request.url)return $done(result);
-    var endpoint=new URL($request.url);
-    if(endpoint.protocol!=='https:'||endpoint.hostname!=='firebaseremoteconfig.googleapis.com'||
-       endpoint.pathname.indexOf('/v1/projects/locket-4252a/')!==0)return $done(result);
+    var requestUrl=String($request.url);
+    if(requestUrl.indexOf('https://firebaseremoteconfig.googleapis.com/v1/projects/locket-4252a/')!==0)return $done(result);
     var data=JSON.parse(original);
     if(!data||typeof data!=='object'||Array.isArray(data)||!data.entries||typeof data.entries!=='object'||Array.isArray(data.entries))return $done(result);
     var value=data.entries.overlay_items;
