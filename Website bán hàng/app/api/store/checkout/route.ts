@@ -27,13 +27,13 @@ export async function POST(r:Request){
  await db.insert(storeOrders).values({id,ownerHash,itemsJson,amount:quote.amount,mode,
    status:mode==='demo'?'DEMO_PENDING':'CREATING',created:now});
  if(mode==='demo')return json({orderCode:id,amount:quote.amount,items:quote.items,mode,
-   checkoutUrl:'/welcome/checkout.html?order='+id});
+   checkoutUrl:'/store/checkout.html?order='+id});
  try{
    const origin=new URL(r.url).origin;
    const s=secrets();
-   const base={amount:quote.amount,cancelUrl:origin+'/welcome/checkout.html?order='+id+'&result=cancel',
+   const base={amount:quote.amount,cancelUrl:origin+'/store/checkout.html?order='+id+'&result=cancel',
     description:'An Store',orderCode:id,
-    returnUrl:origin+'/welcome/checkout.html?order='+id+'&result=return'};
+    returnUrl:origin+'/store/checkout.html?order='+id+'&result=return'};
    const signed={...base,signature:await sign(base,s.PAYOS_CHECKSUM_KEY),expiredAt:Math.floor(now/1000)+1800};
    const response=await payos('/v2/payment-requests',signed),data=response.data;
    if(!await verify(data,response.signature,s.PAYOS_CHECKSUM_KEY) ||
