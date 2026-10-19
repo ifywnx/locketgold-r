@@ -97,7 +97,7 @@
     selected=key;shown=28;lastTrigger=button;
     $('an-store-dialog-title').textContent=packs[key].name;
     $('an-store-search').value='';
-    $('an-store-dialog-subtitle').textContent='Bộ xem trước theo màu gốc GitHub · Không có giá bán hoặc cấp module ở giai đoạn này.';
+    $('an-store-dialog-subtitle').textContent='Xem màu gốc GitHub. Giá trong giỏ hiện là giá thử nghiệm; chưa tự động cấp module.';
     render();
     if(typeof dialog.showModal==='function')dialog.showModal();
     else dialog.setAttribute('open','');
