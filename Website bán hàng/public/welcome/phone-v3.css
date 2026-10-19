@@ -115,3 +115,29 @@
  .locket-demo-phone,.lc-send-photo .phone-screen-caption,.lc-shutter{transition:none!important;animation:none!important}
  .locket-demo-phone{transform:none!important}
 }
+
+
+/* Ensure every control fits the real screenshot's tall device ratio. */
+.lc-send-heading{flex-basis:66px}
+.lc-recipients{flex-basis:77px}
+.locket-send-scene .phone-screen-note{display:none}
+.locket-camera-heading{flex-basis:68px}
+.lc-history{flex-basis:39px}
+.lc-camera-nav{height:49px;flex-basis:49px;margin-bottom:7px}
+@media(max-width:950px){
+  .lc-send-heading{flex-basis:59px}
+  .lc-recipients{flex-basis:69px}
+  .lc-send-toolbar{min-height:62px}
+  .lc-shutterbar{min-height:65px}
+  .locket-camera-heading{flex-basis:59px}
+  .lc-history{flex-basis:33px}
+  .lc-camera-nav{height:43px;flex-basis:43px;margin-bottom:5px}
+  .lc-page-dots{flex-basis:23px}
+}
+@media(max-width:390px){
+  .lc-send-heading{flex-basis:55px}
+  .lc-recipients{flex-basis:58px}
+  .lc-send-toolbar{min-height:57px}
+  .locket-camera-heading{flex-basis:51px}
+  .lc-gallery-icon,.lc-reverse-icon{width:26px;height:26px}
+}
