@@ -1,0 +1,1181 @@
+[
+  {
+    "group": "🎨 Holiday Caption",
+    "text": "Halloween",
+    "icon": "🎃",
+    "colors": [
+      "#150804",
+      "#C8540D"
+    ],
+    "ink": "#FFB182",
+    "id": "caption:halloween_2026"
+  },
+  {
+    "group": "🎨 Holiday Caption",
+    "text": "Xin chào Mùa Thu",
+    "icon": "🍂",
+    "colors": [
+      "#FFE0A0",
+      "#F6A53A"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:autumn_2026"
+  },
+  {
+    "group": "🎨 Holiday Caption",
+    "text": "Giáng sinh an lành",
+    "icon": "🕯️",
+    "colors": [
+      "#2FA85F",
+      "#176B3A"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:christmas_eve_2026"
+  },
+  {
+    "group": "🎨 Holiday Caption",
+    "text": "Giáng sinh an lành",
+    "icon": "🎄",
+    "colors": [
+      "#E53935",
+      "#A81818"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:christmas_day_2026"
+  },
+  {
+    "group": "🎨 Holiday Caption",
+    "text": "Xin chào 2027!",
+    "icon": "🥂",
+    "colors": [
+      "#FFC64B",
+      "#FFEDBF"
+    ],
+    "ink": "#643F00",
+    "id": "caption:new_years_eve_2026"
+  },
+  {
+    "group": "🎨 Holiday Caption",
+    "text": "Xin chào 2027!",
+    "icon": "💫",
+    "colors": [
+      "#3B00EC",
+      "#823FFF"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:new_years_day_2027"
+  },
+  {
+    "group": "🎨 Holiday Caption",
+    "text": "2027",
+    "icon": "",
+    "colors": [
+      "#FF0062",
+      "#FF783F"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:new_years_day_2027_alternate"
+  },
+  {
+    "group": "🎨 Decorative by Locket",
+    "text": "보고 싶어 🥺",
+    "icon": "",
+    "colors": [
+      "#FFFFFF",
+      "#6D9EEB"
+    ],
+    "ink": "#000000E6",
+    "id": "caption:toi_nho_em"
+  },
+  {
+    "group": "🎨 Decorative by Locket",
+    "text": "Party Time!",
+    "icon": "🪩",
+    "colors": [
+      "#5EFFF5",
+      "#FCFF57"
+    ],
+    "ink": "#000000E6",
+    "id": "caption:party_time"
+  },
+  {
+    "group": "🎨 Decorative by Locket",
+    "text": "Good morning",
+    "icon": "☀️",
+    "colors": [
+      "#EF7402",
+      "#EABF0F"
+    ],
+    "ink": "#FFFFFFE5",
+    "id": "caption:good_morning"
+  },
+  {
+    "group": "🎨 Decorative by Locket",
+    "text": "Goodnight",
+    "icon": "🌙",
+    "colors": [
+      "#370C6F",
+      "#575CD4"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:goodnight"
+  },
+  {
+    "group": "🎨 Decorative by Locket",
+    "text": "OOTD",
+    "icon": "🕶",
+    "colors": [
+      "#FFFFFF",
+      "#DBDBDB"
+    ],
+    "ink": "#101010E6",
+    "id": "caption:ootd"
+  },
+  {
+    "group": "🎨 Decorative by Locket",
+    "text": "Miss you",
+    "icon": "🥰",
+    "colors": [
+      "#EC0C00",
+      "#FF493F"
+    ],
+    "ink": "#FFFFFFDB",
+    "id": "caption:miss_you"
+  },
+  {
+    "group": "🎨 Decorative by ifywnx",
+    "text": "💻 ifywnx",
+    "icon": "",
+    "colors": [
+      "#B8E7FF",
+      "#A8F5D0",
+      "#DCCBFF"
+    ],
+    "ink": "#183153",
+    "id": "caption:ifywnx"
+  },
+  {
+    "group": "🎨 Decorative by ifywnx",
+    "text": "Feeling Cute",
+    "icon": "🌷",
+    "colors": [
+      "#F8BBD0",
+      "#E91E63"
+    ],
+    "ink": "#FFFFFFE5",
+    "id": "caption:feeling_cute"
+  },
+  {
+    "group": "🎨 Decorative by ifywnx",
+    "text": "Cu 🐎",
+    "icon": "",
+    "colors": [
+      "#FFD6A5",
+      "#FFF1A8",
+      "#FFC4D6"
+    ],
+    "ink": "#633B24",
+    "id": "caption:cu"
+  },
+  {
+    "group": "🎨 Decorative by ifywnx",
+    "text": "Wedding Time!",
+    "icon": "💍",
+    "colors": [
+      "#FFE4E1",
+      "#E73C7E"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:wedding_time"
+  },
+  {
+    "group": "🎨 Decorative by ifywnx",
+    "text": "Cảm thấy hạnh phúc",
+    "icon": "🇻🇳",
+    "colors": [
+      "#EC407A",
+      "#F8BBD0"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:cam_thay_hanh_phuc"
+  },
+  {
+    "group": "🎨 Decorative by ifywnx",
+    "text": "Coffee Time!",
+    "icon": "☕",
+    "colors": [
+      "#4E342E",
+      "#8D6E63"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:coffee_time"
+  },
+  {
+    "group": "🎨 Decorative by ifywnx",
+    "text": "Snake Vibes",
+    "icon": "🐍",
+    "colors": [
+      "#2E7D32",
+      "#66BB6A"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:snake_vibes"
+  },
+  {
+    "group": "🎨 Decorative by ifywnx",
+    "text": "Mixue Time!",
+    "icon": "🍦",
+    "colors": [
+      "#FFF9C4",
+      "#F8BBD0"
+    ],
+    "ink": "#000000E6",
+    "id": "caption:mixue_time"
+  },
+  {
+    "group": "🎨 Decorative by ifywnx",
+    "text": "Locket Time!",
+    "icon": "📷",
+    "colors": [
+      "#ECEFF1",
+      "#B3E5FC"
+    ],
+    "ink": "#000000E6",
+    "id": "caption:locket_time"
+  },
+  {
+    "group": "🎨 Decorative by ifywnx",
+    "text": "Cinema Time!",
+    "icon": "🎬",
+    "colors": [
+      "#1A237E",
+      "#455A64"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:cinema_time"
+  },
+  {
+    "group": "🎨 Decorative by ifywnx",
+    "text": "Dating Time!",
+    "icon": "💕",
+    "colors": [
+      "#E91E63",
+      "#F44336"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:dating_time"
+  },
+  {
+    "group": "🎨 Decorative by ifywnx",
+    "text": "Happy Graduation Day!",
+    "icon": "🎓",
+    "colors": [
+      "#1A237E",
+      "#283593"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:graduation_day"
+  },
+  {
+    "group": "🎨 Decorative by ifywnx",
+    "text": "Shopping Time!",
+    "icon": "🛍️",
+    "colors": [
+      "#B3E5FC",
+      "#FFFFFF"
+    ],
+    "ink": "#000000E6",
+    "id": "caption:shopping_time"
+  },
+  {
+    "group": "🎨 Decorative by ifywnx",
+    "text": "Dinner Time!",
+    "icon": "🍽️",
+    "colors": [
+      "#FFCCBC",
+      "#FF8A80"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:dinner_time"
+  },
+  {
+    "group": "🎨 Decorative by ifywnx",
+    "text": "Chilling Time!",
+    "icon": "🌴",
+    "colors": [
+      "#E1BEE7",
+      "#F8BBD0"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:chilling_time"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Xin vĩnh biệt cụ",
+    "icon": "🕯️",
+    "colors": [
+      "#232526",
+      "#414345"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:xin_vinh_biet_cu"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Chạy ngay đi",
+    "icon": "🏃💨",
+    "colors": [
+      "#D31027",
+      "#EA384D"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:chay_ngay_di"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Cứ từ từ khoai sẽ nhừ",
+    "icon": "🥔",
+    "colors": [
+      "#56AB2F",
+      "#A8E063"
+    ],
+    "ink": "#000000E6",
+    "id": "caption:cu_tu_tu_khoai_se_nhu"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Kiểm tra nhân phẩm",
+    "icon": "🎲",
+    "colors": [
+      "#654EA3",
+      "#EAAFC8"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:kiem_tra_nhan_pham"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "đọc số tài khoản",
+    "icon": "💳",
+    "colors": [
+      "#1E90FF",
+      "#00D4FF"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:doc_so_tai_khoan"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "ai sợ thì đi về",
+    "icon": "🏃",
+    "colors": [
+      "#B71C1C",
+      "#FF5722"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:ai_so_thi_di_ve"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "còn cái nịt",
+    "icon": "🧶",
+    "colors": [
+      "#D7CCC8",
+      "#8D6E63"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:con_cai_nit"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "cảnh báo có hát",
+    "icon": "🎤",
+    "colors": [
+      "#9C27B0",
+      "#E91E63"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:canh_bao_co_hat"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Thân chưa mà dỡn",
+    "icon": "😔",
+    "colors": [
+      "#607D8B",
+      "#37474F"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:than_chua_ma_don"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Ai mượn?",
+    "icon": "🤔",
+    "colors": [
+      "#E91E63",
+      "#F44336"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:ai_muon"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Hay ra dẻ quá à!",
+    "icon": "🥺",
+    "colors": [
+      "#FFF59D",
+      "#80DEEA"
+    ],
+    "ink": "#000000E6",
+    "id": "caption:hay_ra_de_qua_a"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Giảm sức mạnh con tướng",
+    "icon": "🎮",
+    "colors": [
+      "#4CAF50",
+      "#00BCD4"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:giam_suc_manh_con_tuong"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Mắc cỡ quá hai ơi",
+    "icon": "😭",
+    "colors": [
+      "#FFB74D",
+      "#F8BBD0"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:mac_co_qua_hai_oi"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Mình là lốp",
+    "icon": "🛞",
+    "colors": [
+      "#263238",
+      "#455A64"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:minh_la_lop"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Đẹp trai có gì sai",
+    "icon": "😎",
+    "colors": [
+      "#FF5722",
+      "#FFC107"
+    ],
+    "ink": "#000000E6",
+    "id": "caption:dep_trai_co_gi_sai"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Mong tôn hoa sen thấy cảnh này",
+    "icon": "🪷",
+    "colors": [
+      "#D8B4E2",
+      "#F8BBD0"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:mong_ton_hoa_sen"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "đấm nhau không",
+    "icon": "🥊",
+    "colors": [
+      "#E53935",
+      "#FF7043"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:dam_nhau_khong"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "siêu cấp bá khí",
+    "icon": "🐉",
+    "colors": [
+      "#EC407A",
+      "#F44336"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:sieu_cap_ba_khi"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "dự án ma",
+    "icon": "👻",
+    "colors": [
+      "#263238",
+      "#455A64"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:du_an_ma"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Dỗi rồi",
+    "icon": "😤",
+    "colors": [
+      "#FF5F6D",
+      "#FFC371"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:doi_roi"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Đang bận tương tư",
+    "icon": "💭",
+    "colors": [
+      "#1A2980",
+      "#26D0CE"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:dang_ban_tuong_tu"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Mỏ hỗn nhưng tâm hiền",
+    "icon": "🐤",
+    "colors": [
+      "#FFB75E",
+      "#ED8F03"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:mo_hon_nhung_tam_hien"
+  },
+  {
+    "group": "🌸 Độc lạ",
+    "text": "Muốn được ôm",
+    "icon": "🫂",
+    "colors": [
+      "#FF9A9E",
+      "#FECFEF"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:muon_duoc_om"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Hồi chiều trời mưa...",
+    "icon": "🌧️",
+    "colors": [
+      "#546E7A",
+      "#263238"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:hoi_chieu_troi_mua"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "côn viên lá làn",
+    "icon": "🍂",
+    "colors": [
+      "#12C2E9",
+      "#F64F59"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:con_vien_la_lan"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Tuyệt đối không nghe",
+    "icon": "🙉",
+    "colors": [
+      "#FF416C",
+      "#FF4B2B"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:tuyet_doi_khong_nghe"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Flex đến hơi thở cuối",
+    "icon": "💎",
+    "colors": [
+      "#F7971E",
+      "#FFD200"
+    ],
+    "ink": "#000000E6",
+    "id": "caption:flex_den_hoi_tho_cuoi"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Overthinking vai chưởng",
+    "icon": "🤯",
+    "colors": [
+      "#2C3E50",
+      "#4CA1AF"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:overthinking_vai_chuong"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Chan bố mày đi",
+    "icon": "🙄",
+    "colors": [
+      "#870000",
+      "#190A05"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:chan_bo_may_di"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "oách xà lách",
+    "icon": "🥬",
+    "colors": [
+      "#11998E",
+      "#38EF7D"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:oach_xa_lach"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Ủa alo",
+    "icon": "📞",
+    "colors": [
+      "#8E2DE2",
+      "#4A00E0"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:ua_alo"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Kể chuyện nghe chơi",
+    "icon": "🍿",
+    "colors": [
+      "#8A2387",
+      "#E94057"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:ke_chuyen_nghe_choi"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "hôm nay tôi buồn",
+    "icon": "🥀",
+    "colors": [
+      "#141E30",
+      "#243B55"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:hom_nay_toi_buon"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Xinh đẹp tuyệt vời",
+    "icon": "💅",
+    "colors": [
+      "#FC5C7D",
+      "#6A82FB"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:xinh_dep_tuyet_voi"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Trầm cảm nhẹ",
+    "icon": "🫠",
+    "colors": [
+      "#1F1C2C",
+      "#928DAB"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:tram_cam_nhe"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Chưa đủ wow",
+    "icon": "⭐",
+    "colors": [
+      "#FF5349",
+      "#EB0C00"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:chua_du_wow"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Bóc trúng sít rịt",
+    "icon": "🎁",
+    "colors": [
+      "#9C27B0",
+      "#7B1FA2"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:boc_trung_sit_rit"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Hèn lắm mới xui được vậy á",
+    "icon": "😅",
+    "colors": [
+      "#00BCD4",
+      "#0097A7"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:hen_lam_moi_xui_duoc_vay_a"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Ra đường nể mỗi anh",
+    "icon": "👤",
+    "colors": [
+      "#2196F3",
+      "#1976D2"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:ra_duong_ne_moi_anh"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Cũng cứng đi",
+    "icon": "🚀",
+    "colors": [
+      "#FFC107",
+      "#FFA000"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:cung_cung_di"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Tuyệt đối điện ảnh",
+    "icon": "📷",
+    "colors": [
+      "#455A64",
+      "#263238"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:tuyet_doi_dien_anh"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Đủ bá khí chưa",
+    "icon": "⚡",
+    "colors": [
+      "#FF5722",
+      "#E64A19"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:du_ba_khi_chua"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Ủa alo?",
+    "icon": "❓",
+    "colors": [
+      "#9C27B0",
+      "#7B1FA2"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:ua_alo_question"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Cái gì vậy trời",
+    "icon": "❗",
+    "colors": [
+      "#F44336",
+      "#D32F2F"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:cai_gi_vay_troi"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Này là hết cứu",
+    "icon": "❌",
+    "colors": [
+      "#607D8B",
+      "#455A64"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:nay_la_het_cuu"
+  },
+  {
+    "group": "🌸 Trend TikTok",
+    "text": "Quá là điện ảnh",
+    "icon": "📷",
+    "colors": [
+      "#26A69A",
+      "#00897B"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:qua_la_dien_anh"
+  },
+  {
+    "group": "Gen Z Life 🩻",
+    "text": "Hảo hán",
+    "icon": "🗡️",
+    "colors": [
+      "#114357",
+      "#F29492"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:hao_han"
+  },
+  {
+    "group": "Gen Z Life 🩻",
+    "text": "Cảm lạnh",
+    "icon": "🤧",
+    "colors": [
+      "#2193B0",
+      "#6DD5ED"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:cam_lanh"
+  },
+  {
+    "group": "Gen Z Life 🩻",
+    "text": "Bất lực",
+    "icon": "🏳️",
+    "colors": [
+      "#2C3E50",
+      "#3498DB"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:bat_luc"
+  },
+  {
+    "group": "Gen Z Life 🩻",
+    "text": "Xin lũi được chưa",
+    "icon": "🥺",
+    "colors": [
+      "#F6D365",
+      "#FDA085"
+    ],
+    "ink": "#000000",
+    "id": "caption:xin_lui_duoc_chua"
+  },
+  {
+    "group": "Gen Z Life 🩻",
+    "text": "Rớt nước mắt",
+    "icon": "😭",
+    "colors": [
+      "#1CB5E0",
+      "#000046"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:rot_nuoc_mat"
+  },
+  {
+    "group": "Gen Z Life 🩻",
+    "text": "Gục ngã",
+    "icon": "📉",
+    "colors": [
+      "#3A1C71",
+      "#D76D77"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:guc_nga"
+  },
+  {
+    "group": "Gen Z Life 🩻",
+    "text": "Tiền đình",
+    "icon": "🌪️",
+    "colors": [
+      "#C33764",
+      "#1D2671"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:tien_dinh"
+  },
+  {
+    "group": "Gen Z Life 🩻",
+    "text": "Chê mạnh",
+    "icon": "👎",
+    "colors": [
+      "#FF4E50",
+      "#F9D423"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:che_manh"
+  },
+  {
+    "group": "Gen Z Life 🩻",
+    "text": "Xinh gái ấn phím 1",
+    "icon": "💅",
+    "colors": [
+      "#F77062",
+      "#FE5196"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:xinh_gai_an_phim_1"
+  },
+  {
+    "group": "Gen Z Life 🩻",
+    "text": "Đi làm vì đam mê",
+    "icon": "🤡",
+    "colors": [
+      "#FDC830",
+      "#F37335"
+    ],
+    "ink": "#FFFFFF",
+    "id": "caption:di_lam_vi_dam_me"
+  },
+  {
+    "group": "🌸 Meme vui nhộn",
+    "text": "Cười xỉu",
+    "icon": "😎",
+    "colors": [
+      "#FFEB3B",
+      "#FF9800"
+    ],
+    "ink": "#000000E6",
+    "id": "caption:cuoi_xiu"
+  },
+  {
+    "group": "🌸 Meme vui nhộn",
+    "text": "Toang thật rồi",
+    "icon": "🐉",
+    "colors": [
+      "#F44336",
+      "#B71C1C"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:toang_that_roi"
+  },
+  {
+    "group": "🌸 Meme vui nhộn",
+    "text": "Tới rồi tới rồi",
+    "icon": "❗",
+    "colors": [
+      "#673AB7",
+      "#512DA8"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:toi_roi_toi_roi"
+  },
+  {
+    "group": "🌸 Meme vui nhộn",
+    "text": "Không thể tin nổi",
+    "icon": "❓",
+    "colors": [
+      "#00BCD4",
+      "#0097A7"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:khong_the_tin_noi"
+  },
+  {
+    "group": "🌸 Đời sống",
+    "text": "Ngày mới vui vẻ",
+    "icon": "☀️",
+    "colors": [
+      "#4CAF50",
+      "#2E7D32"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:ngay_moi_vui_ve"
+  },
+  {
+    "group": "🌸 Đời sống",
+    "text": "Ngủ ngon",
+    "icon": "🌙",
+    "colors": [
+      "#3F51B5",
+      "#1A237E"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:ngu_ngon"
+  },
+  {
+    "group": "🌸 Đời sống",
+    "text": "Ăn cơm chưa?",
+    "icon": "🍽️",
+    "colors": [
+      "#FF9800",
+      "#F57C00"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:an_com_chua"
+  },
+  {
+    "group": "🌸 Đời sống",
+    "text": "Đi chơi không?",
+    "icon": "✈️",
+    "colors": [
+      "#E91E63",
+      "#C2185B"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:di_choi_khong"
+  },
+  {
+    "group": "🌸 Gen Z Slay",
+    "text": "Tinh hoa hội tụ",
+    "icon": "✨",
+    "colors": [
+      "#FFD700",
+      "#FF8C00"
+    ],
+    "ink": "#000000E6",
+    "id": "caption:tinh_hoa_hoi_tu"
+  },
+  {
+    "group": "🌸 Gen Z Slay",
+    "text": "Phụ tình không phụ bản",
+    "icon": "🕶️",
+    "colors": [
+      "#8E2DE2",
+      "#4A00E0"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:phu_tinh_khong_phu_ban"
+  },
+  {
+    "group": "🌸 Gen Z Slay",
+    "text": "Ngoan xinh yêu của ai?",
+    "icon": "🌸",
+    "colors": [
+      "#FFAFBD",
+      "#FFC3A0"
+    ],
+    "ink": "#000000E6",
+    "id": "caption:ngoan_xinh_yeu"
+  },
+  {
+    "group": "🌸 Gen Z Slay",
+    "text": "Nhìn là biết uy tín",
+    "icon": "👌",
+    "colors": [
+      "#2980B9",
+      "#2C3E50"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:nhin_la_biet_uy_tin"
+  },
+  {
+    "group": "🌸 Bất ổn & Khó đỡ",
+    "text": "Luôn vui tươi",
+    "icon": "🤡",
+    "colors": [
+      "#00F2FE",
+      "#4FACFE"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:luon_vui_tuoi"
+  },
+  {
+    "group": "🌸 Bất ổn & Khó đỡ",
+    "text": "Bất ổn thật sự",
+    "icon": "🫠",
+    "colors": [
+      "#636363",
+      "#A2AB58"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:bat_on_that_su"
+  },
+  {
+    "group": "🌸 Bất ổn & Khó đỡ",
+    "text": "Không cảm xúc",
+    "icon": "🗿",
+    "colors": [
+      "#434343",
+      "#000000"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:khong_cam_xuc"
+  },
+  {
+    "group": "🌸 Bất ổn & Khó đỡ",
+    "text": "Phụ huynh đừng xem",
+    "icon": "🙈",
+    "colors": [
+      "#FF0844",
+      "#FFB199"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:phu_huynh_dung_xem"
+  },
+  {
+    "group": "🌸 Check VAR & Hóng hớt",
+    "text": "Check VAR liền",
+    "icon": "📺",
+    "colors": [
+      "#11998E",
+      "#38EF7D"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:check_var"
+  },
+  {
+    "group": "🌸 Check VAR & Hóng hớt",
+    "text": "Quá nhiều sự dễ thương",
+    "icon": "🎀",
+    "colors": [
+      "#F38181",
+      "#FCE38A"
+    ],
+    "ink": "#000000E6",
+    "id": "caption:qua_nhieu_su_de_thuong"
+  },
+  {
+    "group": "🌸 Check VAR & Hóng hớt",
+    "text": "Mắc bẫy tình yêu",
+    "icon": "💘",
+    "colors": [
+      "#EE9CA7",
+      "#FFDDE1"
+    ],
+    "ink": "#000000E6",
+    "id": "caption:mac_bay_tinh_yeu"
+  },
+  {
+    "group": "🌸 Check VAR & Hóng hớt",
+    "text": "Sóng gió phủ đời trai",
+    "icon": "🌪️",
+    "colors": [
+      "#3A1C71",
+      "#D76D77"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:song_gio_phu_doi_trai"
+  },
+  {
+    "group": "🌸 Góc Deadline & Đi Làm",
+    "text": "Deadline dí tụt quần",
+    "icon": "🔥",
+    "colors": [
+      "#ED213A",
+      "#93291E"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:deadline_ruot"
+  },
+  {
+    "group": "🌸 Góc Deadline & Đi Làm",
+    "text": "Tiền đâu mà tiêu",
+    "icon": "💸",
+    "colors": [
+      "#11998E",
+      "#38EF7D"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:tien_dau_ma_tieu"
+  },
+  {
+    "group": "🌸 Góc Deadline & Đi Làm",
+    "text": "Cần nạp cafein gấp",
+    "icon": "☕",
+    "colors": [
+      "#0F2027",
+      "#2C5364"
+    ],
+    "ink": "#FFFFFFE6",
+    "id": "caption:nghien_cuu_khoa_hoc"
+  }
+]
