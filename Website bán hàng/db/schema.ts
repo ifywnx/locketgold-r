@@ -14,3 +14,19 @@ export const orders = sqliteTable('orders', {
  created: integer('created').notNull(), checked: integer('checked').notNull().default(0),
  paid: integer('paid'),
 });
+
+/** Separate ledger: never treat a demo checkout as a paid license or access code. */
+export const storeOrders=sqliteTable('store_orders',{
+ id:integer('id').primaryKey(),
+ ownerHash:text('owner_hash').notNull(),
+ itemsJson:text('items_json').notNull(),
+ amount:integer('amount').notNull(),
+ mode:text('mode').notNull(),
+ status:text('status').notNull(),
+ linkId:text('link_id').unique(),
+ checkoutUrl:text('checkout_url'),
+ paymentAccount:text('payment_account'),
+ created:integer('created').notNull(),
+ checked:integer('checked').notNull().default(0),
+ paid:integer('paid')
+});
