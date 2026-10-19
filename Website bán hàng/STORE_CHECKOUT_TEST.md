@@ -2,6 +2,8 @@
 
 ## Hiện trạng
 
+**Lưu ý:** payOS hiện không có sandbox thanh toán độc lập. Chế độ **DEMO** dưới đây là giả lập **do website An thực hiện**, không gọi API ngân hàng. Nếu bật LIVE, payOS sử dụng kênh tiền thật. Xem [tài liệu môi trường test payOS](https://payos.vn/docs/moi-truong-test/).
+
 **Mặc định: DEMO.** Trang `/welcome/index.html#feature-store` có 5 bộ caption thử với giá được **kiểm tra lại trên server**: Trend & Meme 19k, Love & Mood 19k, Vietnamese Premium 29k, Gen Z & Slay 19k, Holiday Collection 29k. Đây là **giá thử**, chưa được xác nhận để bán thật.
 
 Luồng: Chọn một hoặc nhiều bộ → Giỏ hàng → POST `/api/store/checkout` → trang `/welcome/checkout.html?order=…` → giả lập hoàn tất hoặc chuyển đến payOS khi bật LIVE → GET trạng thái đơn.
