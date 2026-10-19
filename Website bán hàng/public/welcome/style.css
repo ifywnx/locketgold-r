@@ -1633,3 +1633,156 @@ header nav .nav-cta:hover span{transform:translate(3px,-3px)}
   .faq-item summary>span,.policy-card,.support-guide-link{transition:none!important}
   .policy-card:hover,.support-guide-link:hover{transform:none}
 }
+
+
+/* Locket-inspired preview corrections: white feed, photo-overlay capsule, no right-side overflow */
+.phone-tilt-shell{width:min(282px,calc(100% - 58px));max-width:100%;box-sizing:border-box}
+.phone-screen{background:#fff;color:#27232b}
+.phone-screen::before{display:none}
+.phone-topbar{
+  flex-shrink:0;min-height:34px;background:#fff;
+  padding:11px 19px 2px;color:#17151b;
+}
+.phone-status-icons{font-size:10px;letter-spacing:.2px}
+.phone-screen-content{
+  position:relative;
+  display:flex;
+  flex:1 1 auto;
+  min-height:0;
+  flex-direction:column;
+  align-items:stretch;
+  gap:6px;
+  padding:2px 11px 0;
+  overflow:hidden;
+}
+.phone-app-header{
+  display:flex;flex-shrink:0;align-items:center;justify-content:center;
+  height:30px;gap:7px;position:relative;color:#1c181d;
+  font-size:18px;font-weight:900;letter-spacing:-.75px;
+}
+.phone-logo-mark{
+  display:inline-grid;place-items:center;
+  width:24px;height:24px;background:#ffc945;border-radius:8px;
+  color:#25202b;font-size:16px;line-height:1;
+}
+.phone-app-header strong{font:900 18px/1.2 'Be Vietnam Pro',system-ui,sans-serif}
+.phone-header-dots{position:absolute;right:0;top:1px;font-size:15px;letter-spacing:1px;color:#777075}
+.phone-feed-header{display:flex;flex-shrink:0;align-items:center;gap:8px;min-height:40px;padding:3px 0}
+.phone-feed-avatar{
+  display:grid;place-items:center;flex:0 0 32px;width:32px;height:32px;
+  background:linear-gradient(135deg,#e7d5fc,#facada);
+  border:1px solid #f6e8fa;border-radius:50%;color:#87588f;font-size:15px;font-weight:900;
+}
+.phone-feed-meta{display:flex;min-width:0;flex:1;flex-direction:column;gap:1px;line-height:1.3}
+.phone-feed-meta b{font-size:11px;color:#332d33}
+.phone-feed-meta small{font-size:8.5px;color:#938a95}
+.phone-feed-menu{color:#898088;font-size:12px;letter-spacing:1px}
+.phone-picture-art{
+  flex:0 1 auto;
+  position:relative;
+  height:186px;
+  width:100%;
+  margin:1px 0 0;
+  border-radius:19px;
+  overflow:hidden;
+  border:1px solid #f1e6e0;
+  background:#d1beb5;
+  box-shadow:0 7px 19px rgba(81,67,76,.12);
+}
+.phone-photo-landscape{position:absolute;inset:0;overflow:hidden;background:linear-gradient(162deg,#f3bca8 0%,#eec5b4 36%,#b1b5c7 68%,#7e9b90 100%)}
+.phone-photo-landscape::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(180deg,transparent 48%,#18201d57)}
+.phone-photo-landscape .picture-sun{z-index:1}
+.phone-photo-landscape .picture-hill{z-index:1}
+.phone-photo-landscape .picture-spark{z-index:1}
+.phone-picture-art .phone-screen-caption{
+  position:absolute;
+  z-index:4;
+  left:50%;bottom:13px;
+  transform:translateX(-50%);
+  margin:0;flex:none;
+  width:max-content;max-width:calc(100% - 20px);min-height:34px;
+  display:inline-flex;
+  align-items:center;justify-content:center;
+  gap:5px;padding:9px 12px;
+  border-radius:999px;
+  font-size:10px;font-weight:800;line-height:1.25;
+  box-shadow:0 4px 16px #241b2a3b,inset 0 1px 1px #ffffff4a;
+  text-align:center;text-wrap:balance;
+  overflow-wrap:anywhere;
+}
+.phone-picture-art .phone-screen-caption span:first-child{font-size:14px;flex-shrink:0}
+.phone-picture-art .phone-screen-caption.caption-switch{
+  animation:phone-caption-overlay-in .32s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes phone-caption-overlay-in{
+  from{opacity:.3;transform:translate(-50%,6px) scale(.95)}
+  to{opacity:1;transform:translate(-50%,0) scale(1)}
+}
+.phone-feed-actions{
+  display:flex;align-items:center;gap:11px;
+  min-height:24px;color:#4e464b;font-size:20px;line-height:1;
+  padding:3px 2px 0;
+}
+.phone-feed-actions span:nth-child(2){font-size:15px}
+.phone-feed-actions .phone-feed-share{margin-left:auto;font-size:20px}
+.phone-screen-note{
+  display:block;flex-shrink:0;
+  width:100%;max-width:none;margin:0;
+  color:#888188;font-size:9px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:left;
+}
+.phone-bottomnav{
+  flex-shrink:0;display:flex;align-items:center;justify-content:space-around;
+  height:51px;min-height:51px;
+  padding:1px 14px 0;
+  background:#fff;border-top:1px solid #f3eef1;
+  color:#777179;
+}
+.phone-bottomnav>span:not(.phone-center-button){display:flex;flex-direction:column;align-items:center;gap:0;font-size:18px;line-height:1.1;min-width:55px}
+.phone-bottomnav small{font-size:7px;font-weight:700;line-height:1.4}
+.phone-bottomnav .phone-center-button{
+  display:grid;place-items:center;
+  height:39px;width:39px;border-radius:50%;
+  background:#ffd344;color:#282128;
+  box-shadow:none;font-size:22px;
+}
+.phone-home-indicator{flex-shrink:0;margin:4px auto 7px;background:#221e23}
+.phone-mock-disclaimer{max-width:325px}
+.phone-outside-badge{max-width:124px}
+@media(max-width:950px){
+  .phone-picture-art{height:158px}
+  .phone-topbar{min-height:30px}
+  .phone-screen-content{padding:0 10px}
+  .phone-app-header{height:27px}
+  .phone-feed-header{min-height:34px}
+  .phone-feed-avatar{width:28px;height:28px;flex-basis:28px}
+  .phone-bottomnav{height:46px;min-height:46px}
+}
+@media(max-width:700px){
+  .hero-stage{width:100%;max-width:100%;min-width:0;overflow:visible}
+  .phone-preview-wrap{width:100%;max-width:100%;min-width:0}
+  .phone-tilt-shell{width:min(230px,calc(100% - 62px));max-width:100%;filter:drop-shadow(0 17px 25px #6e537c2d)}
+  .phone-frame{height:414px;max-width:100%;box-sizing:border-box}
+  .phone-topbar{height:29px;min-height:29px}
+  .phone-screen-content{gap:5px}
+  .phone-app-header{height:27px}
+  .phone-feed-header{min-height:32px}
+  .phone-picture-art{height:155px;flex-shrink:0}
+  .phone-bottomnav{height:46px;min-height:46px}
+  .phone-picture-art .phone-screen-caption{max-width:calc(100% - 14px);font-size:9.5px;padding:8px 10px;bottom:10px}
+  .phone-outside-badge{font-size:9px;padding:8px 9px}
+  .badge-top{right:-26px;top:75px}
+  .badge-bottom{left:-24px;bottom:73px}
+  .phone-screen-note{font-size:8px}
+}
+@media(max-width:390px){
+  .phone-tilt-shell{width:min(218px,calc(100% - 52px))}
+  .phone-frame{height:397px}
+  .phone-picture-art{height:142px}
+  .phone-outside-badge{display:none}
+  .phone-mode-switch{max-width:100%;gap:2px}
+  .phone-mode-switch button{padding:8px 11px;font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  .phone-picture-art .phone-screen-caption.caption-switch{animation:none!important;transform:translateX(-50%)}
+}
