@@ -32,7 +32,7 @@ export async function POST(r:Request){
    const origin=new URL(r.url).origin;
    const s=secrets();
    const base={amount:quote.amount,cancelUrl:origin+'/welcome/checkout.html?order='+id+'&result=cancel',
-    description:'An Store '+String(id).slice(-7),orderCode:id,
+    description:'An Store',orderCode:id,
     returnUrl:origin+'/welcome/checkout.html?order='+id+'&result=return'};
    const signed={...base,signature:await sign(base,s.PAYOS_CHECKSUM_KEY),expiredAt:Math.floor(now/1000)+1800};
    const response=await payos('/v2/payment-requests',signed),data=response.data;
