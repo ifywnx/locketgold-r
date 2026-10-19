@@ -257,3 +257,224 @@ section{scroll-margin-top:90px}
   .caption-grid .caption-card,.caption-grid .caption-card .caption-inner{animation:none!important;transition:none!important}
   .caption-grid .caption-card:hover,.caption-grid .caption-card:hover .caption-inner{transform:none!important}
 }
+
+/* IFYWNX — sales-first trend showcase & accessible package details */
+.trend-showcase{
+  margin-top:70px;
+  padding:43px 38px 29px;
+  background:linear-gradient(133deg,#fff7ea 0%,#fffcfa 48%,#f3eeff 100%);
+  border:1px solid #eee1e9;
+  box-shadow:0 22px 70px rgba(100,74,112,.085);
+}
+.trend-heading{align-items:center}
+.trend-heading h2 em{
+  font-style:normal;
+  background:linear-gradient(95deg,#db9f42,#d7819f,#8764dc);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.trend-heading .eyebrow{color:#bf733c}
+.trend-heading p:not(.eyebrow){max-width:610px}
+.trend-motion{
+  flex-shrink:0;cursor:pointer;
+  border:1px solid #e3d8e5;
+  border-radius:99px;padding:12px 17px;
+  background:#fffefd;color:#554762;
+  font-size:12px;font-weight:750;
+  transition:background .2s,transform .2s;
+}
+.trend-motion:hover{background:#f4eefa;transform:translateY(-2px)}
+.trend-motion:disabled{opacity:.5;cursor:not-allowed}
+.trend-showcase .caption-marquee{
+  margin:19px -38px 5px;
+  padding:8px 0 10px;
+  mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+}
+.trend-showcase .caption-lane{padding:10px 0}
+.trend-showcase .caption-track{
+  animation:caption-scroll var(--track-duration,110s) linear infinite;
+  will-change:transform;
+}
+.trend-showcase .caption-track.reverse{animation-direction:reverse}
+.trend-showcase .caption-run{gap:13px;padding-right:13px}
+.trend-showcase .marquee-pill{
+  max-width:460px;
+  min-height:61px;
+  padding:13px 23px;
+  white-space:normal;
+  text-wrap:balance;
+  line-height:1.45;
+  text-align:center;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.3);
+  backdrop-filter:saturate(1.2);
+  box-shadow:inset 0 1px rgba(255,255,255,.30),0 8px 19px rgba(62,40,69,.15);
+}
+.trend-showcase .marquee-pill .caption-icon{font-size:20px;line-height:1.1}
+.trend-note{font-size:11px;color:#867686;margin:6px 0 0;text-align:center}
+.trend-showcase .motion-paused .caption-track,
+.trend-showcase .caption-marquee.motion-paused .caption-track{animation-play-state:paused}
+
+/* Keep existing plan selection logic; detail controls are separate sibling buttons. */
+.plans{align-items:stretch;gap:18px}
+.plan-shell{
+  display:flex;flex-direction:column;
+  min-width:0;gap:10px;
+}
+.plan-shell .plan{
+  width:100%;flex:1;
+  min-height:345px;
+  text-align:left;
+  cursor:pointer;
+  border-radius:24px;
+}
+.plan-shell .plan p{min-height:56px}
+.plan-shell .plan .pill{font-size:9px;letter-spacing:.05em;line-height:1.5}
+.plan-shell .plan h3{margin:16px 0 10px;font-size:20px;min-height:53px}
+.plan-shell .plan ul{margin:17px 0 20px}
+.plan-shell .plan .choose{color:#74588f}
+.plan-shell .plan.selected .choose{color:#9b6815}
+.plan-shell.featured-plan .plan{
+  background:linear-gradient(158deg,#fffcf7,#faf6ff);
+  border-color:#ded0ec;
+}
+.plan-shell.featured-plan .pill{background:#eee3ff;color:#624593}
+.plan-shell.featured-plan .plan.selected .pill{background:#ffdb64;color:#4a3819}
+.plan-more{
+  appearance:none;
+  width:100%;
+  border:1px solid #e7ddec;
+  border-radius:14px;
+  min-height:46px;padding:11px 15px;
+  background:#fffefd;
+  color:#5f4b7b;
+  font:750 12px 'Be Vietnam Pro',system-ui,sans-serif;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;
+  cursor:pointer;
+  box-shadow:0 5px 18px rgba(85,53,91,.07);
+  transition:background .2s,box-shadow .2s,transform .2s;
+}
+.plan-more:hover{background:#f7f1ff;box-shadow:0 10px 22px rgba(85,53,91,.11);transform:translateY(-2px)}
+.plan-more span{font-size:18px}
+.plan-more:focus-visible{outline:3px solid #9271d6;outline-offset:3px}
+.plan-dialog{
+  padding:0;
+  margin:auto;
+  width:min(690px,calc(100vw - 28px));
+  max-height:min(90dvh,950px);
+  overflow:auto;
+  color:#2e2635;
+  background:#fffdfc;
+  border:1px solid #efe3ef;
+  border-radius:27px;
+  box-shadow:0 30px 110px rgba(35,23,45,.28);
+}
+.plan-dialog::backdrop{background:rgba(28,21,38,.59);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
+.plan-dialog[open]{animation:detail-in .25s cubic-bezier(.2,.7,.2,1)}
+@keyframes detail-in{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+.plan-dialog-content{position:relative;padding:36px}
+.plan-dialog-close{
+  position:sticky;top:0;float:right;
+  display:grid;place-items:center;
+  z-index:3;margin:-13px -13px 0 0;
+  width:39px;height:39px;
+  border:1px solid #e8dde7;
+  border-radius:50%;background:#fff;
+  cursor:pointer;font-size:15px;color:#5f4c66;
+  box-shadow:0 4px 12px rgba(41,28,50,.10);
+}
+.plan-dialog-close:hover{background:#f5ebfa}
+.plan-dialog-header{padding-right:20px}
+.plan-dialog-header h2{font-size:clamp(27px,4vw,38px);letter-spacing:-1.5px;margin:12px 0 8px}
+.plan-dialog-header p:not(.eyebrow){font-size:13px;line-height:1.9;margin:0 0 12px;color:#756b7b}
+.plan-dialog-price{
+  display:inline-flex;
+  align-items:center;
+  border:1px solid #f4deb2;
+  border-radius:99px;
+  background:linear-gradient(100deg,#fff1bd,#fff7dc);
+  color:#78500e;
+  padding:9px 17px;
+  font-size:21px;font-weight:800;
+  letter-spacing:-.7px;
+  margin:9px 0 17px;
+}
+.plan-dialog .detail-heading{font-size:16px;letter-spacing:-.4px;margin:13px 0 14px}
+.plan-detail-list{padding:0;margin:0 0 20px;list-style:none}
+.plan-detail-list li{
+  position:relative;
+  margin:0 0 11px;
+  padding:13px 13px 13px 38px;
+  border-radius:13px;
+  background:#f9f6fb;
+  color:#4c4452;
+  font-size:12px;line-height:1.7;
+}
+.plan-detail-list li::before{content:"✓";position:absolute;left:14px;top:13px;color:#835dbe;font-weight:800}
+.plan-samples{
+  margin-top:12px;
+  border:1px solid #eee4f2;
+  border-radius:19px;
+  padding:16px 17px;
+  background:linear-gradient(130deg,#fffaf3,#f8f3ff);
+}
+.sample-head{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.sample-head span{font-size:10px;color:#a08ea8}
+.sample-grid{display:flex;flex-wrap:wrap;gap:9px;padding:6px 0 4px}
+.detail-caption-pill{
+  display:inline-flex;align-items:center;justify-content:center;
+  border-radius:99px;padding:9px 13px;
+  min-height:41px;max-width:100%;
+  white-space:normal;text-align:center;
+  text-wrap:balance;
+  font-size:11px;font-weight:800;line-height:1.45;
+  box-shadow:0 5px 12px rgba(67,43,70,.13);
+}
+.plan-dialog-note{font-size:11px;line-height:1.75;color:#837687;margin:19px 0}
+.plan-dialog-pick{
+  appearance:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  width:100%;min-height:50px;
+  padding:13px 18px;border:0;
+  border-radius:15px;
+  color:white;background:#2d2535;
+  font:750 13px 'Be Vietnam Pro',system-ui,sans-serif;
+  transition:background .2s,transform .2s;
+}
+.plan-dialog-pick:not(:disabled):hover{background:#624279;transform:translateY(-2px)}
+.plan-dialog-pick:disabled{opacity:.45;cursor:not-allowed}
+.plan-dialog .plan-samples[hidden]{display:none!important}
+@media(max-width:850px){
+  .plan-shell .plan{min-height:0}
+  .plan-shell .plan p{min-height:0}
+  .plan-shell .plan h3{min-height:0}
+}
+@media(max-width:700px){
+  .trend-showcase{padding:25px 16px 18px;margin-top:48px}
+  .trend-heading{display:flex;flex-direction:column;align-items:flex-start}
+  .trend-showcase .caption-marquee{margin:15px -16px 7px}
+  .trend-showcase .caption-lane{padding:7px 0}
+  .trend-showcase .marquee-pill{min-height:51px;max-width:270px;padding:10px 16px;font-size:12px}
+  .trend-showcase .marquee-pill .caption-icon{font-size:17px}
+  .trend-motion{padding:9px 13px;font-size:11px}
+  .plans{gap:16px}
+  .plan-shell{gap:8px}
+  .plan-shell .plan{padding:22px}
+  .plan-shell .plan h3{margin:12px 0 8px}
+  .plan-more{min-height:44px}
+  .plan-dialog{border-radius:20px;max-height:91dvh}
+  .plan-dialog-content{padding:25px 20px 22px}
+  .plan-dialog-close{margin:-6px -3px 0 0}
+  .plan-detail-list li{padding:11px 10px 11px 35px}
+  .plan-detail-list li::before{left:12px;top:11px}
+  .plan-samples{padding:13px}
+}
+@media(prefers-reduced-motion:reduce){
+  .plan-dialog[open]{animation:none}
+  .trend-showcase .caption-track{animation:none!important}
+  .trend-showcase .caption-lane{overflow-x:auto;scrollbar-width:thin}
+  .trend-showcase .caption-run:nth-child(2){display:none}
+}
