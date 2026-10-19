@@ -11,6 +11,7 @@ export function storeMode(): 'demo'|'live' {
   return e.STORE_PAYMENTS_MODE==='live' &&
     e.STORE_FULFILLMENT_READY==='true' &&
     e.STORE_PRICES_APPROVED==='true' &&
+    e.STORE_FILES_READY==='true' && e.STORE_DOWNLOAD_SECRET?.length>=32 &&
     !!e.PAYOS_EXPECTED_ACCOUNT_NUMBER &&
     !!e.PAYOS_CLIENT_ID && !!e.PAYOS_API_KEY && !!e.PAYOS_CHECKSUM_KEY ? 'live':'demo';
 }
