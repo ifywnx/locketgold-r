@@ -10,6 +10,9 @@
   const status=$('an-store-checkout-status');
   const cartItems=$('an-store-cart-items');
   const modeLabel=$('an-store-cart-mode');
+  const cartBadge=$('store-cart-badge');
+  const mobileCart=$('an-store-mobile-cart');
+  const mobileCartLabel=$('an-store-mobile-cart-label');
   let mode='demo',ready=false,selectedFromDialog=null;
   function ensureOwner(){
     let owner=localStorage.getItem('an-store-owner-v1');
@@ -47,15 +50,18 @@
     }
     cartItems.replaceChildren(fragment);
     $('an-store-cart-amount').textContent=money(amount);
+    if(cartBadge)cartBadge.textContent=String(cart.size);
+    if(mobileCart){mobileCart.hidden=!ready||!cart.size;}
+    if(mobileCartLabel)mobileCartLabel.textContent='Xem giỏ hàng · '+cart.size+' bộ · '+money(amount);
     button.disabled=!ready||!cart.size;
     button.querySelector('span').textContent=cart.size?'↗':'＋';
     for(const btn of root.querySelectorAll('[data-store-add]')){
-      btn.textContent=cart.has(btn.dataset.storeAdd)?'✓ Đã chọn · Bỏ khỏi giỏ':'＋ Thêm vào giỏ · '+money(catalog.get(btn.dataset.storeAdd)?.price||0);
+      btn.textContent=cart.has(btn.dataset.storeAdd)?'✓ Đã thêm · Chạm để bỏ':'＋ Thêm vào giỏ';
       btn.setAttribute('aria-pressed',String(cart.has(btn.dataset.storeAdd)));
     }
     const modalAdd=$('an-store-dialog-add');
     if(modalAdd&&selectedFromDialog){
-      modalAdd.textContent=cart.has(selectedFromDialog)?'✓ Đã chọn · Bỏ khỏi giỏ':'＋ Thêm vào giỏ thử';
+      modalAdd.textContent=cart.has(selectedFromDialog)?'✓ Đã thêm · Chạm để bỏ':'＋ Thêm vào giỏ';
     }
   }
   function toggle(id){
@@ -78,18 +84,23 @@
         const add=document.createElement('button');
         add.type='button';add.className='an-store-add';add.dataset.storeAdd=p.id;
         add.addEventListener('click',()=>toggle(p.id));
+        const price=document.createElement('p');
+        price.className='an-store-price';
+        price.textContent='Giá dùng thử: '+money(p.price);
+        const previewButton=card.querySelector('[data-store-preview]');
+        if(previewButton)card.insertBefore(price,previewButton);
         card.append(add);
       }
       ready=true;
-      modeLabel.textContent=mode==='demo'?'DEMO · Không thu tiền':'LIVE · Chuyển qua payOS';
+      modeLabel.textContent=mode==='demo'?'DÙNG THỬ · Không thu tiền':'THANH TOÁN THẬT';
       status.textContent=mode==='demo'
-        ?'Đây là giỏ hàng thử. Bạn có thể tạo đơn rồi bấm mô phỏng thanh toán; không bị trừ tiền.'
+        ?'Đây là giỏ hàng dùng thử. Bạn có thể tạo đơn để xem quy trình, không cần chuyển tiền.'
         :'Thanh toán thật chỉ được bật khi chủ cửa hàng đã xác nhận giao hàng. Kiểm tra đơn trước khi tiếp tục.';
-      button.firstChild.textContent=mode==='demo'?'Tạo đơn thanh toán thử ':'Tạo đơn payOS ';
+      button.firstChild.textContent=mode==='demo'?'Tiếp tục đặt hàng thử ':'Tiếp tục thanh toán ';
       update();
     }catch(error){
-      ready=false;modeLabel.textContent='Chưa kết nối API';button.disabled=true;
-      status.textContent='Không tải được giá từ máy chủ. Hãy thử lại khi backend hoạt động.';
+      ready=false;modeLabel.textContent='Không thể tải giá';button.disabled=true;
+      status.textContent='Chưa xem được giá và giỏ hàng. Vui lòng tải lại trang sau ít phút.';
     }
   }
   root.querySelectorAll('[data-store-preview]').forEach(b=>{
@@ -98,7 +109,7 @@
   $('an-store-dialog-add')?.addEventListener('click',()=>toggle(selectedFromDialog));
   button.addEventListener('click',async()=>{
     if(!ready||!cart.size)return;
-    button.disabled=true;status.textContent='Đang tạo đơn trên máy chủ…';
+    button.disabled=true;status.textContent='Đang tạo đơn dùng thử…';
     try{
       const response=await fetch('/api/store/checkout',{
         method:'POST',cache:'no-store',
@@ -106,7 +117,7 @@
         body:JSON.stringify({items:[...cart]})
       });
       const data=await response.json();
-      if(!response.ok||!data.orderCode)throw Error(data.error||'Không tạo được đơn');
+      if(!response.ok||!data.orderCode)throw Error(data.error||'Chưa tạo được đơn, vui lòng thử lại');
       localStorage.setItem('an-store-last-order',String(data.orderCode));
       // Local order details are always shown before any transfer to payOS.
       location.assign('/store/checkout.html?order='+encodeURIComponent(data.orderCode));
