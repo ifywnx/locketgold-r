@@ -87,3 +87,173 @@ section{scroll-margin-top:90px}
 @media(max-width:370px){.caption-grid{grid-template-columns:1fr 1fr}.hero h1{font-size:38px}.featurebar{grid-template-columns:1fr}.featurebar div{border-left:0;border-top:1px solid #f1e7ec;padding:8px 5px}}
 @media(hover:none),(pointer:coarse){.caption-card:hover{transform:none;filter:none}.heroart{transform:rotate(-2deg)!important}.plan:hover{transform:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.caption-track,.caption-card,.caption-icon,.art-glint{animation:none!important}.caption-card,.plan,.heroart,.button{transition:none!important}.motion-ready [data-reveal]{opacity:1;transform:none;transition:none}.caption-lane{overflow:auto}.caption-run:nth-child(2){display:none}}
+
+
+/* Caption gallery refinement — Locket-style gradient pill, not double-painted text */
+.caption-gallery{
+  background:linear-gradient(148deg,#fffaf4 0%,#fffdfc 46%,#f7f3ff 100%);
+  border:1px solid rgba(231,219,233,.84);
+  box-shadow:0 28px 75px rgba(88,67,95,.085);
+}
+.caption-grid{
+  align-items:stretch;
+  gap:16px;
+  padding:12px 0 22px;
+}
+.caption-grid .caption-card{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:13px;
+  min-width:0;
+  min-height:153px;
+  padding:22px 15px 15px;
+  border:1px solid rgba(226,221,230,.94);
+  border-radius:25px;
+  background:rgba(255,255,255,.90);
+  background-image:none!important;
+  color:#554b5c;
+  box-shadow:0 3px 11px rgba(56,38,63,.038),0 14px 32px rgba(74,58,75,.055),inset 0 1px 0 #fff;
+  transform-style:preserve-3d;
+  transition:transform .34s cubic-bezier(.22,1,.36,1),box-shadow .34s ease,border-color .34s ease;
+}
+.caption-grid .caption-card::before{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  z-index:-1;
+  width:74%;
+  height:105%;
+  top:-48%;
+  right:-25%;
+  border-radius:50%;
+  background:linear-gradient(125deg,var(--caption-color-start,#e4d9ff),var(--caption-color-end,#ffe2c4));
+  opacity:.13;
+  filter:blur(18px);
+}
+.caption-grid .caption-card::after{
+  content:"";
+  position:absolute;
+  inset:0 auto auto 20%;
+  width:60%;
+  height:2px;
+  border-radius:0 0 999px 999px;
+  background:linear-gradient(90deg,var(--caption-color-start,#f5ca96),var(--caption-color-end,#c2adf8));
+  opacity:.6;
+}
+.caption-grid .caption-card .caption-inner{
+  position:relative;
+  z-index:1;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  align-self:center;
+  flex:0 1 auto;
+  gap:8px;
+  max-width:100%;
+  min-height:54px;
+  margin:auto 0 0;
+  padding:14px 19px;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:999px;
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 9px 18px rgba(60,45,66,.13),0 2px 5px rgba(45,30,49,.08);
+  line-height:1.35;
+  font-weight:780;
+  font-size:14px;
+  text-align:center;
+  transform:translateZ(0);
+  transition:transform .36s cubic-bezier(.2,.7,.2,1),box-shadow .36s ease;
+}
+.caption-grid .caption-card .caption-text{
+  min-width:0;
+  background:none!important;
+  box-shadow:none!important;
+  text-wrap:balance;
+  overflow-wrap:anywhere;
+}
+.caption-grid .caption-card .caption-icon{
+  flex:0 0 auto;
+  font-size:20px;
+  line-height:1.05;
+  animation:none;
+}
+.caption-grid .caption-card .copy-hint{
+  position:relative;
+  z-index:1;
+  display:block;
+  margin:0;
+  color:#99909f;
+  opacity:1;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.06px;
+  line-height:1.5;
+}
+.caption-grid .caption-card:hover{
+  transform:perspective(950px) translateY(-6px) rotateX(2.3deg) rotateY(-1.5deg);
+  border-color:#d9cbec;
+  filter:none;
+  box-shadow:0 12px 22px rgba(70,50,78,.065),0 24px 50px rgba(71,52,80,.105);
+}
+.caption-grid .caption-card:hover .caption-inner{
+  transform:translateY(-3px) translateZ(13px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 14px 27px rgba(60,45,66,.18);
+}
+.caption-grid .caption-card:focus-visible{
+  outline:3px solid #8669d8;
+  outline-offset:3px;
+}
+.caption-grid .caption-card:active{
+  transform:translateY(1px) scale(.985);
+}
+.caption-grid .caption-card.copied{
+  border-color:#b19bdd;
+  background:#f9f6ff;
+}
+.caption-grid .caption-card.copied .copy-hint{
+  color:#6b4bb3;
+}
+.caption-marquee .marquee-pill{
+  position:relative;
+  overflow:hidden;
+  flex-shrink:0;
+  border:1px solid rgba(255,255,255,.3);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 9px 19px rgba(66,49,75,.12);
+}
+.caption-marquee .caption-text{
+  background:none!important;
+  box-shadow:none!important;
+}
+.caption-quick .quick-chip{box-shadow:0 3px 12px rgba(54,45,68,.04)}
+.caption-quick .quick-chip.active{background:#363043;box-shadow:0 8px 17px rgba(54,40,71,.16)}
+@media(max-width:900px){
+  .caption-grid{gap:12px}
+  .caption-grid .caption-card{min-height:143px;padding:17px 11px 13px;border-radius:21px}
+  .caption-grid .caption-card .caption-inner{min-height:50px;padding:12px 13px;font-size:12.5px}
+  .caption-grid .caption-card .caption-icon{font-size:18px}
+}
+@media(max-width:700px){
+  .caption-gallery{padding:22px 15px}
+  .caption-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .caption-grid .caption-card{min-height:137px;padding:14px 8px 11px;border-radius:19px;gap:10px}
+  .caption-grid .caption-card .caption-inner{min-height:46px;padding:11px 9px;font-size:11.5px;gap:5px}
+  .caption-grid .caption-card .caption-icon{font-size:17px}
+  .caption-grid .caption-card .copy-hint{font-size:9px}
+}
+@media(max-width:360px){
+  .caption-grid{grid-template-columns:1fr}
+  .caption-grid .caption-card .caption-inner{font-size:13px;padding:13px 18px}
+}
+@media(hover:none),(pointer:coarse){
+  .caption-grid .caption-card:hover{transform:none;box-shadow:0 3px 11px rgba(56,38,63,.038),0 14px 32px rgba(74,58,75,.055)}
+  .caption-grid .caption-card:hover .caption-inner{transform:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.24),0 9px 18px rgba(60,45,66,.13)}
+}
+@media(prefers-reduced-motion:reduce){
+  .caption-grid .caption-card,.caption-grid .caption-card .caption-inner{animation:none!important;transition:none!important}
+  .caption-grid .caption-card:hover,.caption-grid .caption-card:hover .caption-inner{transform:none!important}
+}
