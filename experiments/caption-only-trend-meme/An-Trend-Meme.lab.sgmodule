@@ -1,0 +1,16 @@
+#!name=An · Caption Only · Trend & Meme [LAB]
+#!desc=143 caption tĩnh · Chưa kiểm thử trên iPhone · Không cấp Gold hay video
+#!category=Rewrite
+#!system=iOS
+
+# CHỈ LÀ MẪU THỬ NGHIỆM.
+# Máy chủ phân phối hợp lệ phải thay __SIGNED_SCRIPT_URL__ bằng
+# URL HTTPS truy cập được và được phép sử dụng.
+# Repo GitHub hiện PRIVATE: đường dẫn raw không công khai sẽ không tải được.
+# KHÔNG cài đồng thời với bộ V1/V2 có script xử lý cùng Remote Config.
+
+[Script]
+an_caption_lab = type=http-response, pattern=^https:\/\/firebaseremoteconfig\.googleapis\.com\/v1\/projects\/locket-4252a\/.+, script-path=__SIGNED_SCRIPT_URL__, requires-body=true, max-size=-1, timeout=30
+
+[MITM]
+hostname = %APPEND% firebaseremoteconfig.googleapis.com
