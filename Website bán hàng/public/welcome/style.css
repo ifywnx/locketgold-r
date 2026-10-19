@@ -1304,3 +1304,29 @@ header nav .nav-cta:hover span{transform:translate(3px,-3px)}
   .experience-tile,.step-card,.page-rail a,.hero-primary,header nav a:not(.nav-cta)::after{transition:none!important}
   .experience-tile:hover,.step-card:hover{transform:none}
 }
+
+
+/* Resolve reveal-vs-hover transform priorities and pause marquee on inspection. */
+.motion-ready .hero-stage[data-reveal].is-visible{
+  transform:translateY(var(--hero-parallax,0px));
+}
+.motion-ready .experience-tile[data-reveal].is-visible:hover{
+  transform:translateY(-7px) rotateX(1deg);
+}
+.motion-ready .step-card[data-reveal].is-visible:hover{
+  transform:translateY(-5px);
+}
+.motion-ready [data-reveal]{
+  transition-delay:var(--reveal-delay,0ms);
+}
+.trend-showcase .caption-marquee.is-hovered .caption-track{
+  animation-play-state:paused;
+}
+@media(max-width:700px),(hover:none),(pointer:coarse){
+  .motion-ready .experience-tile[data-reveal].is-visible:hover,
+  .motion-ready .step-card[data-reveal].is-visible:hover{transform:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .motion-ready .hero-stage[data-reveal].is-visible{transform:none}
+  .motion-ready [data-reveal]{transition-delay:0ms}
+}
