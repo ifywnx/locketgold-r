@@ -3,7 +3,7 @@ const $=id=>document.getElementById(id);
 const plans={standard:{price:49000,name:'An · Locket V1'},v2:{price:89000,name:'Locket V2'},plus:{price:129000,name:'V2 + Shadowrocket'}};
 let plan='standard',order=null,paid=false,accountRequest=0;
 const money=n=>n.toLocaleString('vi-VN')+'đ';
-function select(value,restore=false){if(order&&!restore)return;if(!plans[value])value='standard';plan=value;document.querySelectorAll('[data-plan]').forEach(el=>{const on=el.dataset.plan===plan;el.classList.toggle('selected',on);el.setAttribute('aria-pressed',String(on));el.querySelector('.choose').textContent=on?'● Đang chọn':'○ Chọn gói này'});$('selection').textContent=plans[plan].name+' · '+money(plans[plan].price);$('buy').textContent='Thanh toán '+money(plans[plan].price)+' →'}
+function select(value,restore=false){if(order&&!restore)return;if(value==='plus'&&!restore)value='v2';if(!plans[value])value='standard';plan=value;document.querySelectorAll('[data-plan]').forEach(el=>{const on=el.dataset.plan===plan;el.classList.toggle('selected',on);el.setAttribute('aria-pressed',String(on));el.querySelector('.choose').textContent=on?'● Đang chọn':'○ Chọn gói này'});$('selection').textContent=plans[plan].name+' · '+money(plans[plan].price);$('buy').textContent='Thanh toán '+money(plans[plan].price)+' →'}
 document.querySelectorAll('[data-plan]').forEach(el=>el.onclick=()=>select(el.dataset.plan));
 function installLink(session,file,title){
  const link=document.createElement('a');link.className='button dark';link.textContent=title;
