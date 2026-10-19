@@ -1,9 +1,9 @@
 #!url=https://raw.githubusercontent.com/ifywnx/locket-gold-ywnx/refs/heads/main/downloads/ifywnx-Locket-Captions.sgmodule
 #!name=An · Locket V1
-#!desc=Bộ thiết lập Locket · ifywnx
+#!desc=Bộ thiết lập Locket · An
 
 [Script]
-# ~ By ifywnx
+# ~ By An
 # ～ Egern transfer to Shadowrocket & Surge & LanceX
 revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts$|subscribers\/[^/]+$), script-path=__ASSET_BASE__/Locket_An.js, requires-body=true, max-size=-1, timeout=60
 
