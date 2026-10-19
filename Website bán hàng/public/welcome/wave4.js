@@ -3,35 +3,6 @@
   const byId=id=>document.getElementById(id);
   const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
   const mobile=window.matchMedia('(max-width:700px)');
-  const phone=document.querySelector('[data-phone-tilt]');
-
-  // Three entirely original, CSS-drawn mock scenes. No uploaded/reference photo is used.
-  document.querySelectorAll('[data-photo-scene]').forEach(button=>{
-    button.addEventListener('click',()=>{
-      if(!phone)return;
-      const scene=button.dataset.photoScene;
-      if(!['sunset','sky','dream'].includes(scene))return;
-      phone.dataset.photoScene=scene;
-      document.querySelectorAll('[data-photo-scene]').forEach(option=>{
-        const active=option===button;
-        option.classList.toggle('active',active);
-        option.setAttribute('aria-pressed',String(active));
-      });
-    });
-  });
-  document.querySelectorAll('[data-demo-palette]').forEach(button=>{
-    button.addEventListener('click',()=>{
-      const palette=button.dataset.demoPalette;
-      if(!['original','gold','lilac','rose'].includes(palette))return;
-      document.querySelectorAll('[data-demo-palette]').forEach(option=>{
-        const active=option===button;
-        option.classList.toggle('active',active);
-        option.setAttribute('aria-pressed',String(active));
-      });
-      window.dispatchEvent(new CustomEvent('an:demo-palette',{detail:{palette}}));
-    });
-  });
-  if(phone)phone.dataset.photoScene='sunset';
 
   // V1 and V2 examples are read directly from the same preview data as the detail modal.
   const samples=[['v1','v1-caption-data.json'],['v2','caption-data.json']];
