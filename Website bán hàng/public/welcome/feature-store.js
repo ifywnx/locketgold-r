@@ -18,7 +18,7 @@
 
   async function getCatalog(){
     if(!loading){
-      loading=fetch('caption-data.json',{cache:'no-cache'}).then(res=>{
+      loading=fetch('/welcome/caption-data.json',{cache:'no-cache'}).then(res=>{
         if(!res.ok)throw Error('Không thể tải thư viện');
         return res.json();
       }).then(entries=>{
