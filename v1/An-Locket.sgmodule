@@ -1,0 +1,15 @@
+#!url=https://raw.githubusercontent.com/ifywnx/locket-gold-ywnx/refs/heads/main/downloads/ifywnx-Locket-Captions.sgmodule
+#!name=An · Locket V1
+#!desc=Bộ thiết lập Locket · ifywnx
+
+[Script]
+# ~ By ifywnx
+# ～ Egern transfer to Shadowrocket & Surge & LanceX
+revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts$|subscribers\/[^/]+$), script-path=__ASSET_BASE__/Locket_An.js, requires-body=true, max-size=-1, timeout=60
+
+deleteHeader = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts|subscribers), script-path=__ASSET_BASE__/deleteHeader.js, timeout=60
+
+locket_rc = type=http-response, pattern=^https:\/\/firebaseremoteconfig\.googleapis\.com\/v1\/projects\/locket-4252a\/.+, script-path=__ASSET_BASE__/Locket_Unlocked.js, requires-body=true, max-size=-1, timeout=60
+
+[MITM]
+hostname = %APPEND% api.revenuecat.com, firebaseremoteconfig.googleapis.com
