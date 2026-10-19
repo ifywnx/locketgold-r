@@ -41,8 +41,8 @@
       el.classList.add('copied');
       el.setAttribute('aria-label','Đã sao chép: '+text);
       const mark=el.querySelector('.copy-hint');
-      if(mark)mark.textContent='Đã sao chép ✓';
-      setTimeout(()=>{el.classList.remove('copied');if(mark)mark.textContent='Chạm để sao chép';},1700);
+      if(mark)mark.textContent='✓ Đã sao chép';
+      setTimeout(()=>{if(!el.isConnected)return;el.classList.remove('copied');el.setAttribute('aria-label','Sao chép caption: '+text);if(mark)mark.textContent='⧉ Sao chép';},1700);
     }catch{count.textContent='Không thể sao chép tự động. Hãy chọn và sao chép câu chữ.'}
   }
   function draw(){
@@ -50,11 +50,11 @@
     const fragment=document.createDocumentFragment();
     for(const [i,x] of found.slice(0,limit).entries()){
       const card=make('button','animated-caption caption-card');
-      card.type='button';card.style.backgroundImage=gradient(x);card.style.color=x.ink;
+      card.type='button';card.style.setProperty('--caption-color-start',x.colors[0]);card.style.setProperty('--caption-color-end',x.colors[x.colors.length-1]);card.setAttribute('aria-label','Sao chép caption: '+x.text);
       card.style.setProperty('--caption-delay',String(Math.min(i,17)*24)+'ms');
       card.title='Sao chép caption: '+x.text;
       const body=pill(x,'caption-inner');
-      const hint=make('span','copy-hint','Chạm để sao chép');
+      const hint=make('span','copy-hint','⧉ Sao chép');
       card.append(body,hint);card.onclick=()=>copyCaption(x.text,card);
       fragment.append(card);
     }
