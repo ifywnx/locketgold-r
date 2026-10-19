@@ -51,6 +51,8 @@ export async function POST(r:Request){
  }
 }
 export async function GET(r:Request){
+ if(new URL(r.url).searchParams.get('catalog')==='1')
+   return json({mode:storeMode(),products:Object.entries(STORE_PRODUCTS).map(([id,p])=>({id,name:p.name,price:p.price}))});
  const token=owner(r);
  if(!token)return json({error:'Không tìm thấy phiên của đơn hàng.'},401);
  const id=Number(new URL(r.url).searchParams.get('order'));
