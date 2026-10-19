@@ -1,0 +1,7 @@
+(async()=>{
+const grid=document.querySelector('#caption-grid'),search=document.querySelector('#caption-search'),more=document.querySelector('#caption-more'),motion=document.querySelector('#caption-motion');
+let rows=[],limit=12;
+function draw(){const q=search.value.toLocaleLowerCase('vi');const found=rows.filter(x=>(x.text+' '+x.group).toLocaleLowerCase('vi').includes(q));grid.replaceChildren();for(const [i,x] of found.slice(0,limit).entries()){const card=document.createElement('div');card.className='animated-caption';card.style.backgroundImage='linear-gradient(135deg,'+x.colors.join(',')+')';card.style.color=x.ink;card.style.animationDelay=(-i*.4)+'s';const icon=document.createElement('span');icon.className='caption-icon';icon.textContent=x.icon;const text=document.createElement('span');text.textContent=x.text;card.append(icon,text);grid.append(card)}document.querySelector('#caption-count').textContent=Math.min(limit,found.length)+' / '+found.length+' caption';more.hidden=limit>=found.length;}
+search.addEventListener('input',()=>{limit=12;draw()});more.onclick=()=>{limit+=24;draw()};motion.onclick=()=>{const paused=grid.classList.toggle('motion-paused');motion.textContent=paused?'Bật hiệu ứng':'Tạm dừng hiệu ứng';motion.setAttribute('aria-pressed',String(!paused))};
+try{const response=await fetch('caption-data.json');if(!response.ok)throw Error();rows=await response.json();draw()}catch{document.querySelector('#caption-count').textContent='Chưa tải được caption. Bạn thử tải lại trang nhé.';more.hidden=true}
+})();
