@@ -10,6 +10,7 @@ export function storeMode(): 'demo'|'live' {
   // Test checkout is the default, regardless of any payOS keys being configured.
   return e.STORE_PAYMENTS_MODE==='live' &&
     e.STORE_FULFILLMENT_READY==='true' &&
+    e.STORE_PRICES_APPROVED==='true' &&
     !!e.PAYOS_EXPECTED_ACCOUNT_NUMBER &&
     !!e.PAYOS_CLIENT_ID && !!e.PAYOS_API_KEY && !!e.PAYOS_CHECKSUM_KEY ? 'live':'demo';
 }
