@@ -8,25 +8,25 @@
       eyebrow:'AN · GÓI V1 · DÀNH CHO NGƯỜI ĐÃ CÓ SHADOWROCKET',
       name:'An · Locket V1',
       price:'49.000đ',
-      summary:'Bộ cấu hình cơ bản V1 trong repository. Phù hợp nếu bạn đã có ứng dụng Shadowrocket và muốn bắt đầu từ bản đơn giản.',
+      summary:'Bộ cấu hình cơ bản V1 trong kho dữ liệu của An. Phù hợp nếu bạn đã có ứng dụng Shadowrocket và muốn bắt đầu từ bản đơn giản.',
       features:[
-        'Bản cấu hình Locket V1, sử dụng logic riêng của nhánh V1.',
-        'Module và các script của V1; DNS cũ và hướng dẫn từng bước.',
-        'Có hỗ trợ các thành phần caption của bản V1, nhưng không phải kho caption Full Icon/V15 của V2.',
+        'Bản cấu hình Locket V1, sử dụng cách thiết lập riêng của V1.',
+        'Tệp cài đặt và mã xử lý của V1; cấu hình DNS cũ và hướng dẫn từng bước.',
+        'Có thư viện caption V1; không bao gồm toàn bộ các mẫu ở V2.',
         'Không kèm tài khoản tải Shadowrocket — bạn cần có ứng dụng sẵn.'
       ],
       note:'Lưu ý: Bộ V1 và V2 dùng nguồn cấu hình khác nhau; giao diện web không chứng minh mọi tính năng đều hoạt động trên mọi phiên bản Locket.',
       hasSamples:true
     },
     v2:{
-      eyebrow:'GÓI V2 · BẢN V15 FULL ICON',
+      eyebrow:'GÓI V2 · NHIỀU BIỂU TƯỢNG',
       name:'Locket V2',
       price:'89.000đ',
-      summary:'Dành cho người đã có Shadowrocket và muốn bộ V2 với nhiều kiểu caption, icon và màu sắc hơn V1.',
+      summary:'Phù hợp với người đã có Shadowrocket, muốn nhiều kiểu caption, biểu tượng và màu sắc.',
       features:[
-        'Bộ cấu hình V2 nguồn V15 trong GitHub, cùng module và hướng dẫn cài đặt.',
-        'Bộ caption mở rộng theo nhiều chủ đề, Full Icon và gradient; có caption nhóm Trend.',
-        'Bộ thiết lập khung widget và thông số video 30 giây theo mô tả module V2 (cần kiểm thử thực tế).',
+        'Bộ cấu hình V2, tệp cài đặt và hướng dẫn sử dụng.',
+        'Nhiều bộ caption theo chủ đề, kèm biểu tượng và màu chuyển sắc.',
+        'Thiết lập khung ảnh tiện ích và thông số quay video 30 giây theo mô tả nguồn (chưa kiểm chứng thực tế).',
         'Không kèm tài khoản tải Shadowrocket — bạn cần có ứng dụng sẵn.'
       ],
       note:'Các caption bên dưới là ví dụ minh hoạ từ dữ liệu trang web. Cách hiện và tính tương thích trong Locket phụ thuộc ứng dụng và thiết bị.',
@@ -38,10 +38,10 @@
       price:'129.000đ',
       summary:'Toàn bộ gói V2 89k, không phải phiên bản Locket thứ ba. Khoản chênh lệch là phần tài khoản và hướng dẫn tải Shadowrocket.',
       features:[
-        'Nhận ĐÚNG bộ V2 như gói 89.000đ — cùng caption, icon, gradient và cấu hình.',
+        'Nhận cùng bộ V2 như gói 89.000đ — nội dung, biểu tượng, màu sắc và cấu hình giống nhau.',
         'Được cấp thông tin tài khoản phục vụ tải Shadowrocket theo quy trình hỗ trợ.',
         'Kèm hướng dẫn đăng nhập/đăng xuất trong “Phương tiện & Mục mua” để giữ tài khoản iCloud cá nhân.',
-        'Không có kho caption hoặc chức năng Locket riêng vượt gói V2 89k.'
+        'Không có bộ caption hoặc chức năng bổ sung vượt gói V2 89k.'
       ],
       note:'Tài khoản tải ứng dụng là phần hỗ trợ thêm, không phải phiên bản Shadowrocket khác hay một gói Locket nâng cấp riêng. Khả năng cấp tài khoản phụ thuộc cấu hình dịch vụ.',
       hasSamples:true
