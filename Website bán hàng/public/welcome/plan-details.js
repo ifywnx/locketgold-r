@@ -48,7 +48,7 @@
     }
   };
   let active='standard', lastTrigger=null;
-  let libraryRows=[], visibleLimit=9, libraryLoading=0;
+  let libraryRows=[], visibleLimit=36, libraryLoading=0;
   const cached = new Map();
   const safeText=(node,value)=>{node.textContent=value;return node};
   const $=id=>byId(id);
@@ -79,50 +79,46 @@
     return libraryRows.filter(item=>(!category||item.group===category)&&
       (!q||norm([item.text,item.icon,item.group].join(' ')).includes(q)));
   }
+  // Match the user-supplied V15 HTML preview: a complete, passive Locket pill.
   function createTile(item){
-    const button=document.createElement('button');
-    button.type='button';
-    button.className='plan-caption-tile';
-    button.style.backgroundImage='linear-gradient(180deg,'+item.colors.join(',')+')';
-    button.style.color=item.ink;
-    button.setAttribute('aria-label','Sao chép caption: '+item.text);
-
-    const body=document.createElement('span');
-    body.className='plan-caption-body';
+    const pill=document.createElement('div');
+    pill.className='plan-caption-pill';
+    pill.style.background='linear-gradient(180deg,'+item.colors.join(',')+')';
+    pill.style.color=item.ink;
+    pill.title=item.colors.join(' → ');
     if(item.icon){
       const icon=document.createElement('span');
       icon.className='plan-caption-icon';
-      icon.setAttribute('aria-hidden','true');
       icon.textContent=item.icon;
-      body.append(icon);
+      icon.setAttribute('aria-hidden','true');
+      pill.append(icon);
     }
-    const text=document.createElement('span');
-    text.className='plan-caption-text';
-    text.textContent=item.text;
-    body.append(text);
-    const hint=document.createElement('span');
-    hint.className='plan-caption-copy';
-    hint.textContent='⧉ Sao chép';
-    button.append(body,hint);
-    button.addEventListener('click',async()=>{
-      try{
-        if(!navigator.clipboard?.writeText)throw Error('Clipboard unsupported');
-        await navigator.clipboard.writeText(item.text);
-        hint.textContent='✓ Đã sao chép';
-        button.classList.add('copied');
-        setTimeout(()=>{if(!button.isConnected)return;hint.textContent='⧉ Sao chép';button.classList.remove('copied')},1400);
-      }catch{
-        hint.textContent='Không sao chép được';
-        setTimeout(()=>{if(button.isConnected)hint.textContent='⧉ Sao chép'},1800);
-      }
-    });
-    return button;
+    const label=document.createElement('span');
+    label.className='plan-caption-text';
+    label.textContent=item.text;
+    pill.append(label);
+    return pill;
   }
   function drawLibrary(){
     const matching=filtered();
     const displayed=matching.slice(0,visibleLimit);
     const grid=$('plan-caption-grid'),fragment=document.createDocumentFragment();
-    for(const item of displayed)fragment.append(createTile(item));
+    let currentGroup=null,groupName='';
+    for(const item of displayed){
+      if(groupName!==item.group){
+        const section=document.createElement('section');
+        section.className='plan-caption-group';
+        const heading=document.createElement('h4');
+        heading.textContent=item.group;
+        const pills=document.createElement('div');
+        pills.className='plan-caption-pills';
+        section.append(heading,pills);
+        fragment.append(section);
+        currentGroup=pills;
+        groupName=item.group;
+      }
+      currentGroup.append(createTile(item));
+    }
     if(!matching.length){
       const empty=document.createElement('p');
       empty.className='library-empty';
@@ -137,7 +133,7 @@
   function resetLibraryFilters(){
     $('plan-caption-search').value='';
     $('plan-caption-category').replaceChildren(new Option('Tất cả chủ đề',''));
-    visibleLimit=9;
+    visibleLimit=36;
   }
   async function renderLibraryFor(version){
     const request=++libraryLoading;
@@ -169,9 +165,9 @@
     }
   }
 
-  $('plan-caption-search').addEventListener('input',()=>{visibleLimit=9;drawLibrary();$('plan-caption-grid').scrollTop=0})
-  $('plan-caption-category').addEventListener('change',()=>{visibleLimit=9;drawLibrary();$('plan-caption-grid').scrollTop=0})
-  $('plan-caption-more').addEventListener('click',()=>{visibleLimit+=9;drawLibrary();const grid=$('plan-caption-grid');grid.scrollTo({top:grid.scrollHeight,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})});
+  $('plan-caption-search').addEventListener('input',()=>{visibleLimit=36;drawLibrary();$('plan-caption-grid').scrollTop=0})
+  $('plan-caption-category').addEventListener('change',()=>{visibleLimit=36;drawLibrary();$('plan-caption-grid').scrollTop=0})
+  $('plan-caption-more').addEventListener('click',()=>{visibleLimit+=36;drawLibrary();const grid=$('plan-caption-grid');grid.scrollTo({top:grid.scrollHeight,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})});
   $('plan-library-jump').addEventListener('click',()=>{
     const scrollable=$('plan-samples');
     scrollable.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
