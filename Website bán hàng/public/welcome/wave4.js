@@ -75,7 +75,9 @@
     const rect=plans.getBoundingClientRect();
     const heroRect=hero.getBoundingClientRect();
     const pricingVisible=rect.top<window.innerHeight*.75&&rect.bottom>70;
-    const shouldShow=mobile.matches&&heroRect.bottom<38&&!pricingVisible&&!modal?.open;
+    // Historic Plus orders have no new-sale card: never show an incorrect V1 price.
+    const hasVisibleSelection=!!document.querySelector('.plan.selected');
+    const shouldShow=mobile.matches&&heroRect.bottom<38&&!pricingVisible&&!modal?.open&&hasVisibleSelection;
     bar.hidden=!shouldShow;
     document.body.classList.toggle('an-has-sticky',shouldShow);
   }
