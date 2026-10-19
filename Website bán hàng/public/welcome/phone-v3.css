@@ -1,7 +1,10 @@
 /* An V3: faithful, lightweight mock of the two screenshots supplied by the owner.
    It is an illustrative CSS interface and does not communicate with Locket. */
-.phone-preview-wrap{width:100%;max-width:380px;min-width:0;gap:9px}
-.phone-mode-switch{gap:3px;padding:4px}
+.phone-preview-wrap{position:relative;z-index:5;display:flex;align-items:center;flex-direction:column;gap:9px;width:100%;max-width:380px;min-width:0;margin:0 auto}
+.phone-mode-switch{display:inline-flex;justify-content:center;align-items:center;gap:3px;padding:4px;background:#fffefde9;border:1px solid #e9e0ed;border-radius:999px;box-shadow:0 7px 20px #6d487012}
+.phone-mode-switch button{appearance:none;border:0;border-radius:999px;padding:9px 12px;background:transparent;color:#86768c;font-size:11px;font-weight:800;white-space:nowrap;cursor:pointer}
+.phone-mode-switch button.active{background:#42364e;color:#fff}
+.phone-mode-switch button:focus-visible{outline:3px solid #a682ce;outline-offset:2px}
 .phone-mode-switch button{padding:9px 12px}
 .phone-scene-switch{display:flex;gap:15px;justify-content:center;align-items:center;margin:1px 0 5px;font-size:10px}
 .phone-scene-switch button{appearance:none;background:transparent;border:0;padding:5px 1px;color:#a69bae;font-size:10px;font-weight:800;cursor:pointer;border-bottom:2px solid transparent}
@@ -71,7 +74,11 @@
 .lc-recipients .active small{color:#f4bd00}
 .locket-send-scene .phone-screen-note{margin:0 auto;flex:0 0 18px;display:block;width:94%;max-width:94%;font-size:8px;color:#9d9d9d;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:18px}
 .lc-home-indicator{display:block;flex:0 0 4px;margin:3px auto 8px;width:78px;height:4px;border-radius:99px;background:#fff}
-.phone-preview-controls{position:relative;z-index:2}
+.phone-preview-controls{position:relative;z-index:2;display:inline-flex;align-items:center;justify-content:center;gap:12px}
+.phone-preview-controls button{appearance:none;width:33px;height:33px;background:#fff;border:1px solid #eaddeb;color:#6c5977;border-radius:50%;font-size:16px;cursor:pointer;box-shadow:0 3px 13px #5b415e12}
+.phone-preview-controls button:focus-visible{outline:2px solid #a582d9;outline-offset:2px}
+.phone-preview-controls>span{font-size:10px;font-weight:700;color:#7d7087;min-width:133px;text-align:center}
+.phone-mock-disclaimer{font-size:10px;line-height:1.55;color:#95869a;text-align:center;max-width:330px;margin:0 auto}
 .phone-mock-disclaimer{line-height:1.55}
 @media(max-width:950px){
   .locket-demo-phone{width:246px}
