@@ -10,7 +10,7 @@
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer=matchMedia('(hover: hover) and (pointer: fine)');
   const cache=new Map();
-  let version='v2', items=[], cursor=0, request=0, scene='send';
+  let version='v2', items=[], cursor=0, request=0, scene='send', palette='original';
   const source={v1:'v1-caption-data.json',v2:'caption-data.json'};
   function valid(item){
     return typeof item.text==='string'&&typeof item.group==='string'&&
@@ -39,8 +39,15 @@
     label.textContent=item.text;
     icon.textContent=item.icon||'';
     icon.hidden=!item.icon;
-    caption.style.backgroundImage='linear-gradient(180deg,'+item.colors.join(',')+')';
-    caption.style.color=item.ink;
+    // Color variations are temporary visualization only; source captions stay unchanged.
+    const palettes={
+      gold:{colors:['#ffe9a3','#ffd36c'],ink:'#5e4214'},
+      lilac:{colors:['#ebdfff','#b999e5'],ink:'#43285a'},
+      rose:{colors:['#ffdfeb','#ed9fc4'],ink:'#643047'}
+    };
+    const visual=palettes[palette]||{colors:item.colors,ink:item.ink};
+    caption.style.backgroundImage='linear-gradient(180deg,'+visual.colors.join(',')+')';
+    caption.style.color=visual.ink;
     group.textContent=item.group;
     status.textContent=(version==='v1'?'V1':'V2')+' · '+(cursor+1)+' / '+items.length+' mẫu xem trước';
     if(!reduce.matches){
@@ -131,6 +138,12 @@
       swipeStart=null;
     },{passive:true});
   }
+  window.addEventListener('an:demo-palette',event=>{
+    const next=event.detail?.palette;
+    if(!['original','gold','lilac','rose'].includes(next))return;
+    palette=next;
+    render();
+  });
   setScene('send');
   void setVersion('v2');
 })();
