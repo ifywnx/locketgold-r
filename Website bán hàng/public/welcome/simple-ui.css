@@ -16,3 +16,12 @@ html{scroll-behavior:smooth}
 .an-choose-card:focus-visible{outline:3px solid #ad8dd2;outline-offset:3px}
 @media(max-width:700px){.an-choose-path{margin:22px 0 40px}.an-choose-grid{grid-template-columns:1fr;gap:9px}.an-choose-card{padding:14px 15px;border-radius:16px}.an-choice-icon{width:42px;height:42px;flex-basis:42px}.an-choice-content strong{font-size:14px}.an-choice-content small{font-size:11px}.an-choice-arrow{font-size:19px}.an-store-linkbox{margin:24px 0 37px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.an-choose-card{transition:none}.an-choose-card:hover{transform:none}}
+
+/* Trên điện thoại vẫn luôn có đủ hai lối: gói trọn bộ và caption lẻ. */
+@media(max-width:700px){
+  header .brand span{display:none}
+  header nav{gap:7px}
+  header nav>a[href="/store/"]{display:inline-flex!important;align-items:center;min-height:37px;padding:8px 10px;background:#f5e9fa;color:#5b4170;border:1px solid #e7d8f1;border-radius:99px;font-size:10px;font-weight:850;text-decoration:none}
+  header nav .nav-cta{min-height:37px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;padding:8px 10px}
+  header nav .nav-cta span{display:none}
+}
