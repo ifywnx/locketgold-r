@@ -53,8 +53,12 @@
     document.querySelectorAll('.plan').forEach(card=>{
       card.addEventListener('pointermove',e=>{
         const r=card.getBoundingClientRect();
-        card.style.setProperty('--tilt-x',((.5-(e.clientY-r.top)/r.height)*3).toFixed(2)+'deg');
-        card.style.setProperty('--tilt-y',(((e.clientX-r.left)/r.width)-.5)*3+'deg');
+        const pointerX=(e.clientX-r.left)/r.width;
+        const pointerY=(e.clientY-r.top)/r.height;
+        card.style.setProperty('--tilt-x',((.5-pointerY)*3).toFixed(2)+'deg');
+        card.style.setProperty('--tilt-y',((pointerX-.5)*3).toFixed(2)+'deg');
+        card.style.setProperty('--glow-x',(pointerX*100).toFixed(1)+'%');
+        card.style.setProperty('--glow-y',(pointerY*100).toFixed(1)+'%');
       },{passive:true});
       card.addEventListener('pointerleave',()=>{
         card.style.setProperty('--tilt-x','0deg');
