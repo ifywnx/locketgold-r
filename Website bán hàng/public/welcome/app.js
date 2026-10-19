@@ -1,6 +1,6 @@
 const cfg=window.IFYWNX_CONFIG;
 const $=id=>document.getElementById(id);
-const plans={standard:{price:39000,name:'Locket Essential'},plus:{price:59000,name:'Locket + Hỗ trợ cài'}};
+const plans={standard:{price:49000,name:'Locket V1'},v2:{price:89000,name:'Locket V2'},plus:{price:129000,name:'V2 + Hỗ trợ cài'}};
 let plan='standard',order=null,paid=false,accountRequest=0;
 const money=n=>n.toLocaleString('vi-VN')+'đ';
 function select(value,restore=false){if(order&&!restore)return;if(!plans[value])value='standard';plan=value;document.querySelectorAll('[data-plan]').forEach(el=>{const on=el.dataset.plan===plan;el.classList.toggle('selected',on);el.setAttribute('aria-pressed',String(on));el.querySelector('.choose').textContent=on?'● Đang chọn':'○ Chọn gói này'});$('selection').textContent=plans[plan].name+' · '+money(plans[plan].price);$('buy').textContent='Thanh toán '+money(plans[plan].price)+' →'}
