@@ -4,52 +4,6 @@
   const reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
   const mobile=window.matchMedia('(max-width:700px)');
 
-  // V1 and V2 examples are read directly from the same preview data as the detail modal.
-  const samples=[['v1','v1-caption-data.json'],['v2','caption-data.json']];
-  function addPill(container,item){
-    const pill=document.createElement('span');
-    pill.className='an-compare-pill';
-    pill.style.backgroundImage='linear-gradient(180deg,'+item.colors.join(',')+')';
-    pill.style.color=item.ink;
-    if(item.icon){
-      const icon=document.createElement('span');
-      icon.textContent=item.icon;
-      icon.setAttribute('aria-hidden','true');
-      pill.append(icon);
-    }
-    const words=document.createElement('span');
-    words.textContent=item.text;
-    pill.append(words);container.append(pill);
-  }
-  async function showSamples(version,url){
-    const container=byId('compare-'+version+'-captions');
-    if(!container)return;
-    try{
-      const response=await fetch(url,{cache:'no-cache'});
-      if(!response.ok)throw Error('load');
-      const entries=await response.json();
-      if(!Array.isArray(entries))throw Error('data');
-      const candidates=entries.filter(x=>typeof x.text==='string'&&x.text.length<=42&&Array.isArray(x.colors)&&x.colors.length>=2&&typeof x.ink==='string');
-      const selected=[],seen=new Set();
-      for(const item of candidates){
-        if(seen.has(item.group))continue;
-        selected.push(item);seen.add(item.group);
-        if(selected.length===4)break;
-      }
-      container.replaceChildren();
-      selected.forEach(item=>addPill(container,item));
-    }catch{
-      container.textContent='Chưa tải được mẫu caption. Hãy mở chi tiết gói để thử lại.';
-    }
-  }
-  for(const [version,url] of samples)void showSamples(version,url);
-  document.querySelectorAll('[data-compare-detail]').forEach(button=>{
-    button.addEventListener('click',()=>{
-      const key=button.dataset.compareDetail;
-      document.querySelector('.plan-more[data-detail="'+key+'"]')?.click();
-    });
-  });
-
   // Mobile bar reads the existing selected plan; it does NOT create an order or payment.
   const bar=byId('mobile-package-bar');
   const selection=byId('selection');
