@@ -21,7 +21,7 @@ export async function GET(req:Request){
   try{
     const origin=new URL(req.url).origin;
     return json({orderCode:orderId,mode:demo?'demo':'live',
-      note:demo?'File DEMO: chỉ 1 caption thử cho mỗi nhóm. Không cấp gói đã mua.':'File Caption Only: chưa xác minh khả năng hoạt động trên Locket thực tế.',
+      note:demo?'File DEMO: chỉ 1 caption thử cho mỗi nhóm. Không cấp gói đã mua.':'Bộ caption: chưa xác minh khả năng hoạt động trên Locket thực tế.',
       packs:keys.map(k=>makeLinks(origin,orderId,k))});
   }catch{return json({error:'Chưa thiết lập dịch vụ tạo liên kết tải file.'},503)}
 }
