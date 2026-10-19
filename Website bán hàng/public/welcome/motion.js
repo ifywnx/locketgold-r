@@ -4,6 +4,10 @@
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer=window.matchMedia('(hover: hover) and (pointer: fine)');
   const progress=document.getElementById('scroll-progress');
+  const stage=document.querySelector('.hero-stage');
+  const ambientOrbs=[...document.querySelectorAll('.ambient-orb')];
+  const mobile=window.matchMedia('(max-width:700px)');
+  const backToTop=document.getElementById('back-to-top');
   let frame=0;
 
   // Passive scroll progress: no layout changes to checkout or activation.
@@ -12,11 +16,11 @@
     frame=requestAnimationFrame(()=>{
       const max=Math.max(0,root.scrollHeight-window.innerHeight);
       root.style.setProperty('--scroll-progress',max?((scrollY/max)*100).toFixed(2)+'%':'0%');
-      if(!reduced.matches){
+      if(backToTop)backToTop.classList.toggle('is-visible',window.scrollY>450);
+      if(!reduced.matches&&!mobile.matches){
         const distance=Math.min(760,Math.max(0,window.scrollY));
-        const stage=document.querySelector('.hero-stage');
-        if(stage)stage.style.setProperty('--hero-parallax',(distance*.065).toFixed(1)+'px');
-        document.querySelectorAll('.ambient-orb').forEach((orb,i)=>{
+        if(stage)stage.style.setProperty('--hero-parallax',(distance*.04).toFixed(1)+'px');
+        ambientOrbs.forEach((orb,i)=>{
           orb.style.setProperty('--orb-drift',(distance*(.025+(i*.012))).toFixed(1)+'px');
         });
       }
@@ -83,8 +87,8 @@
 
   // Scroll-synced mini navigation: mirrors the actual sections, no fake state.
   if('IntersectionObserver' in window){
-    const links=[...document.querySelectorAll('.page-rail a, header nav a[href^="#"]')];
-    const sections=['experience','captions','packages','how-it-works'];
+    const links=[...document.querySelectorAll('header nav a[href^="#"]')];
+    const sections=['packages','captions','faq','support','how-it-works'];
     const targets=sections.map(id=>document.getElementById(id)).filter(Boolean);
     const spy=new IntersectionObserver(entries=>{
       const visible=entries.filter(entry=>entry.isIntersecting)
