@@ -1,149 +1,128 @@
 'use strict';
 (() => {
-  const byId=id=>document.getElementById(id);
-  const caption=byId('phone-caption'),label=byId('phone-caption-text'),
-        icon=byId('phone-caption-icon'),group=byId('phone-group'),
-        status=byId('phone-preview-status');
-  if(!caption||!label||!icon||!status)return;
-  const buttons={v1:byId('preview-v1'),v2:byId('preview-v2')};
-  const frame=document.querySelector('[data-phone-tilt]');
+  const $=id=>document.getElementById(id);
+  const phone=$('an-v5-device');
+  const capsule=$('phone-caption');
+  const label=$('phone-caption-text');
+  const icon=$('phone-caption-icon');
+  const group=$('phone-group');
+  const status=$('phone-preview-status');
+  if(!phone||!capsule||!label||!icon||!status)return;
+
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
-  const finePointer=matchMedia('(hover: hover) and (pointer: fine)');
+  const buttons={v1:$('preview-v1'),v2:$('preview-v2')};
+  const panes={camera:$('phone-camera-scene'),send:$('phone-send-scene')};
+  const sources={v1:'v1-caption-data.json',v2:'caption-data.json'};
   const cache=new Map();
-  let version='v2', items=[], cursor=0, request=0, scene='send', palette='original';
-  const source={v1:'v1-caption-data.json',v2:'caption-data.json'};
-  function valid(item){
-    return typeof item.text==='string'&&typeof item.group==='string'&&
-      typeof item.ink==='string'&&Array.isArray(item.colors)&&item.colors.length>=2;
-  }
-  function getCaptions(which){
-    if(!cache.has(which)){
-      cache.set(which,fetch(source[which],{cache:'no-cache'}).then(res=>{
-        if(!res.ok)throw Error('HTTP '+res.status);
-        return res.json();
-      }).then(data=>{
-        if(!Array.isArray(data))throw Error('Dữ liệu không hợp lệ');
-        const rows=data.filter(valid);
-        if(!rows.length)throw Error('Không có caption');
-        const shortlist=which==='v2'
-          ? rows.filter(item=>/Trend|Premium|Gen Z|Slang/i.test(item.group)&&item.text.length<=48)
-          : rows.filter(item=>item.text.length<=45);
-        return shortlist.length?shortlist:rows;
-      }).catch(err=>{cache.delete(which);throw err}));
+  let version='v2',scene='send',items=[],index=0,sequence=0;
+
+  function setScene(next){
+    if(!panes[next])return;
+    scene=next;
+    for(const [key,pane] of Object.entries(panes))pane.hidden=key!==scene;
+    const view=$('phone-camera-view');
+    if(view){
+      view.querySelector('span').textContent=scene==='camera'?'Xem caption':'Camera';
+      view.setAttribute('aria-label',scene==='camera'?'Xem màn hình gửi và caption':'Chuyển sang màn hình camera');
     }
-    return cache.get(which);
   }
-  function render(){
-    if(!items.length)return;
-    const item=items[((cursor%items.length)+items.length)%items.length];
+
+  function formatItem(item){
     label.textContent=item.text;
     icon.textContent=item.icon||'';
     icon.hidden=!item.icon;
-    // Color variations are temporary visualization only; source captions stay unchanged.
-    const palettes={
-      gold:{colors:['#ffe9a3','#ffd36c'],ink:'#5e4214'},
-      lilac:{colors:['#ebdfff','#b999e5'],ink:'#43285a'},
-      rose:{colors:['#ffdfeb','#ed9fc4'],ink:'#643047'}
-    };
-    const visual=palettes[palette]||{colors:item.colors,ink:item.ink};
-    caption.style.backgroundImage='linear-gradient(180deg,'+visual.colors.join(',')+')';
-    caption.style.color=visual.ink;
-    group.textContent=item.group;
-    status.textContent=(version==='v1'?'V1':'V2')+' · '+(cursor+1)+' / '+items.length+' mẫu xem trước';
+    capsule.style.backgroundImage='linear-gradient(180deg,'+item.colors.join(',')+')';
+    capsule.style.color=item.ink;
+    if(group)group.textContent=item.group;
+    status.textContent=String(index+1).padStart(2,'0')+' / '+items.length;
     if(!reduce.matches){
-      caption.classList.remove('caption-switch');
-      void caption.offsetWidth;
-      caption.classList.add('caption-switch');
+      capsule.classList.remove('is-swapping');
+      // Restart the small caption-only transition without repositioning any screen elements.
+      void capsule.offsetWidth;
+      capsule.classList.add('is-swapping');
     }
   }
-  async function setVersion(which){
-    if(!source[which])return;
-    version=which;cursor=0;
-    const id=++request;
+
+  async function captions(which){
+    if(!cache.has(which)){
+      const promise=fetch(sources[which],{cache:'no-cache'}).then(response=>{
+        if(!response.ok)throw Error('Không tải được dữ liệu');
+        return response.json();
+      }).then(data=>{
+        if(!Array.isArray(data))throw Error('Dữ liệu không hợp lệ');
+        const valid=data.filter(item=>typeof item.text==='string'&&item.text.length>0&&item.text.length<=41&&
+          typeof item.group==='string'&&typeof item.ink==='string'&&
+          Array.isArray(item.colors)&&item.colors.length>=2&&item.colors.every(c=>/^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(c)));
+        // Trend is used as a relevant storefront preview, not as a replacement for the full library.
+        const trend=which==='v2'?valid.filter(item=>item.group==='🔥 Trend TikTok & Threads'):[];
+        const result=trend.length?trend:valid;
+        if(!result.length)throw Error('Không có caption xem trước');
+        return result;
+      }).catch(err=>{cache.delete(which);throw err});
+      cache.set(which,promise);
+    }
+    return cache.get(which);
+  }
+
+  async function selectVersion(which){
+    if(!sources[which])return;
+    version=which;index=0;
+    const current=++sequence;
     for(const [key,button] of Object.entries(buttons)){
-      button.classList.toggle('active',key===which);
-      button.setAttribute('aria-pressed',String(key===which));
+      if(!button)continue;
+      const active=which===key;
+      button.classList.toggle('is-active',active);
+      button.setAttribute('aria-pressed',String(active));
     }
-    status.textContent='Đang tải mẫu '+which.toUpperCase()+'…';
+    status.textContent='Đang tải…';
     try{
-      const rows=await getCaptions(which);
-      if(id!==request)return;
-      items=rows;
-      render();
+      const list=await captions(which);
+      if(current!==sequence)return;
+      items=list;
+      formatItem(items[0]);
     }catch{
-      if(id!==request)return;
+      if(current!==sequence)return;
       items=[];
-      status.textContent='Không tải được mẫu, hãy thử lại.';
-      label.textContent='Your little moments ✨';
-      icon.textContent='♡';
-      group.textContent='Bản minh hoạ';
+      status.textContent='Chưa tải được';
+      label.textContent='Hãy thử lại';
+      icon.hidden=true;
+      if(group)group.textContent='Không tải được caption mẫu';
     }
   }
-  const scenes={camera:byId('phone-camera-scene'),send:byId('phone-send-scene')};
-  const sceneButtons={camera:byId('phone-camera-view'),send:byId('phone-send-view')};
-  function setScene(next){
-    if(!scenes[next])return;
-    scene=next;
-    for(const [key,node] of Object.entries(scenes))node.hidden=key!==scene;
-    for(const [key,button] of Object.entries(sceneButtons)){
-      button.classList.toggle('active',key===scene);
-      button.setAttribute('aria-pressed',String(key===scene));
-    }
-    frame?.setAttribute('aria-label',scene==='send'
-      ?'Màn hình gửi ảnh minh hoạ với caption trên ảnh'
-      :'Màn hình camera Locket minh hoạ');
-  }
-  sceneButtons.camera.addEventListener('click',()=>setScene('camera'));
-  sceneButtons.send.addEventListener('click',()=>setScene('send'));
-  byId('phone-shutter').addEventListener('click',()=>setScene('send'));
-  byId('phone-back-camera').addEventListener('click',()=>setScene('camera'));
-  byId('phone-send-demo').addEventListener('click',()=>{
-    status.textContent='Chỉ là bản xem thử — không gửi ảnh thật.';
-    status.setAttribute('aria-live','polite');
-  });
-  buttons.v1.addEventListener('click',()=>setVersion('v1'));
-  buttons.v2.addEventListener('click',()=>setVersion('v2'));
+
   function step(direction){
     if(!items.length)return;
-    if(scene==='camera')setScene('send');
-    cursor=(cursor+direction+items.length)%items.length;
-    render();
+    if(scene!=='send')setScene('send');
+    index=(index+direction+items.length)%items.length;
+    formatItem(items[index]);
   }
-  byId('phone-prev').addEventListener('click',()=>step(-1));
-  byId('phone-next').addEventListener('click',()=>step(1));
 
-  if(frame&&!reduce.matches&&finePointer.matches){
-    frame.addEventListener('pointermove',event=>{
-      const rect=frame.getBoundingClientRect();
-      const x=(event.clientX-rect.left)/rect.width-.5;
-      const y=(event.clientY-rect.top)/rect.height-.5;
-      frame.style.setProperty('--preview-rotate-y',(x*11).toFixed(2)+'deg');
-      frame.style.setProperty('--preview-rotate-x',(-y*8).toFixed(2)+'deg');
-    },{passive:true});
-    frame.addEventListener('pointerleave',()=>{
-      frame.style.setProperty('--preview-rotate-y','0deg');
-      frame.style.setProperty('--preview-rotate-x','0deg');
-    });
-  }
-  let swipeStart=null;
-  if(frame){
-    frame.addEventListener('touchstart',e=>{
-      if(e.touches.length===1)swipeStart={x:e.touches[0].clientX,y:e.touches[0].clientY};
-    },{passive:true});
-    frame.addEventListener('touchend',e=>{
-      if(!swipeStart||!e.changedTouches.length)return;
-      const dx=e.changedTouches[0].clientX-swipeStart.x;
-      const dy=e.changedTouches[0].clientY-swipeStart.y;
-      if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.5)step(dx<0?1:-1);
-      swipeStart=null;
-    },{passive:true});
-  }
-  window.addEventListener('an:demo-palette',event=>{
-    const next=event.detail?.palette;
-    if(!['original','gold','lilac','rose'].includes(next))return;
-    palette=next;
-    render();
+  buttons.v1?.addEventListener('click',()=>selectVersion('v1'));
+  buttons.v2?.addEventListener('click',()=>selectVersion('v2'));
+  $('phone-prev')?.addEventListener('click',()=>step(-1));
+  $('phone-next')?.addEventListener('click',()=>step(1));
+  $('phone-camera-view')?.addEventListener('click',()=>setScene(scene==='camera'?'send':'camera'));
+  $('phone-shutter')?.addEventListener('click',()=>setScene('send'));
+  $('phone-back-camera')?.addEventListener('click',()=>setScene('camera'));
+  $('phone-send-demo')?.addEventListener('click',()=>{
+    status.textContent='Chỉ là mô phỏng';
+    status.setAttribute('aria-live','polite');
   });
+
+  let touch=null;
+  phone.addEventListener('touchstart',event=>{
+    if(event.touches.length!==1)return;
+    touch={x:event.touches[0].clientX,y:event.touches[0].clientY};
+  },{passive:true});
+  phone.addEventListener('touchend',event=>{
+    if(!touch||event.changedTouches.length!==1)return;
+    const dx=event.changedTouches[0].clientX-touch.x;
+    const dy=event.changedTouches[0].clientY-touch.y;
+    if(Math.abs(dx)>58&&Math.abs(dx)>Math.abs(dy)*1.5)step(dx<0?1:-1);
+    touch=null;
+  },{passive:true});
+  phone.addEventListener('touchcancel',()=>{touch=null},{passive:true});
+
   setScene('send');
-  void setVersion('v2');
+  void selectVersion('v2');
 })();
