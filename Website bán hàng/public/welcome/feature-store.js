@@ -13,6 +13,19 @@
     holiday:{name:'Lễ hội & Các mùa',groups:['🎨 Holiday Caption']}
   };
   let all=[],selected='trend',shown=28,lastTrigger=null,loading=null;
+  const groupLabel=name=>({
+    '🔥 Trend TikTok & Threads':'🔥 Xu hướng TikTok và Threads',
+    '🤡 Meme & Câu cửa miệng':'🤡 Hài hước và câu cửa miệng',
+    '🧠 Vô tri & Brainrot':'🧠 Những câu vô tri vui nhộn',
+    '🌙 Mood & Chữa lành':'🌙 Tâm trạng và chữa lành',
+    '🥂 Tiếng Việt Premium · Sang & tinh tế':'🥂 Tiếng Việt sang và tinh tế',
+    '🍃 Tiếng Việt Premium · Văn thơ':'🍃 Tiếng Việt văn thơ',
+    '🪄 Tiếng Việt Premium · Hài có duyên':'🪄 Tiếng Việt hài có duyên',
+    '🧸 Teencode · Chê yêu':'🧸 Ngôn ngữ tuổi teen',
+    '✨ Aura · Slay & Flex':'✨ Cá tính và nổi bật',
+    '🌐 English Slang & Internet':'🌐 Tiếng lóng và mạng xã hội',
+    '🎨 Holiday Caption':'🎨 Theo mùa và ngày lễ'
+  })[name]||name;
   const normalize=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase();
   const colorsValid=colors=>Array.isArray(colors)&&colors.length>=2&&colors.every(c=>/^#[a-f0-9]{6}([a-f0-9]{2})?$/i.test(c));
 
@@ -76,7 +89,7 @@
       if(item.group!==previousGroup){
         const h=document.createElement('h4');
         h.className='an-store-group-heading';
-        h.textContent=item.group;
+        h.textContent=groupLabel(item.group);
         frame.append(h);
         previousGroup=item.group;
       }
