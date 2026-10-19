@@ -16,7 +16,7 @@
         'Không kèm tài khoản tải Shadowrocket — bạn cần có ứng dụng sẵn.'
       ],
       note:'Lưu ý: Bộ V1 và V2 dùng nguồn cấu hình khác nhau; giao diện web không chứng minh mọi tính năng đều hoạt động trên mọi phiên bản Locket.',
-      hasSamples:false
+      hasSamples:true
     },
     v2:{
       eyebrow:'GÓI V2 · BẢN V15 FULL ICON',
@@ -47,37 +47,135 @@
       hasSamples:true
     }
   };
-  let active='standard',lastTrigger=null,trendPromise=null;
-  const safeText=(node,text)=>{node.textContent=text;return node};
-  function loadTrend(){
-    if(!trendPromise)trendPromise=fetch('caption-data.json',{cache:'no-cache'})
-      .then(r=>{if(!r.ok)throw Error();return r.json()})
-      .then(rows=>rows.filter(x=>x.group==='🔥 Trend TikTok & Threads').slice(0,8));
-    return trendPromise;
+  let active='standard', lastTrigger=null;
+  let libraryRows=[], visibleLimit=18, libraryLoading=0;
+  const cached = new Map();
+  const safeText=(node,value)=>{node.textContent=value;return node};
+  const $=id=>byId(id);
+
+  function datasetFor(version){return version==='standard'?'v1':'v2'}
+  function dataFor(which){
+    if(!cached.has(which)){
+      const url=which==='v1'?'v1-caption-data.json':'caption-data.json';
+      cached.set(which,fetch(url,{cache:'no-cache'})
+        .then(response=>{if(!response.ok)throw Error('Không tải được dữ liệu');return response.json()})
+        .then(data=>{
+          if(!Array.isArray(data))throw Error('Dữ liệu caption không hợp lệ');
+          return data.filter(item=>typeof item.text==='string'&&typeof item.group==='string'&&
+            Array.isArray(item.colors)&&item.colors.length>=2&&typeof item.ink==='string');
+        })
+        .catch(error=>{cached.delete(which);throw error})
+      );
+    }
+    return cached.get(which);
   }
-  async function samplesFor(version){
-    const wrap=byId('plan-samples'),grid=byId('plan-sample-grid');
-    if(!facts[version].hasSamples){wrap.hidden=true;grid.replaceChildren();return}
-    wrap.hidden=false;
-    grid.replaceChildren();
-    safeText(grid,'Đang tải mẫu caption…');
+  function norm(value){
+    return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .toLocaleLowerCase('vi').replace(/đ/g,'d');
+  }
+  function filtered(){
+    const q=norm($('plan-caption-search').value.trim());
+    const category=$('plan-caption-category').value;
+    return libraryRows.filter(item=>(!category||item.group===category)&&
+      (!q||norm([item.text,item.icon,item.group].join(' ')).includes(q)));
+  }
+  function createTile(item){
+    const button=document.createElement('button');
+    button.type='button';
+    button.className='plan-caption-tile';
+    button.style.backgroundImage='linear-gradient(180deg,'+item.colors.join(',')+')';
+    button.style.color=item.ink;
+    button.setAttribute('aria-label','Sao chép caption: '+item.text);
+
+    const body=document.createElement('span');
+    body.className='plan-caption-body';
+    if(item.icon){
+      const icon=document.createElement('span');
+      icon.className='plan-caption-icon';
+      icon.setAttribute('aria-hidden','true');
+      icon.textContent=item.icon;
+      body.append(icon);
+    }
+    const text=document.createElement('span');
+    text.className='plan-caption-text';
+    text.textContent=item.text;
+    body.append(text);
+    const hint=document.createElement('span');
+    hint.className='plan-caption-copy';
+    hint.textContent='⧉ Sao chép';
+    button.append(body,hint);
+    button.addEventListener('click',async()=>{
+      try{
+        if(!navigator.clipboard?.writeText)throw Error('Clipboard unsupported');
+        await navigator.clipboard.writeText(item.text);
+        hint.textContent='✓ Đã sao chép';
+        button.classList.add('copied');
+        setTimeout(()=>{if(!button.isConnected)return;hint.textContent='⧉ Sao chép';button.classList.remove('copied')},1400);
+      }catch{
+        hint.textContent='Không sao chép được';
+        setTimeout(()=>{if(button.isConnected)hint.textContent='⧉ Sao chép'},1800);
+      }
+    });
+    return button;
+  }
+  function drawLibrary(){
+    const matching=filtered();
+    const displayed=matching.slice(0,visibleLimit);
+    const grid=$('plan-caption-grid'),fragment=document.createDocumentFragment();
+    for(const item of displayed)fragment.append(createTile(item));
+    if(!matching.length){
+      const empty=document.createElement('p');
+      empty.className='library-empty';
+      empty.textContent='Chưa tìm thấy caption phù hợp. Hãy thử từ khóa hoặc chủ đề khác.';
+      fragment.append(empty);
+    }
+    grid.replaceChildren(fragment);
+    const total=matching.length;
+    $('plan-caption-count').textContent='Đang hiển thị '+displayed.length+' / '+total+' caption';
+    $('plan-caption-more').hidden=displayed.length>=total;
+  }
+  function resetLibraryFilters(){
+    $('plan-caption-search').value='';
+    $('plan-caption-category').replaceChildren(new Option('Tất cả chủ đề',''));
+    visibleLimit=18;
+  }
+  async function renderLibraryFor(version){
+    const request=++libraryLoading;
+    const dataset=datasetFor(version);
+    resetLibraryFilters();
+    libraryRows=[];
+    $('plan-caption-grid').replaceChildren();
+    $('plan-caption-count').textContent='Đang tải thư viện caption…';
+    $('plan-caption-more').hidden=true;
+    $('plan-caption-title').textContent=version==='standard'?'Thư viện caption V1':'Thư viện caption V2 · V15';
+    $('plan-caption-description').textContent=version==='standard'
+      ?'107 caption tĩnh từ V1 với màu, icon gốc. Ngoài ra V1 còn 11 kiểu caption động không có nội dung cố định để xem trước.'
+      :'705 caption bản xem trước V2 trên website, đủ 21 chủ đề, đúng nội dung và màu gradient trong dữ liệu GitHub.';
+    $('plan-caption-total').textContent=version==='standard'?'V1 · 107 caption':'V2 · 705 caption';
     try{
-      const examples=await loadTrend();
-      if(active!==version)return;
-      grid.replaceChildren();
-      examples.forEach(item=>{
-        const pill=document.createElement('span');
-        pill.className='detail-caption-pill';
-        pill.style.backgroundImage='linear-gradient(180deg,'+item.colors.join(',')+')';
-        pill.style.color=item.ink;
-        pill.textContent=[item.icon,item.text].filter(Boolean).join(' ');
-        grid.append(pill);
-      });
+      const data=await dataFor(dataset);
+      if(request!==libraryLoading || active!==version)return;
+      libraryRows=data;
+      const uniqueGroups=[...new Set(data.map(item=>item.group))];
+      const select=$('plan-caption-category');
+      for(const group of uniqueGroups)select.add(new Option(group,group));
+      $('plan-caption-total').textContent=version==='standard'
+        ?'V1 · '+data.length+' caption tĩnh':'V2 · '+data.length+' caption';
+      drawLibrary();
     }catch{
-      safeText(grid,'Không tải được mẫu caption. Quyền lợi gói vẫn hiển thị bên trên.');
-      trendPromise=null;
+      if(request!==libraryLoading || active!==version)return;
+      $('plan-caption-grid').replaceChildren();
+      $('plan-caption-count').textContent='Không tải được thư viện caption. Hãy đóng chi tiết và mở lại để thử.';
     }
   }
+
+  $('plan-caption-search').addEventListener('input',()=>{visibleLimit=18;drawLibrary()});
+  $('plan-caption-category').addEventListener('change',()=>{visibleLimit=18;drawLibrary()});
+  $('plan-caption-more').addEventListener('click',()=>{visibleLimit+=24;drawLibrary()});
+  $('plan-library-jump').addEventListener('click',()=>{
+    const scrollable=$('plan-samples');
+    scrollable.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
+  });
   function openDetails(version,trigger){
     if(!facts[version])return;
     active=version;lastTrigger=trigger;
@@ -98,9 +196,10 @@
     const card=document.querySelector('.plan[data-plan="'+version+'"]');
     pick.disabled=!!card?.disabled;
     pick.textContent=pick.disabled?'Đơn đã tạo · Không thể đổi gói':'Chọn '+details.name+' →';
-    void samplesFor(version);
+    void renderLibraryFor(version);
     if(typeof dialog.showModal==='function')dialog.showModal();
     else dialog.setAttribute('open','');
+    dialog.scrollTop=0;
   }
   document.querySelectorAll('[data-detail]').forEach(button=>{
     button.addEventListener('click',()=>openDetails(button.dataset.detail,button));
