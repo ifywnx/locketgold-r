@@ -1,7 +1,7 @@
 import {and,eq} from 'drizzle-orm';
-import {getDb} from '../../../../db';
-import {storeOrders} from '../../../../db/schema';
-import {digest,json,sameOrigin} from '../../../../lib/access';
+import {getDb} from '../../../../../db';
+import {storeOrders} from '../../../../../db/schema';
+import {digest,json,sameOrigin} from '../../../../../lib/access';
 export async function POST(r:Request){
  if(!sameOrigin(r))return json({error:'Nguồn yêu cầu không hợp lệ.'},403);
  const token=r.headers.get('authorization')?.replace(/^Bearer /,'')||'';
