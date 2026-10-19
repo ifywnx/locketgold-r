@@ -5,8 +5,8 @@
   const byId=id=>document.getElementById(id);
   const facts={
     standard:{
-      eyebrow:'GÓI V1 · DÀNH CHO NGƯỜI ĐÃ CÓ SHADOWROCKET',
-      name:'Locket V1',
+      eyebrow:'AN · GÓI V1 · DÀNH CHO NGƯỜI ĐÃ CÓ SHADOWROCKET',
+      name:'An · Locket V1',
       price:'49.000đ',
       summary:'Bộ cấu hình cơ bản V1 trong repository. Phù hợp nếu bạn đã có ứng dụng Shadowrocket và muốn bắt đầu từ bản đơn giản.',
       features:[
