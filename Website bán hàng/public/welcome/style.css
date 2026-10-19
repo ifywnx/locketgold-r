@@ -710,8 +710,8 @@ section{scroll-margin-top:90px}
 
 /* IFYWNX compact details + polished, restrained exterior effects */
 .plan-dialog {
-  width:min(740px,calc(100vw - 32px));
-  max-height:min(82dvh,800px);
+  width:min(710px,calc(100vw - 32px));
+  max-height:min(74dvh,720px);
   border-radius:24px;
   scrollbar-width:thin;
   scrollbar-color:#cfc0d8 transparent;
@@ -827,7 +827,7 @@ header .nav-cta:hover {
 @media(max-width:700px) {
   .plan-dialog {
     width:calc(100vw - 22px);
-    max-height:83dvh;
+    max-height:80dvh;
     border-radius:19px;
   }
   .plan-dialog-content { padding:20px 15px 14px; }
