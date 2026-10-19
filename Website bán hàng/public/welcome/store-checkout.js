@@ -51,7 +51,7 @@
     cartItems.replaceChildren(fragment);
     $('an-store-cart-amount').textContent=money(amount);
     if(cartBadge)cartBadge.textContent=String(cart.size);
-    if(mobileCart){mobileCart.hidden=!ready||!cart.size;}
+    if(mobileCart){mobileCart.hidden=!ready||!cart.size;document.body.classList.toggle('an-store-has-mobile-cart',ready&&cart.size>0);}
     if(mobileCartLabel)mobileCartLabel.textContent='Xem giỏ hàng · '+cart.size+' bộ · '+money(amount);
     button.disabled=!ready||!cart.size;
     button.querySelector('span').textContent=cart.size?'↗':'＋';
