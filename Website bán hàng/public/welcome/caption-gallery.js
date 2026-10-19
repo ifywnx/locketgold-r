@@ -64,10 +64,10 @@
       fragment.append(windowEl);
     }
     marquee.replaceChildren(fragment);
-    status.textContent=trend.length+' caption Trend · Màu và icon lấy từ bộ dữ liệu GitHub.';
+    status.textContent=trend.length+' câu caption mẫu · Giữ nguyên chữ, biểu tượng và màu sắc.';
     setMotion();
   }catch(error){
-    status.textContent='Chưa tải được caption Trend. Bạn thử tải lại trang nhé.';
+    status.textContent='Chưa tải được caption mẫu. Bạn hãy tải lại trang nhé.';
     motion.disabled=true;
   }
 })();
