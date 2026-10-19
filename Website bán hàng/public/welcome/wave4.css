@@ -1,0 +1,120 @@
+/* AN LOCKET — WAVE 4
+   Original 100% CSS photo artwork; no reference screenshot asset used.
+   Scoped selectors minimize side effects on checkout & FAQ. */
+
+/* Distinct original illustration presets rendered identically in both screens */
+.locket-demo-phone{--photo-sky-top:#dd9c9b;--photo-sky-bottom:#f5d9b3;--photo-haze:#ffdfb6;--photo-distant:#a57e96;--photo-near:#3f7378;--photo-detail:#e4b99f;--photo-sun:#ffeed6;transform-origin:50% 55%}
+.locket-demo-phone[data-photo-scene="sky"]{--photo-sky-top:#5e9bd0;--photo-sky-bottom:#c3e9e6;--photo-haze:#edf9ff;--photo-distant:#86babf;--photo-near:#3d748a;--photo-detail:#d6e4c9;--photo-sun:#fff7c5}
+.locket-demo-phone[data-photo-scene="dream"]{--photo-sky-top:#9783c8;--photo-sky-bottom:#edb4c7;--photo-haze:#fce2ed;--photo-distant:#b99bc5;--photo-near:#70578d;--photo-detail:#e4b3e1;--photo-sun:#f9e8ff}
+.locket-demo-phone .lc-photo{background-image:none!important;background-color:var(--photo-sky-top)}
+.locket-demo-phone .lc-photo .an-photo-art{position:absolute;inset:0;z-index:0;overflow:hidden;isolation:isolate;background:linear-gradient(165deg,var(--photo-sky-top),var(--photo-sky-bottom) 66%,var(--photo-haze));pointer-events:none}
+.an-photo-art::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 95% 55% at 67% 27%,var(--photo-haze),transparent 70%);opacity:.42}
+.an-photo-art::after{content:"";position:absolute;z-index:5;inset:0;box-shadow:inset 0 0 45px #17182513;background:linear-gradient(180deg,transparent 65%,#071d2840)}
+.an-photo-glow{position:absolute;width:75%;height:75%;left:45%;top:-8%;border-radius:50%;filter:blur(30px);background:var(--photo-sun);opacity:.27}
+.an-photo-sun{position:absolute;z-index:1;right:22%;top:19%;width:21%;aspect-ratio:1;border-radius:50%;background:var(--photo-sun);box-shadow:0 0 0 12px #fff9db22,0 0 42px 14px #fff2d366}
+.an-photo-ridge{position:absolute;display:block;left:-36%;width:174%;height:82%;border-radius:50% 60% 0 0;transform-origin:center}
+.ridge-far{z-index:2;bottom:-48%;rotate:-9deg;background:linear-gradient(155deg,var(--photo-distant),var(--photo-sky-bottom))}
+.ridge-near{z-index:3;bottom:-60%;left:-42%;rotate:10deg;background:linear-gradient(130deg,var(--photo-near),#304858)}
+.an-photo-detail{position:absolute;z-index:4;left:10%;bottom:11%;width:60%;height:14%;border-radius:50%;rotate:-9deg;background:linear-gradient(110deg,transparent,var(--photo-detail) 60%,transparent);filter:blur(8px);opacity:.6}
+/* Keep original app-like black framing, but give it editorial polish. */
+.locket-demo-phone .phone-frame{border-color:#302b34;background:linear-gradient(135deg,#302933,#554b57 35%,#2b262c);box-shadow:inset 0 0 0 1px #8e828f,0 2px 2px #2228,0 24px 45px #362a4440}
+.locket-demo-phone .phone-screen{background:#050505;color:#fafafa}
+.locket-demo-phone .phone-screen-caption{isolation:isolate}
+.lc-send-photo .phone-screen-caption{z-index:6!important;position:relative!important}
+.lc-camera-photo .an-photo-art{z-index:0}
+.lc-send-photo .an-photo-art{z-index:0}
+.lc-camera-photo .lc-photo-tool{z-index:6}
+/* Stable framing: a 3D mouse effect is enough; no perpetual wobble. */
+.hero-stage{contain:layout style}
+.phone-preview-wrap{max-width:410px}
+.locket-demo-phone{filter:drop-shadow(0 26px 35px #49384a36);transition:transform .32s cubic-bezier(.2,.75,.2,1),filter .32s ease}
+.locket-demo-phone:hover{filter:drop-shadow(0 28px 39px #48304c40)}
+.phone-mock-disclaimer{font-size:9px;line-height:1.6;color:#918597;max-width:325px;padding:0 4px}
+.an-demo-customizer{width:min(370px,100%);display:grid;gap:10px;margin:11px auto 3px;padding:14px 14px;background:linear-gradient(140deg,#ffffffeb,#fff9f5df);border:1px solid #eee4ed;border-radius:18px;box-shadow:0 13px 30px #5b426b0c}
+.an-demo-control-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+.an-demo-control-row>span{font-size:10px;letter-spacing:.1px;font-weight:800;color:#655b71;white-space:nowrap}
+.an-demo-scenes,.an-demo-palettes{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.an-demo-scenes button,.an-demo-palettes button{appearance:none;cursor:pointer;min-height:30px;padding:6px 9px;border-radius:99px;background:#fff;color:#706276;border:1px solid #e7dce8;font:750 10px/1.35 'Be Vietnam Pro',system-ui,sans-serif;transition:background .2s,transform .2s,border-color .2s;white-space:nowrap}
+.an-demo-scenes button.active,.an-demo-palettes button.active{background:#42354d;color:#fff;border-color:#42354d;box-shadow:0 5px 13px #45334f25}
+.an-demo-scenes button:hover,.an-demo-palettes button:hover{transform:translateY(-1px)}
+.an-demo-scenes button:focus-visible,.an-demo-palettes button:focus-visible{outline:2px solid #af8ce1;outline-offset:3px}
+
+/* Comparison: verifiable information, not invented ratings or claims. */
+.an-compare{margin:60px 0 90px;scroll-margin-top:115px}
+.an-compare-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:26px;margin-bottom:24px}
+.an-compare-heading h2{font-size:clamp(33px,4.5vw,49px);line-height:1.15;letter-spacing:-2px;margin:9px 0 0}
+.an-compare-heading h2 em{font-style:normal;background:linear-gradient(95deg,#b282c5,#dba573);color:transparent;-webkit-background-clip:text;background-clip:text}
+.an-compare-heading>p{max-width:335px;font-size:12px;color:#7b7181;line-height:1.9}
+.an-compare-layout{position:relative;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:21px}
+.an-compare-panel{position:relative;min-width:0;min-height:365px;display:flex;flex-direction:column;align-items:stretch;overflow:hidden;border:1px solid #efe5ef;border-radius:29px;padding:25px 27px 23px;background:linear-gradient(140deg,#fffaf0,#fffdfa 77%);box-shadow:0 16px 43px #5c456819;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.an-compare-v2{background:linear-gradient(145deg,#f4edff,#fff9fe 78%);border-color:#e2d5ef}
+.an-compare-panel:hover{transform:translateY(-5px);box-shadow:0 24px 52px #5c456826}
+.an-compare-panel-top{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:10px;color:#9d839b;letter-spacing:1.2px;font-weight:800}
+.an-compare-panel-top strong{font-size:13px;letter-spacing:0;color:#65516d;background:#ffffffb5;border:1px solid #fff;border-radius:99px;padding:7px 12px}
+.an-compare-panel h3{font-size:25px;letter-spacing:-.8px;margin:18px 0 7px;line-height:1.24}
+.an-compare-panel>p{font-size:11px;color:#74687b;line-height:1.8;margin:0}
+.an-compare-number{display:flex;align-items:center;gap:10px;margin:19px 0 2px}
+.an-compare-number b{font-size:47px;font-weight:850;letter-spacing:-3px;line-height:1;color:#b88f57}
+.an-compare-v2 .an-compare-number b{color:#9977c4}
+.an-compare-number span{font-size:11px;font-weight:750;color:#736777;max-width:125px;line-height:1.45}
+.an-compare-panel .an-compare-small{font-size:10px;color:#8a7f8f;min-height:34px}
+.an-compare-examples{display:flex;flex-wrap:wrap;gap:8px;align-content:flex-start;min-height:94px;margin:14px 0 21px;padding:2px 0}
+.an-compare-pill{display:inline-flex;align-items:center;gap:5px;max-width:100%;padding:9px 12px;min-height:35px;border:1px solid #ffffff55;border-radius:999px;font:800 10px/1.4 'Be Vietnam Pro',system-ui,sans-serif;overflow-wrap:anywhere;text-wrap:balance;box-shadow:0 4px 10px #55405e18}
+.an-compare-detail{appearance:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:43px;margin:auto 0 0;padding:10px 14px;border:1px solid #e5d7eb;border-radius:13px;background:#fffdfa;color:#70528a;font:800 11px/1.4 'Be Vietnam Pro',system-ui,sans-serif;transition:transform .2s,background .2s}
+.an-compare-detail:hover{transform:translateY(-2px);background:#f3e9ff}
+.an-compare-detail:focus-visible{outline:3px solid #aa87dc}
+.an-compare-detail span{font-size:17px}
+.an-compare-divider{position:absolute;left:50%;top:50%;z-index:3;transform:translate(-50%,-50%);pointer-events:none}
+.an-compare-divider span{width:43px;height:43px;border:1px solid #f2e6f0;border-radius:50%;display:grid;place-items:center;background:#fff;color:#9b7aac;font-size:11px;font-weight:900;box-shadow:0 10px 24px #44334d24}
+.an-compare-footnote{margin:17px 0 0;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:7px;text-align:center;font-size:11px;line-height:1.7;color:#776a7d}
+.an-compare-footnote button{appearance:none;cursor:pointer;background:transparent;border:0;color:#7855a2;font:800 11px/1.7 'Be Vietnam Pro',system-ui,sans-serif;text-decoration:underline;text-underline-offset:3px}
+.an-compare-footnote button:focus-visible{outline:2px solid #9b7bd0;outline-offset:2px}
+
+/* Mobile floating selection bar: follows existing plan selection; no payment action. */
+.an-mobile-package-bar{display:none}
+@media(max-width:700px){
+  body.an-has-sticky{padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
+  .an-mobile-package-bar:not([hidden]){position:fixed;display:flex;align-items:center;justify-content:space-between;gap:8px;left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:75;min-height:62px;padding:9px 11px;border:1px solid #e9dceb;border-radius:18px;background:#fffdfcf2;box-shadow:0 12px 35px #4431492b;backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2)}
+  .an-mobile-package-copy{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-width:0;flex:1;gap:0}
+  .an-mobile-package-copy>span{font-size:9px;color:#9b90a2;font-weight:700}
+  .an-mobile-package-copy strong{font-size:11px;line-height:1.35;color:#43334c;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+  .an-mobile-package-copy b{color:#a16a3e;font-size:11px;line-height:1.4;font-weight:900}
+  .an-mobile-package-actions{display:flex;gap:6px;flex:none}
+  .an-mobile-package-actions button{cursor:pointer;border-radius:11px;padding:9px 11px;min-height:38px;font:800 10px/1.2 'Be Vietnam Pro',system-ui,sans-serif;white-space:nowrap}
+  #mobile-package-details{background:#f7f2f9;border:1px solid #e7dbeb;color:#746382}
+  #mobile-package-select{background:#352c40;border:1px solid #352c40;color:#fff}
+  .an-mobile-package-actions button:focus-visible{outline:2px solid #a684e4;outline-offset:3px}
+  body.an-has-sticky .back-to-top{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+  .hero{overflow:visible}
+  .hero-stage{min-width:0}
+  .an-demo-customizer{max-width:345px;padding:11px;gap:9px}
+  .an-demo-control-row>span{font-size:9px}
+  .an-demo-scenes button,.an-demo-palettes button{padding:6px 8px;font-size:9px}
+  .an-compare{margin:48px 0 65px}
+  .an-compare-heading{display:block;margin-bottom:18px}
+  .an-compare-heading h2{font-size:34px;letter-spacing:-1.4px}
+  .an-compare-heading>p{margin:10px 0 0;max-width:420px}
+  .an-compare-layout{grid-template-columns:1fr;gap:14px}
+  .an-compare-panel{min-height:0;padding:20px;border-radius:23px}
+  .an-compare-panel h3{font-size:22px;margin-top:12px}
+  .an-compare-number{margin-top:13px}
+  .an-compare-number b{font-size:41px}
+  .an-compare-examples{min-height:0;margin:10px 0 15px}
+  .an-compare-divider{top:50%;left:50%}
+  .an-compare-footnote{font-size:10px}
+}
+@media(max-width:390px){
+  .an-demo-control-row{flex-direction:column;align-items:flex-start;gap:6px}
+  .an-demo-scenes,.an-demo-palettes{justify-content:flex-start}
+  .an-mobile-package-bar:not([hidden]){left:6px;right:6px;padding:8px}
+  .an-mobile-package-actions button{padding:8px 9px}
+  .an-mobile-package-copy strong{font-size:10px}
+}
+@media(hover:none),(pointer:coarse){
+ .an-compare-panel:hover{transform:none}
+ .an-demo-scenes button:hover,.an-demo-palettes button:hover{transform:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .locket-demo-phone,.an-compare-panel,.an-compare-detail,.an-demo-scenes button,.an-demo-palettes button{animation:none!important;transition:none!important}
+  .an-compare-panel:hover,.an-compare-detail:hover{transform:none!important}
+}
