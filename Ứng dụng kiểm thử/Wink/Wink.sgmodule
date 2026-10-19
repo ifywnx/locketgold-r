@@ -1,0 +1,9 @@
+#!name=Wink — kiểm thử
+#!desc=Trích từ All In One, chưa xác nhận trên thiết bị
+#!author=duyvinh09
+
+[Script]
+Wink =type=http-response,pattern=^https:\/\/api-sub\.meitu\.com\/v2\/user\/vip_info_by_group\.json,requires-body=1,script-path=__ASSET_BASE__/WinkVipCrack.js
+
+[MITM]
+hostname = %APPEND% api-sub.meitu.com

@@ -1,0 +1,9 @@
+#!name=SoundCloud — kiểm thử
+#!desc=Trích từ All In One, chưa xác nhận trên thiết bị
+#!author=duyvinh09
+
+[Script]
+SoundCloudGo+=type=http-response,pattern=https://api-mobile.soundcloud.com/configuration/ios,requires-body=1,script-path=__ASSET_BASE__/SoundCloudGoPlus.js
+
+[MITM]
+hostname = %APPEND% api-mobile.soundcloud.com

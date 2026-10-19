@@ -1,0 +1,9 @@
+#!name=Lightroom — kiểm thử
+#!desc=Trích từ All In One, chưa xác nhận trên thiết bị
+#!author=duyvinh09
+
+[Script]
+Lightroom = type=http-response,pattern=^https:\/\/photos\.adobe\.io\/v\d\/accounts,requires-body=1,max-size=0,script-path=__ASSET_BASE__/lightroom.js,script-update-interval=-1
+
+[MITM]
+hostname = %APPEND% photos.adobe.io

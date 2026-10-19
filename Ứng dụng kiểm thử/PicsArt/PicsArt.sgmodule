@@ -1,0 +1,10 @@
+#!name=PicsArt — kiểm thử
+#!desc=Trích từ All In One, chưa xác nhận trên thiết bị
+#!author=duyvinh09
+
+[Script]
+PicsArt = type=http-request,pattern=^https:\/\/api\.picsart\.com\/gw-v2\/shop\/subscription\/apple\/purchases,script-path=__ASSET_BASE__/PicsArt.js,requires-body=true,timeout=60
+PicsArtStorages = type=http-response,pattern=^https:\/\/api\.picsart\.com\/gw-v2\/cloud-storage\/v1\/me\/storages,script-path=__ASSET_BASE__/PicsArtStorages.js,requires-body=1,max-size=0
+
+[MITM]
+hostname = %APPEND% api.picsart.com

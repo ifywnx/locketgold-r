@@ -1,0 +1,226 @@
+{
+  "schemaVersion": 1,
+  "products": [
+    {
+      "id": "youtube",
+      "name": "YouTube",
+      "directory": "Ứng dụng kiểm thử/YouTube",
+      "module": "YouTube.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "issues": [
+        "engine={{{script}}} còn là placeholder; chưa sửa hoặc xác nhận engine phù hợp.",
+        "Giá trị argument chứa JSON lồng dấu nháy; cần xác minh trình phân tích Shadowrocket."
+      ],
+      "source": "https://github.com/duyvinh09/Module_IOS",
+      "scripts": [
+        "youtube.response.js"
+      ],
+      "syntaxCheck": true
+    },
+    {
+      "id": "spotify",
+      "name": "Spotify",
+      "directory": "Ứng dụng kiểm thử/Spotify",
+      "module": "Spotify.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "issues": [],
+      "source": "https://github.com/duyvinh09/Module_IOS",
+      "scripts": [
+        "spotify-json.js",
+        "spotify-proto.js"
+      ],
+      "syntaxCheck": true
+    },
+    {
+      "id": "soundcloud",
+      "name": "SoundCloud",
+      "directory": "Ứng dụng kiểm thử/SoundCloud",
+      "module": "SoundCloud.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "issues": [],
+      "source": "https://github.com/duyvinh09/Module_IOS",
+      "scripts": [
+        "SoundCloudGoPlus.js"
+      ],
+      "syntaxCheck": true
+    },
+    {
+      "id": "vsco",
+      "name": "VSCO",
+      "directory": "Ứng dụng kiểm thử/VSCO",
+      "module": "VSCO.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "issues": [
+        "Dòng Script gốc thiếu dấu phân cách và pattern=; chưa chuẩn hóa."
+      ],
+      "source": "https://github.com/duyvinh09/Module_IOS",
+      "scripts": [
+        "VSCO.js"
+      ],
+      "syntaxCheck": true
+    },
+    {
+      "id": "alightmotion",
+      "name": "AlightMotion",
+      "directory": "Ứng dụng kiểm thử/AlightMotion",
+      "module": "AlightMotion.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "issues": [],
+      "source": "https://github.com/duyvinh09/Module_IOS",
+      "scripts": [
+        "AlightMotion.js"
+      ],
+      "syntaxCheck": true
+    },
+    {
+      "id": "picsart",
+      "name": "PicsArt",
+      "directory": "Ứng dụng kiểm thử/PicsArt",
+      "module": "PicsArt.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "issues": [],
+      "source": "https://github.com/duyvinh09/Module_IOS",
+      "scripts": [
+        "PicsArt.js",
+        "PicsArtStorages.js"
+      ],
+      "syntaxCheck": true
+    },
+    {
+      "id": "wink",
+      "name": "Wink",
+      "directory": "Ứng dụng kiểm thử/Wink",
+      "module": "Wink.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "issues": [],
+      "source": "https://github.com/duyvinh09/Module_IOS",
+      "scripts": [
+        "WinkVipCrack.js"
+      ],
+      "syntaxCheck": true
+    },
+    {
+      "id": "truecaller",
+      "name": "Truecaller",
+      "directory": "Ứng dụng kiểm thử/Truecaller",
+      "module": "Truecaller.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "issues": [],
+      "source": "https://github.com/duyvinh09/Module_IOS",
+      "scripts": [
+        "TrueCaller.js"
+      ],
+      "syntaxCheck": true
+    },
+    {
+      "id": "lightroom",
+      "name": "Lightroom",
+      "directory": "Ứng dụng kiểm thử/Lightroom",
+      "module": "Lightroom.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "issues": [],
+      "source": "https://github.com/duyvinh09/Module_IOS",
+      "scripts": [
+        "lightroom.js"
+      ],
+      "syntaxCheck": true
+    },
+    {
+      "id": "kinemaster",
+      "name": "KineMaster",
+      "directory": "Ứng dụng kiểm thử/KineMaster",
+      "module": "KineMaster.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "issues": [],
+      "source": "https://github.com/duyvinh09/Module_IOS",
+      "scripts": [
+        "Kinemaster.js"
+      ],
+      "syntaxCheck": true
+    },
+    {
+      "id": "camscanner",
+      "name": "CamScanner",
+      "directory": "Ứng dụng kiểm thử/CamScanner",
+      "module": "CamScanner.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "issues": [
+        "Pattern gốc có khoảng trắng sau dấu =; cần kiểm tra trên Shadowrocket."
+      ],
+      "source": "https://github.com/duyvinh09/Module_IOS",
+      "scripts": [
+        "camScanner.js"
+      ],
+      "syntaxCheck": true
+    },
+    {
+      "id": "meitu",
+      "name": "Meitu",
+      "directory": "Ứng dụng kiểm thử/Meitu",
+      "module": "Meitu.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "issues": [],
+      "source": "https://github.com/duyvinh09/Module_IOS",
+      "scripts": [
+        "MeiTuXiuXiu.js"
+      ],
+      "syntaxCheck": true
+    },
+    {
+      "id": "beautyplus",
+      "name": "BeautyPlus",
+      "directory": "Ứng dụng kiểm thử/BeautyPlus",
+      "module": "BeautyPlus.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "scripts": [
+        "BeautyPlus.js"
+      ]
+    },
+    {
+      "id": "soda",
+      "name": "SODA",
+      "directory": "Ứng dụng kiểm thử/SODA",
+      "module": "SODA.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "scripts": [
+        "Soda.js"
+      ]
+    },
+    {
+      "id": "snow",
+      "name": "SNOW",
+      "directory": "Ứng dụng kiểm thử/SNOW",
+      "module": "SNOW.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "scripts": [
+        "Snow.js"
+      ]
+    },
+    {
+      "id": "camera360",
+      "name": "Camera360",
+      "directory": "Ứng dụng kiểm thử/Camera360",
+      "module": "Camera360.sgmodule",
+      "enabled": false,
+      "status": "unverified",
+      "scripts": [
+        "Camera360.js"
+      ]
+    }
+  ]
+}

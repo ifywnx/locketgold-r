@@ -1,0 +1,9 @@
+#!name=CamScanner — kiểm thử
+#!desc=Trích từ All In One, chưa xác nhận trên thiết bị
+#!author=duyvinh09
+
+[Script]
+Camscanner = requires-body=1,script-path=__ASSET_BASE__/camScanner.js,type=http-response,pattern= https:\/\/(api|api-cs.*)\.intsig\.net\/purchase\/cs\/query_property\?
+
+[MITM]
+hostname = %APPEND% ap*.intsig.net

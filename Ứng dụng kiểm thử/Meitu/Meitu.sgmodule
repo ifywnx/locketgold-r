@@ -1,0 +1,9 @@
+#!name=Meitu — kiểm thử
+#!desc=Trích từ All In One, chưa xác nhận trên thiết bị
+#!author=duyvinh09
+
+[Script]
+Meitu = type=http-response,pattern=^https?:\/\/(h5|api)\.xiuxiu\.meitu\.com\/v\d\/(h\d\/vip|vip|user)\/,requires-body=1,script-path=__ASSET_BASE__/MeiTuXiuXiu.js
+
+[MITM]
+hostname = %APPEND% h5.xiuxiu.meitu.com, api.xiuxiu.meitu.com

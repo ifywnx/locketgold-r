@@ -1,0 +1,9 @@
+#!name=AlightMotion — kiểm thử
+#!desc=Trích từ All In One, chưa xác nhận trên thiết bị
+#!author=duyvinh09
+
+[Script]
+AlightMotion = type=http-response,script-path=__ASSET_BASE__/AlightMotion.js,pattern=^https:\/\/us-central1-alight-creative\.cloudfunctions\.net\/getAccountStatusAndLicenses,max-size=131072,requires-body=true,timeout=10,enable=true
+
+[MITM]
+hostname = %APPEND% us-central1-alight-creative.cloudfunctions.net

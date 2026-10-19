@@ -5,7 +5,7 @@
 | v1 | V3 Sites |
 | v2 | V15 chính, Full Icon / Semantic Studio, thương hiệu An |
 
-Hai phiên bản có cùng cấu trúc file, dùng DNS uBlock cũ và ảnh popup An. Không trộn tính năng V15 vào V3. Thư mục `Website bán hàng` chứa nền tảng web độc lập đang chuẩn bị; chưa deploy, chưa nối v1/v2. `Ứng dụng kiểm thử` chứa 4 bộ ứng dụng chưa xác nhận hoạt động, chưa mở bán.
+Hai phiên bản có cùng cấu trúc file, dùng DNS uBlock cũ và ảnh popup An. Không trộn tính năng V15 vào V3. Thư mục `Website bán hàng` chứa nền tảng web độc lập đang chuẩn bị; chưa deploy, chưa nối v1/v2. `Ứng dụng kiểm thử` chứa 16 bộ ứng dụng chưa xác nhận hoạt động, chưa mở bán.
 
 ## Phân phối qua website
 

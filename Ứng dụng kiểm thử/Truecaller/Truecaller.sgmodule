@@ -1,0 +1,9 @@
+#!name=Truecaller — kiểm thử
+#!desc=Trích từ All In One, chưa xác nhận trên thiết bị
+#!author=duyvinh09
+
+[Script]
+Truecaller = type=http-response,pattern=^https:\/\/premium-[^.]+\.truecaller\.com\/v\d+\/(subscriptions\/status|products\/apple)(\?.*)?$,requires-body=1,max-size=0,script-path=__ASSET_BASE__/TrueCaller.js
+
+[MITM]
+hostname = %APPEND% premium*.truecaller.com

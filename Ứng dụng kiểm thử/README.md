@@ -1,10 +1,7 @@
-# Rà soát AllApps
+# Ứng dụng kiểm thử
 
-| Ứng dụng | Kiểm tra tĩnh | Thiết bị |
-|---|---|---|
-| BeautyPlus | Qua kiểm tra cú pháp JS | Chưa thử trên thiết bị |
-| SODA | Qua kiểm tra cú pháp JS | Chưa thử trên thiết bị |
-| SNOW | Qua kiểm tra cú pháp JS | Chưa thử trên thiết bị |
-| Camera360 | Qua kiểm tra cú pháp JS | Chưa thử trên thiết bị |
+16 thư mục ứng dụng. catalog.json là danh mục để backend tích hợp sau; enabled=false cho toàn bộ, không phải sản phẩm đang bán. Không thay đổi web đang chạy.
 
-Chưa có ứng dụng bổ sung nào được xác nhận hoạt động. Các script khác chưa tách do cần rà soát quy tắc và phụ thuộc.
+Nguồn: https://github.com/duyvinh09/Module_IOS
+
+Các quy tắc có placeholder/lỗi định dạng được ghi trong README từng app. Kiểm tra cú pháp JavaScript không chứng minh tính năng hoạt động. Sub-Store, RevenueCat chung và iTunes chung không tách thành sản phẩm vì là tiện ích/quy tắc dùng chung, có thể tác động nhiều app.

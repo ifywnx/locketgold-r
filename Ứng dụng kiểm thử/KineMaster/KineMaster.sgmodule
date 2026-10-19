@@ -1,0 +1,9 @@
+#!name=KineMaster — kiểm thử
+#!desc=Trích từ All In One, chưa xác nhận trên thiết bị
+#!author=duyvinh09
+
+[Script]
+Kinemaster = type=http-response,pattern=^https:\/\/api-account\.kinemasters\.com\/v\d\/user\/subscribe$,requires-body=1,max-size=0,script-path=__ASSET_BASE__/Kinemaster.js
+
+[MITM]
+hostname = %APPEND% api-account.kinemasters.com
