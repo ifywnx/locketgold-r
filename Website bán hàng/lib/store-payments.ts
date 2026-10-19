@@ -19,9 +19,13 @@ export async function verifyStorePaid(order:StoreOrder){
   const response=await payos('/v2/payment-requests/'+order.id);
   const data=response.data;
   if(!await verify(data,response.signature,secrets().PAYOS_CHECKSUM_KEY))throw Error('Invalid payOS response signature');
-  if(data.id!==order.linkId||data.orderCode!==order.id||data.amount!==order.amount ||
-     data.accountNumber!==order.paymentAccount ||
-     data.accountNumber!==process.env.PAYOS_EXPECTED_ACCOUNT_NUMBER)throw Error('Store order mismatch');
+  if(data.id!==order.linkId||data.orderCode!==order.id||data.amount!==order.amount)
+    throw Error('Store order mismatch');
+  // payOS GET may omit accountNumber; the initial signed create response and
+  // webhook verify the destination account. Check it here only if present.
+  if(typeof data.accountNumber==='string' &&
+     (data.accountNumber!==order.paymentAccount||data.accountNumber!==process.env.PAYOS_EXPECTED_ACCOUNT_NUMBER))
+    throw Error('Store recipient mismatch');
   const db=getDb();
   if(data.status==='CANCELLED'||data.status==='EXPIRED'){
     await db.update(storeOrders).set({status:String(data.status)}).where(eq(storeOrders.id,order.id));
