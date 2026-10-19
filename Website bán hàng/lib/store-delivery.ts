@@ -91,7 +91,7 @@ export function productScript(sku:StoreProductId,demo:boolean){
 }
 export function productConfig(sku:StoreProductId,scriptUrl:string,kind:'sgmodule'|'conf',demo:boolean){
   const note=demo?'TEST — 1 caption mẫu mỗi nhóm; không kích hoạt tài khoản.':'Caption Only — chưa xác nhận tương thích mọi phiên bản Locket.';
-  const rule='an_caption_'+sku+' = type=http-response, pattern=^https:\\\\/\\\\/firebaseremoteconfig\\\\.googleapis\\\\.com\\\\/v1\\\\/projects\\\\/locket-4252a\\\\/.+, script-path='+scriptUrl+', requires-body=true, max-size=-1, timeout=60';
+  const rule='an_caption_'+sku+' = type=http-response, pattern=^https://firebaseremoteconfig[.]googleapis[.]com/v1/projects/locket-4252a/.+, script-path='+scriptUrl+', requires-body=true, max-size=-1, timeout=60';
   if(kind==='sgmodule')return '#!name=An · '+STORE_PRODUCTS[sku].name+(demo?' · DEMO':'')+
     '\n#!desc='+note+'\n#!category=Rewrite\n#!system=iOS\n\n[Script]\n'+rule+
     '\n\n[MITM]\nhostname = %APPEND% firebaseremoteconfig.googleapis.com\n';
