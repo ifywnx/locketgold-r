@@ -1,0 +1,23 @@
+
+/* Feature Store checkout additions — distinct from legacy V1/V2 purchases */
+.an-feature-store .an-store-item>.an-store-add{margin-top:8px;background:#352d40;color:#fff;border-color:#352d40;display:flex;justify-content:center;text-align:center}
+.an-feature-store .an-store-item>.an-store-add[aria-pressed=true]{background:#eee9f2;color:#715e7c;border-color:#e3daea}
+.an-store-dialog-add{display:block;width:100%;margin-top:14px;padding:13px 16px;background:#473b55;border:0;border-radius:12px;color:#fff;font-size:12px;font-weight:850;cursor:pointer}
+.an-store-dialog-add:focus-visible{outline:3px solid #b18cda;outline-offset:3px}
+.an-store-cart{margin:27px 0 16px;padding:23px 26px 25px;background:linear-gradient(132deg,#fffefd,#f9f3fd);border-radius:25px;border:1px solid #eaddea;box-shadow:0 15px 33px #563f6718}
+.an-store-cart-top{display:flex;gap:15px;align-items:flex-start;justify-content:space-between}
+.an-store-cart-top h3{font-size:22px;margin:7px 0 0;letter-spacing:-.8px;color:#47384e}
+.an-store-cart-mode{background:#f0e9f5;border:1px solid #e5dced;border-radius:99px;padding:9px 12px;color:#796281;font-size:10px;font-weight:850;white-space:nowrap}
+.an-store-cart-items{margin:16px 0 0;padding:12px 0;border-top:1px solid #eee4f0;border-bottom:1px solid #eee4f0}
+.an-store-cart-items>p{font-size:12px;color:#94839d;margin:4px 0}
+.an-cart-line{display:flex;align-items:center;gap:12px;padding:7px 0;font-size:12px}
+.an-cart-line strong{flex:1;min-width:0;color:#554564}
+.an-cart-line>span{font-weight:900;color:#9c6a3b}
+.an-cart-line button{cursor:pointer;border:1px solid #eadcea;border-radius:7px;padding:5px 10px;background:#fff;color:#8d6b9b;font-size:10px;font-weight:750}
+.an-store-cart-total{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 0;font-size:13px;font-weight:750;color:#76647d}
+.an-store-cart-total b{font-size:23px;font-weight:900;color:#463752}
+.an-store-cart-footer{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.an-store-cart-footer p{flex:1;margin:0;max-width:540px;color:#877991;font-size:11px;line-height:1.8}
+.an-store-cart-footer button{border:0;border-radius:12px;background:#372d43;color:#fff;font:850 12px/1.4 'Be Vietnam Pro',system-ui,sans-serif;cursor:pointer;padding:14px 20px;white-space:nowrap}
+.an-store-cart-footer button:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:700px){.an-store-cart{padding:18px 16px}.an-store-cart-footer{flex-direction:column;align-items:stretch}.an-store-cart-footer button{width:100%}.an-store-cart-top{flex-wrap:wrap}.an-store-cart-total b{font-size:20px}}
