@@ -1,0 +1,143 @@
+/* AN LOCKET — stable camera / send demonstration, researched independently from Locket public pages.
+   This is an original illustration, not an official app capture. No user photo assets.
+   Every major row has a deliberate size; the photo remains 1:1 at all breakpoints. */
+.an-v5-stage{display:grid;place-items:center;position:relative;min-height:0!important;min-width:0;width:100%;max-width:100%;margin:0;overflow:visible;contain:none!important;transform:none!important;perspective:none!important}
+.an-v5-wrap{width:min(385px,100%);min-width:0;display:flex;flex-direction:column;align-items:center;gap:11px;padding:10px 0 0}
+.an-v5-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;width:min(340px,100%);min-width:0}
+.an-v5-heading-label{display:inline-flex;align-items:center;gap:7px;color:#73657a;font-size:10px;line-height:1.4;font-weight:850;letter-spacing:1.05px;white-space:nowrap}
+.an-v5-live-dot{flex:0 0 7px;width:7px;height:7px;border-radius:50%;background:#f0b948;box-shadow:0 0 0 4px #fff0cc}
+.an-v5-version{display:flex;flex:0 0 auto;align-items:center;gap:4px;padding:4px;border:1px solid #e9ddea;border-radius:99px;background:#fffdfef0;box-shadow:0 8px 17px #5d486a14}
+.an-v5-version button{appearance:none;border:0;background:transparent;border-radius:99px;padding:8px 11px;color:#817287;font:800 10px/1.3 'Be Vietnam Pro',system-ui,sans-serif;cursor:pointer;white-space:nowrap}
+.an-v5-version button.is-active{background:#45384e;color:#fff;box-shadow:0 5px 11px #5944662c}
+.an-v5-version button:focus-visible,.an-v5-controls button:focus-visible,.an-v5-scene button:focus-visible{outline:3px solid #aa87d7;outline-offset:3px}
+.an-v5-device{box-sizing:border-box;position:relative;flex:none;width:min(292px,calc(100vw - 64px));max-width:100%;aspect-ratio:292/615;padding:6px;border:5px solid #39333e;border-radius:47px;background:linear-gradient(120deg,#27232c,#736575 46%,#2a2630);box-shadow:0 20px 46px #34243f36,0 40px 100px #80638c1c,inset 0 0 0 1px #96899c;isolation:isolate}
+.an-v5-device::before{content:"";position:absolute;top:96px;left:-8px;height:42px;width:3px;background:#5b5061;border-radius:5px}
+.an-v5-screen{box-sizing:border-box;display:flex;flex-direction:column;width:100%;height:100%;min-height:0;background:#050505;color:#f9f9fa;border-radius:35px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.an-v5-status{flex:0 0 33px;min-height:33px;display:flex;align-items:center;justify-content:space-between;position:relative;padding:5px 17px 0;z-index:2;color:#fff;font-weight:760}
+.an-v5-clock{font-size:12px;letter-spacing:-.2px;white-space:nowrap}
+.an-v5-location{display:inline-block;margin-left:2px;transform:rotate(18deg);font-size:9px}
+.an-v5-status-center{position:absolute;left:50%;top:6px;transform:translateX(-50%);height:16px;width:70px;border-radius:99px;background:#030303}
+.an-v5-status-right{display:inline-flex;align-items:center;gap:4px;font-size:10px}
+.an-v5-signal{font-size:11px;letter-spacing:-3px;padding-right:3px}
+.an-v5-wifi{font-size:12px}
+.an-v5-battery{position:relative;padding:3px 4px 2px;border-radius:3px;background:#e9e9e9;color:#191919;font-size:10px;font-weight:900;line-height:1}
+.an-v5-battery::after{content:"";position:absolute;right:-3px;top:5px;width:2px;height:5px;background:#aaa;border-radius:0 2px 2px 0}
+.an-v5-scene{flex:1 1 auto;min-height:0;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.an-v5-scene[hidden]{display:none!important}
+.an-v5-camera-top{box-sizing:border-box;flex:0 0 62px;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 11px 6px}
+.an-v5-round,.an-v5-avatar{display:grid;place-items:center;flex:0 0 33px;width:33px;height:33px;border-radius:50%;background:#252525}
+.an-v5-round svg{opacity:.88}
+.an-v5-avatar{font-size:15px;font-weight:800;background:linear-gradient(140deg,#d2a0c1,#967eac);color:#fff}
+.an-v5-friends{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-width:0;padding:10px 12px;border:1px solid #393939;border-radius:99px;color:#fff;background:#292929;font-size:12px;font-weight:850;white-space:nowrap}
+.an-v5-friends svg{flex:none}
+.an-v5-photo{position:relative;box-sizing:border-box;isolation:isolate;flex:0 0 auto;width:calc(100% - 12px);aspect-ratio:1;margin:0 auto;overflow:hidden;border-radius:34px;background:#c79d88}
+.an-v5-art{position:absolute;inset:0;z-index:0;overflow:hidden;background:radial-gradient(ellipse 100% 85% at 75% 16%,#fbe0a8 0%,#e9b98e 31%,#b98983 72%,#716578 100%)}
+.an-v5-art::before{content:"";position:absolute;z-index:1;inset:0;background:linear-gradient(135deg,#ffe0b235,transparent 57%,#2a253329);pointer-events:none}
+.an-v5-window{position:absolute;left:11%;top:-13%;width:74%;height:77%;border:8px solid #b18374;border-radius:9px 9px 3px 3px;background:linear-gradient(160deg,#ffe3a8 0%,#efbd94 40%,#ad9bb8 100%);box-shadow:inset 0 0 0 3px #f3d1b080,16px 19px 29px #553c414b;transform:rotate(-2deg)}
+.an-v5-window::after{content:"";position:absolute;top:0;bottom:0;left:51%;width:8px;background:linear-gradient(90deg,#a57469,#c3957d)}
+.an-v5-skyline{position:absolute;top:25%;left:16%;width:61%;height:24%;clip-path:polygon(0 78%,9% 78%,9% 54%,18% 54%,18% 73%,29% 73%,29% 29%,38% 29%,38% 64%,47% 64%,47% 36%,57% 36%,57% 70%,67% 70%,67% 44%,79% 44%,79% 62%,90% 62%,90% 43%,100% 43%,100% 100%,0 100%);background:#886f86;opacity:.64;transform:rotate(-2deg)}
+.an-v5-light{position:absolute;top:8%;right:29%;width:24%;aspect-ratio:1;background:#fff0bb;border-radius:50%;box-shadow:0 0 31px 13px #ffeab27f;opacity:.8}
+.an-v5-table{position:absolute;z-index:3;bottom:-18%;left:-30%;width:168%;height:57%;border-radius:49%;background:linear-gradient(170deg,#a87158 0%,#81554d 33%,#4a3d44 100%);box-shadow:0 -11px 22px #5f404241;transform:rotate(-13deg)}
+.an-v5-cup{position:absolute;z-index:4;left:43%;bottom:11%;width:26%;height:13%;border-radius:50%;background:radial-gradient(ellipse at 49% 44%,#7b4b32 0 40%,#f1e2ce 42% 59%,#c5b9b0 61% 68%,#4f3b3c 70%);box-shadow:6px 10px 11px #3829286b;transform:rotate(-12deg)}
+.an-v5-cup-handle{position:absolute;z-index:4;left:65%;bottom:12%;width:12%;height:10%;border:5px solid #e0d0ba;border-left:0;border-radius:0 50% 50% 0;transform:rotate(-14deg)}
+.an-v5-leaf{position:absolute;z-index:4;left:3%;bottom:26%;width:19%;height:9%;border-radius:100% 0 100% 0;background:linear-gradient(120deg,#73977d,#314e4b);box-shadow:0 3px 9px #262e3260;transform:rotate(28deg)}
+.an-v5-leaf.leaf-two{left:12%;bottom:20%;transform:rotate(-38deg);width:16%;height:8%}
+.an-v5-grain{position:absolute;z-index:5;inset:0;opacity:.13;pointer-events:none;background-image:radial-gradient(#fffeff 0.65px,transparent .65px);background-size:5px 5px;mix-blend-mode:soft-light}
+.an-v5-tool{position:absolute;z-index:7;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;color:#fff;background:#332c30a8;backdrop-filter:blur(5px)}
+.an-v5-flash{bottom:12px;left:12px}
+.an-v5-zoom{top:12px;right:12px;font-size:13px;font-weight:800}
+.an-v5-spark{bottom:12px;right:12px;font-size:24px}
+.an-v5-camera-actions{flex:1 1 auto;min-height:80px;display:flex;align-items:center;justify-content:space-around;padding:7px 17px;gap:20px}
+.an-v5-side-icon{display:grid;place-items:center;width:30px;height:30px;color:#eee}
+.an-v5-shutter{display:grid;place-items:center;flex:0 0 75px;width:75px;height:75px;border:4px solid #ffbc00;border-radius:50%;padding:0;background:transparent;cursor:pointer}
+.an-v5-shutter span{width:60px;height:60px;border:3px solid #1c1c1c;border-radius:50%;background:#fff}
+.an-v5-shutter:hover{box-shadow:0 0 0 4px #f8c23c22}
+.an-v5-shutter:active{transform:scale(.96)}
+.an-v5-history{box-sizing:border-box;flex:0 0 35px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px}
+.an-v5-history-avatar{display:grid;place-items:center;width:23px;height:23px;border-radius:8px;background:linear-gradient(145deg,#c09f9c,#94748d);font-size:11px;font-weight:800}
+.an-v5-history strong{font-size:12px;font-weight:800}
+.an-v5-history-arrow{color:#818181;font-size:22px;margin-left:2px}
+.an-v5-app-nav{box-sizing:border-box;flex:0 0 45px;display:flex;align-items:center;justify-content:space-around;margin:1px 26px 3px;border:1px solid #2b2b2b;border-radius:99px;background:#191919;color:#a2a2a2;font-size:19px}
+.an-v5-app-nav b{display:grid;place-items:center;width:58px;height:39px;border-radius:99px;background:#444;color:#fff;font-size:25px}
+/* send flow */
+.an-v5-send-title{box-sizing:border-box;flex:0 0 62px;display:flex;align-items:center;justify-content:center;position:relative;color:#dedede}
+.an-v5-send-title strong{font-size:20px;font-weight:800}
+.an-v5-save{position:absolute;right:16px;color:#aaa}
+.an-v5-send-photo{display:flex;align-items:flex-end;justify-content:center}
+.an-v5-caption{position:relative;z-index:7;display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:0;max-width:calc(100% - 16px);min-height:37px;margin:0 8px 13px;padding:9px 13px;border-radius:99px;box-shadow:0 4px 11px #352c3450,inset 0 1px 1px #ffffff42;text-align:center;font:850 11px/1.27 'Be Vietnam Pro',system-ui,sans-serif;overflow-wrap:anywhere;white-space:normal;background-image:linear-gradient(#ffdc82,#ffd250);color:#543909}
+.an-v5-caption span:first-child{flex:0 0 auto;font-size:15px}
+.an-v5-caption span[hidden]{display:none}
+.an-v5-caption.is-swapping{animation:an-v5-caption-fade .2s ease both}
+@keyframes an-v5-caption-fade{from{opacity:.35;scale:.97}to{opacity:1;scale:1}}
+.an-v5-dots{box-sizing:border-box;flex:0 0 26px;display:flex;align-items:center;justify-content:center;gap:7px}
+.an-v5-dots b,.an-v5-dots i{display:block;width:6px;height:6px;border-radius:50%;background:#525252}
+.an-v5-dots b{background:#fff;width:7px;height:7px}
+.an-v5-send-actions{box-sizing:border-box;display:flex;flex:1 1 auto;min-height:78px;align-items:center;justify-content:space-around;padding:0 17px;gap:18px}
+.an-v5-send-actions button{appearance:none;display:grid;place-items:center;cursor:pointer}
+.an-v5-back-camera{width:29px;height:29px;border:0;color:#fff;background:transparent}
+.an-v5-send-button{width:75px;height:75px;padding:17px!important;border:0;border-radius:50%;background:#464646;color:#fff}
+.an-v5-send-button:active{background:#585858;transform:scale(.98)}
+.an-v5-decorate{width:28px;font-size:33px;line-height:1;text-align:center}
+.an-v5-recipients{box-sizing:border-box;flex:0 0 72px;display:flex;align-items:center;justify-content:space-around;gap:8px;padding:3px 12px 0}
+.an-v5-recipient{display:flex;flex:1;min-width:0;align-items:center;flex-direction:column;justify-content:center;gap:5px}
+.an-v5-recipient b{display:grid;place-items:center;width:39px;height:39px;border:2px solid #444;border-radius:50%;background:#272727;font-size:20px;font-weight:500}
+.an-v5-recipient b svg{width:20px;height:20px}
+.an-v5-recipient small{font-size:10px;color:#b6b6b6;font-weight:750;white-space:nowrap}
+.an-v5-recipient.is-selected b{border-color:#edb700;box-shadow:0 0 0 2px #edb7005c}
+.an-v5-recipient.is-selected small{color:#f8c427}
+.an-v5-home{flex:0 0 13px;display:flex;align-items:center;justify-content:center}
+.an-v5-home::before{content:"";display:block;width:90px;height:4px;border-radius:99px;background:#fff}
+/* outside controls, no absolute overlays */
+.an-v5-controls{display:flex;align-items:center;justify-content:space-between;gap:13px;width:min(340px,100%);padding:1px 0}
+.an-v5-controls>button{display:flex;align-items:center;justify-content:center;gap:7px;appearance:none;cursor:pointer;padding:9px 11px;border:1px solid #e7dbe7;border-radius:13px;background:#fffdfcee;color:#685775;font:750 11px/1.3 'Be Vietnam Pro',system-ui,sans-serif;box-shadow:0 4px 12px #6f537010}
+.an-v5-controls>button svg{width:16px;height:16px}
+.an-v5-pager{display:flex;align-items:center;gap:8px}
+.an-v5-pager button{display:grid;place-items:center;width:31px;height:31px;appearance:none;cursor:pointer;border:1px solid #e7dce9;border-radius:50%;background:#fff;color:#796a84}
+.an-v5-pager button svg{width:15px;height:15px}
+.an-v5-pager span{min-width:68px;text-align:center;font-size:10px;color:#786c80;font-weight:800}
+.an-v5-disclaimer,.an-v5-caption-group{max-width:340px;min-width:0;margin:0;text-align:center;line-height:1.6}
+.an-v5-caption-group{font-size:10px;font-weight:700;color:#8c7c91}
+.an-v5-disclaimer{font-size:9px;color:#9a8da0}
+.an-v5-wrap button:focus-visible{outline:3px solid #ab87de;outline-offset:3px}
+@media(max-width:980px){
+  .an-v5-device{width:min(270px,calc(100vw - 64px))}
+  .an-v5-heading,.an-v5-controls{width:min(330px,100%)}
+  .an-v5-camera-top,.an-v5-send-title{flex-basis:57px}
+  .an-v5-shutter,.an-v5-send-button{width:67px;height:67px;flex-basis:67px}
+  .an-v5-shutter span{width:53px;height:53px}
+  .an-v5-camera-actions{min-height:70px}
+  .an-v5-send-actions{min-height:70px}
+  .an-v5-history{flex-basis:31px}
+  .an-v5-app-nav{flex-basis:42px}
+  .an-v5-recipients{flex-basis:65px}
+}
+@media(max-width:700px){
+  .an-v5-stage{margin:16px 0 0;min-height:0!important;transform:none!important}
+  .an-v5-wrap{gap:9px;padding-top:5px;width:min(350px,100%)}
+  .an-v5-device{width:min(267px,calc(100vw - 65px));border-radius:44px;box-shadow:0 18px 47px #4937532c}
+  .an-v5-heading{gap:8px}
+  .an-v5-heading-label{font-size:9px;letter-spacing:.5px}
+  .an-v5-version button{padding:7px 10px;font-size:9px}
+  .an-v5-friends{font-size:11px;padding:9px 9px}
+  .an-v5-photo{border-radius:30px}
+  .an-v5-recipients{flex-basis:63px}
+  .an-v5-history{flex-basis:29px}
+}
+@media(max-width:370px){
+  .an-v5-device{width:min(246px,calc(100vw - 58px))}
+  .an-v5-heading-label{font-size:8px}
+  .an-v5-version button{padding:6px 8px}
+  .an-v5-camera-top,.an-v5-send-title{flex-basis:51px}
+  .an-v5-camera-actions,.an-v5-send-actions{min-height:57px}
+  .an-v5-shutter,.an-v5-send-button{width:58px;height:58px;flex-basis:58px}
+  .an-v5-shutter span{width:46px;height:46px}
+  .an-v5-history{flex-basis:25px}
+  .an-v5-app-nav{flex-basis:38px}
+  .an-v5-recipients{flex-basis:55px}
+  .an-v5-recipient b{width:32px;height:32px}
+  .an-v5-recipients small{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  .an-v5-caption.is-swapping{animation:none!important}
+  .an-v5-shutter,.an-v5-send-button{transition:none!important}
+}
