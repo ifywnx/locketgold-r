@@ -19,7 +19,7 @@ function render(session,packageId,demo=false){
  const options=[
  ['ifywnx-Locket-Captions.sgmodule','1 · Cài module Locket','Nhập module vào Shadowrocket.','Cài module →'],
  ['ifywnx-Locket-Config.conf','2 · Cài cấu hình','Nhập rồi chọn cấu hình. Cấu hình này đã có quy tắc Locket: tắt module trùng trước khi bật kết nối.','Cài cấu hình →'],
- ['ifywnx-Locket-DNS.mobileconfig','3 · DNS riêng ifywnx','Tuỳ chọn. Gỡ hồ sơ DNS cũ, mở bằng Safari rồi cài hồ sơ mới trong Cài đặt iPhone.','Cài DNS →'],
+ ['ifywnx-Locket-DNS.mobileconfig','3 · DNS riêng An','Tuỳ chọn. Gỡ hồ sơ DNS cũ, mở bằng Safari rồi cài hồ sơ mới trong Cài đặt iPhone.','Cài DNS →'],
  ['ifywnx-DNS-Cu.mobileconfig','DNS cũ · dự phòng','Chỉ dùng thay DNS riêng khi cần. Gỡ hồ sơ DNS đang dùng trước khi cài.','Cài DNS cũ →']
  ];
  for(const [file,title,description,label] of options){
