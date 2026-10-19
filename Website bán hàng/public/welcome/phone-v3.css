@@ -1,4 +1,4 @@
-/* An V3: faithful, lightweight mock of the two screenshots supplied by the owner.
+/* An V4: independent CSS mock of an iPhone camera and send flow.
    It is an illustrative CSS interface and does not communicate with Locket. */
 .phone-preview-wrap{position:relative;z-index:5;display:flex;align-items:center;flex-direction:column;gap:9px;width:100%;max-width:380px;min-width:0;margin:0 auto}
 .phone-mode-switch{display:inline-flex;justify-content:center;align-items:center;gap:3px;padding:4px;background:#fffefde9;border:1px solid #e9e0ed;border-radius:999px;box-shadow:0 7px 20px #6d487012}
@@ -31,7 +31,7 @@
 .lc-profile-circle{background:linear-gradient(145deg,#d9b7c7,#9275a1);font-size:17px;font-weight:800;color:#fff}
 .lc-friends-bubble{display:flex;align-items:center;gap:7px;justify-content:center;align-self:flex-start;min-width:0;white-space:nowrap;padding:9px 12px;border:1px solid #373737;background:#292929;border-radius:99px;font-size:12px;font-weight:800}
 .lc-friends-bubble svg{width:19px;height:19px;flex-shrink:0;stroke-width:2.7;fill:#fff;stroke:#fff}
-.lc-photo{position:relative;flex:none;display:block;overflow:hidden;width:100%;border-radius:37px;background-color:#9e8c76;background-image:url("images/demo-camera-wall.webp");background-position:center;background-size:cover}
+.lc-photo{position:relative;flex:none;display:block;overflow:hidden;width:100%;border-radius:37px;background-color:#9e8c76;background-image:none;background-position:center;background-size:cover}
 .lc-camera-photo{aspect-ratio:1/1}
 .lc-photo-tool{position:absolute;z-index:2;display:grid;place-items:center;width:31px;height:31px;background:#594c3fa8;border-radius:50%;color:#f8f8f8;font-size:17px;line-height:1}
 .tool-mic{left:12px;top:13px}.tool-zoom{right:12px;top:13px;font-size:13px}.tool-flash{left:12px;bottom:13px;font-size:25px}.tool-spark{right:12px;bottom:13px;font-size:24px}
