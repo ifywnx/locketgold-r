@@ -9,7 +9,10 @@ function owner(r:Request){const v=r.headers.get('authorization')?.replace(/^Bear
 export async function POST(r:Request){
  if(!sameOrigin(r))return json({error:'Yêu cầu không hợp lệ.'},403);
  let plan;try{const b=await r.json() as {plan?:unknown};plan=parsePlan(b.plan)}catch{return json({error:'Chọn gói hợp lệ.'},400)}
- if(!plan)return json({error:'Chọn gói hợp lệ.'},400);const amount=PLANS[plan];
+ if(!plan)return json({error:'Chọn gói hợp lệ.'},400);
+ // Retired bundle: preserve existing paid orders and access, reject *new* Plus orders.
+ if(plan==='plus')return json({error:'Gói 129.000đ đã ngừng mở bán. Vui lòng chọn V1 hoặc V2.'},410);
+ const amount=PLANS[plan];
  const token=owner(r);if(!token)return json({error:'Thiếu phiên đặt hàng.'},400);
  const db=getDb(),ownerHash=await digest(token),now=Date.now();
  const [existing]=await db.select().from(orders).where(eq(orders.ownerHash,ownerHash)).orderBy(orders.created).limit(1);
@@ -23,13 +26,13 @@ export async function POST(r:Request){
  await db.insert(orders).values({id,ownerHash,amount,status:'CREATING',created:now,codeHash:await digest(code),codeCipher:await seal(code,s.PAYOS_CHECKSUM_KEY)});
  try{
  const origin=r.headers.get('origin')==='https://ifywnx.netlify.app'?'https://ifywnx.netlify.app':new URL(r.url).origin;
- const body={amount,cancelUrl:origin+'/?payment=cancelled',description:'IFYWNX',orderCode:id,returnUrl:origin+'/?payment=return'};
+ const body={amount,cancelUrl:origin+'/?payment=cancelled',description:'An Store',orderCode:id,returnUrl:origin+'/?payment=return'};
  const res=await payos('/v2/payment-requests',{...body,signature:await sign(body,s.PAYOS_CHECKSUM_KEY),expiredAt:Math.floor(now/1000)+1800});
  const d=res.data;
  if(!await verify(d,res.signature,s.PAYOS_CHECKSUM_KEY)||(d.accountNumber!==ACCOUNT && !(typeof d.accountNumber==='string'&&/^VQR[A-Z0-9]{5,}$/.test(d.accountNumber)))||d.bin!==BIN||d.amount!==amount||d.orderCode!==id||typeof d.paymentLinkId!=='string'||typeof d.checkoutUrl!=='string'||new URL(d.checkoutUrl).origin!=='https://pay.payos.vn')throw Error('Kênh payOS chưa khớp tài khoản MB Bank đã chọn.');
  await db.update(orders).set({status:'PENDING',paymentAccount:d.accountNumber as string,linkId:d.paymentLinkId,checkoutUrl:d.checkoutUrl}).where(eq(orders.id,id));
  return json({orderCode:id,checkoutUrl:d.checkoutUrl,amount,plan});
- }catch{await db.update(orders).set({status:'ERROR'}).where(eq(orders.id,id));return json({error:'Chưa tạo được thanh toán đúng tài khoản MB Bank. Vui lòng liên hệ ifywnx; chưa cần chuyển tiền.'},502)}
+ }catch{await db.update(orders).set({status:'ERROR'}).where(eq(orders.id,id));return json({error:'Chưa tạo được thanh toán đúng tài khoản MB Bank. Vui lòng liên hệ An; chưa cần chuyển tiền.'},502)}
 }
 export async function GET(r:Request){
  const token=owner(r);if(!token)return json({error:'Thiếu phiên đặt hàng.'},401);
