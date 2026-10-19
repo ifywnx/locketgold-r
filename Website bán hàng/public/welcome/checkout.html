@@ -1,0 +1,41 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer"><meta name="theme-color" content="#fbf8fc"><title>Kiểm tra đơn | An Feature Store</title><link rel="icon" type="image/svg+xml" href="../favicon.svg"><link rel="stylesheet" href="style.css"><style>
+:root{color-scheme:light}body{min-height:100dvh;background:radial-gradient(circle at 10% 12%,#ebddf9,transparent 32%),radial-gradient(circle at 93% 72%,#ffe6d5,transparent 30%),#fbf8fc;padding:0 14px;color:#423548}
+.an-order-header{display:flex;align-items:center;justify-content:space-between;max-width:790px;margin:0 auto;padding:22px 0}
+.an-order-header>a{text-decoration:none;color:#6f5977;font-size:12px;font-weight:800}
+.an-order-header b{font-size:16px}
+.an-order-frame{max-width:680px;margin:34px auto 60px;padding:29px 30px 25px;background:#fffdfcf2;box-shadow:0 20px 55px #4d375b19;border:1px solid #eadfec;border-radius:26px}
+.an-order-kicker{color:#a27a9d;font-size:11px;letter-spacing:1.4px;font-weight:900}
+.an-order-frame h1{font-size:clamp(27px,4vw,37px);line-height:1.25;letter-spacing:-1.5px;margin:11px 0}
+.an-order-desc{font-size:12px;color:#776c7f;margin:0 0 18px}
+.an-order-badge{display:inline-flex;padding:7px 13px;border-radius:99px;background:#f2eafa;color:#725882;font-size:11px;font-weight:850}
+.an-order-badge[data-state="done"]{background:#e8f5eb;color:#30784c}
+.an-order-badge[data-state="warning"]{background:#fff0de;color:#956d2d}
+.an-order-info{display:grid;gap:8px;margin:21px 0 14px;border-top:1px solid #eee5ef;padding-top:20px}
+.an-order-line{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:#76687d}
+.an-order-line strong{color:#453652;text-align:right;min-width:0;overflow-wrap:anywhere}
+.an-order-products{margin:16px 0;background:#faf5fc;border-radius:14px;padding:13px 15px}
+.an-order-products p{margin:4px 0 10px;font-size:11px;color:#82758d}
+.an-order-item{display:flex;justify-content:space-between;gap:12px;font-size:12px;padding:5px 0}
+.an-order-item span{color:#675774}.an-order-item strong{font-weight:850}
+.an-order-total{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-top:1px solid #eee4ee;border-bottom:1px solid #eee4ee;font-size:12px;color:#746578;font-weight:800}
+.an-order-total strong{font-size:25px;color:#483852}
+.an-order-alert{background:#f8f4fb;color:#756982;font-size:12px;line-height:1.8;padding:13px 15px;border-radius:13px;margin:18px 0}
+.an-order-actions{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin:15px 0}
+.an-order-actions button,.an-order-actions a{display:inline-flex;align-items:center;justify-content:center;text-align:center;cursor:pointer;text-decoration:none;border:1px solid #e7dce8;border-radius:12px;padding:12px 16px;background:#fff;color:#735a7f;font-size:12px;font-weight:800;min-height:43px}
+.an-order-actions .primary{background:#42324f;color:#fff;border-color:#42324f}
+.an-order-actions [hidden]{display:none!important}
+.an-order-note{font-size:11px;line-height:1.8;color:#95889b;margin:16px 0 0}
+@media(max-width:600px){.an-order-header{padding:15px 5px}.an-order-frame{margin:16px auto 35px;padding:22px 17px;border-radius:20px}.an-order-actions{flex-direction:column;align-items:stretch}.an-order-actions>*{width:100%}}
+</style></head><body>
+<header class="an-order-header"><a href="index.html#feature-store">← Quay lại cửa hàng</a><b>An · Feature Store</b></header>
+<main class="an-order-frame">
+ <p class="an-order-kicker">KIỂM TRA ĐƠN HÀNG</p><h1>Đơn caption của bạn</h1>
+ <p class="an-order-desc">Đây là trang xác minh trạng thái bằng máy chủ, không đánh dấu đã trả tiền dựa trên URL quay lại.</p>
+ <span class="an-order-badge" id="order-state">Đang tải đơn…</span>
+ <div class="an-order-info"><div class="an-order-line"><span>Mã đơn</span><strong id="order-id">—</strong></div><div class="an-order-line"><span>Chế độ</span><strong id="order-mode">—</strong></div><div class="an-order-line"><span>Ngày tạo</span><strong id="order-date">—</strong></div></div>
+ <div class="an-order-products"><p>Các bộ caption trong giỏ</p><div id="order-products">Đang tải…</div></div>
+ <div class="an-order-total"><span>Thành tiền</span><strong id="order-total">—</strong></div>
+ <p class="an-order-alert" id="order-message" role="status" aria-live="polite">Đang kết nối máy chủ…</p>
+ <div class="an-order-actions"><button id="order-demo-confirm" class="primary" type="button" hidden>Giả lập thanh toán thành công</button><a id="order-payos-link" class="primary" href="#" target="_self" hidden>Đi đến trang payOS ↗</a><button id="order-refresh" type="button">↻ Kiểm tra trạng thái</button></div>
+ <p class="an-order-note">DEMO không trừ tiền, không phát hành mã và không mở khóa tính năng. Với thanh toán thật, mã đơn chỉ được xác nhận sau khi payOS và máy chủ xác minh giao dịch. Các gói Caption Only chưa được kiểm thử trên Locket thực tế.</p>
+</main><script src="store-order.js" defer></script></body></html>
