@@ -6,11 +6,11 @@
   const $=id=>document.getElementById(id);
   // Keep catalog groups anchored to the GitHub source; do not manufacture captions.
   const packs={
-    trend:{name:'Trend & Meme',groups:['🔥 Trend TikTok & Threads','🤡 Meme & Câu cửa miệng','🧠 Vô tri & Brainrot']},
-    love:{name:'Love & Mood',groups:['💘 Tình cảm & Thả thính','🌙 Mood & Chữa lành']},
-    premium:{name:'Vietnamese Premium',groups:['🥂 Tiếng Việt Premium · Sang & tinh tế','🍃 Tiếng Việt Premium · Văn thơ','🪄 Tiếng Việt Premium · Hài có duyên']},
-    genz:{name:'Gen Z & Slay',groups:['🧸 Teencode · Chê yêu','✨ Aura · Slay & Flex','🌐 English Slang & Internet']},
-    holiday:{name:'Holiday Collection',groups:['🎨 Holiday Caption']}
+    trend:{name:'Xu hướng & Hài hước',groups:['🔥 Trend TikTok & Threads','🤡 Meme & Câu cửa miệng','🧠 Vô tri & Brainrot']},
+    love:{name:'Tình cảm & Tâm trạng',groups:['💘 Tình cảm & Thả thính','🌙 Mood & Chữa lành']},
+    premium:{name:'Tiếng Việt tinh tế',groups:['🥂 Tiếng Việt Premium · Sang & tinh tế','🍃 Tiếng Việt Premium · Văn thơ','🪄 Tiếng Việt Premium · Hài có duyên']},
+    genz:{name:'Gen Z & Cá tính',groups:['🧸 Teencode · Chê yêu','✨ Aura · Slay & Flex','🌐 English Slang & Internet']},
+    holiday:{name:'Lễ hội & Các mùa',groups:['🎨 Holiday Caption']}
   };
   let all=[],selected='trend',shown=28,lastTrigger=null,loading=null;
   const normalize=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase();
@@ -52,7 +52,7 @@
       const count=$('feature-store').querySelector('[data-store-count="'+key+'"]');
       const preview=$('feature-store').querySelector('[data-store-sample="'+key+'"]');
       const items=members(key);
-      if(count)count.textContent=items.length+' caption';
+      if(count)count.textContent=items.length+' câu';
       if(!preview)continue;
       const fragment=document.createDocumentFragment();
       const seen=new Set();
@@ -89,7 +89,7 @@
       frame.append(empty);
     }
     $('an-store-gallery').replaceChildren(frame);
-    $('an-store-showing').textContent='Đang xem '+subset.length+' / '+matching.length+' caption';
+    $('an-store-showing').textContent='Đang xem '+subset.length+' / '+matching.length+' câu';
     $('an-store-more').hidden=shown>=matching.length;
   }
   function showPack(key,button){
@@ -97,7 +97,7 @@
     selected=key;shown=28;lastTrigger=button;
     $('an-store-dialog-title').textContent=packs[key].name;
     $('an-store-search').value='';
-    $('an-store-dialog-subtitle').textContent='Xem màu gốc GitHub. Giá trong giỏ hiện là giá thử nghiệm; chưa tự động cấp module.';
+    $('an-store-dialog-subtitle').textContent='Bạn đang xem câu chữ và màu gốc. Giá chỉ để thử đặt hàng, chưa thu tiền thật.';
     render();
     if(typeof dialog.showModal==='function')dialog.showModal();
     else dialog.setAttribute('open','');
@@ -127,7 +127,7 @@
         showPack(button.dataset.storePreview,button);
       }catch{
         const target=root.querySelector('[data-store-count="'+button.dataset.storePreview+'"]');
-        if(target)target.textContent='Tải dữ liệu thất bại';
+        if(target)target.textContent='Chưa tải được mẫu';
       }
     });
   });
