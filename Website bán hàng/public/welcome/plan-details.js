@@ -48,7 +48,7 @@
     }
   };
   let active='standard', lastTrigger=null;
-  let libraryRows=[], visibleLimit=18, libraryLoading=0;
+  let libraryRows=[], visibleLimit=9, libraryLoading=0;
   const cached = new Map();
   const safeText=(node,value)=>{node.textContent=value;return node};
   const $=id=>byId(id);
@@ -137,7 +137,7 @@
   function resetLibraryFilters(){
     $('plan-caption-search').value='';
     $('plan-caption-category').replaceChildren(new Option('Tất cả chủ đề',''));
-    visibleLimit=18;
+    visibleLimit=9;
   }
   async function renderLibraryFor(version){
     const request=++libraryLoading;
@@ -169,9 +169,9 @@
     }
   }
 
-  $('plan-caption-search').addEventListener('input',()=>{visibleLimit=18;drawLibrary()});
-  $('plan-caption-category').addEventListener('change',()=>{visibleLimit=18;drawLibrary()});
-  $('plan-caption-more').addEventListener('click',()=>{visibleLimit+=24;drawLibrary()});
+  $('plan-caption-search').addEventListener('input',()=>{visibleLimit=9;drawLibrary();$('plan-caption-grid').scrollTop=0})
+  $('plan-caption-category').addEventListener('change',()=>{visibleLimit=9;drawLibrary();$('plan-caption-grid').scrollTop=0})
+  $('plan-caption-more').addEventListener('click',()=>{visibleLimit+=9;drawLibrary();const grid=$('plan-caption-grid');grid.scrollTo({top:grid.scrollHeight,behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})});
   $('plan-library-jump').addEventListener('click',()=>{
     const scrollable=$('plan-samples');
     scrollable.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});
