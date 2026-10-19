@@ -109,7 +109,7 @@
       if(!response.ok||!data.orderCode)throw Error(data.error||'Không tạo được đơn');
       localStorage.setItem('an-store-last-order',String(data.orderCode));
       // Local order details are always shown before any transfer to payOS.
-      location.assign('/welcome/checkout.html?order='+encodeURIComponent(data.orderCode));
+      location.assign('/store/checkout.html?order='+encodeURIComponent(data.orderCode));
     }catch(error){
       status.textContent=error?.message||'Tạo đơn không thành công';
       button.disabled=false;
