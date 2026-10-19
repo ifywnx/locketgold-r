@@ -33,7 +33,7 @@
 
   // Opt in to gentle reveal only when observers are supported.
   if(!reduced.matches && 'IntersectionObserver' in window){
-    const targets=[...document.querySelectorAll('.hero-copy,.hero-stage,.featurebar,.experience-heading,.experience-tile,.caption-gallery,.plans,.checkoutbar,.how-it-works>.sectionhead,.step-card,.workspace')];
+    const targets=[...document.querySelectorAll('.hero-copy,.hero-stage,.an-demo-customizer,.featurebar,.an-compare-heading,.an-compare-panel,.experience-heading,.experience-tile,.caption-gallery,.plans,.checkoutbar,.how-it-works>.sectionhead,.step-card,.workspace')];
     const observer=new IntersectionObserver(entries=>{
       for(const entry of entries){
         if(entry.isIntersecting){
@@ -44,7 +44,7 @@
     },{threshold:.1,rootMargin:'0px 0px -25px 0px'});
     targets.forEach((el,index)=>{
       el.setAttribute('data-reveal','');
-      if(el.classList.contains('experience-tile')||el.classList.contains('step-card')){
+      if(el.classList.contains('experience-tile')||el.classList.contains('step-card')||el.classList.contains('an-compare-panel')){
         el.style.setProperty('--reveal-delay',((index%3)*85)+'ms');
       }
       observer.observe(el);
@@ -88,7 +88,7 @@
   // Scroll-synced mini navigation: mirrors the actual sections, no fake state.
   if('IntersectionObserver' in window){
     const links=[...document.querySelectorAll('header nav a[href^="#"]')];
-    const sections=['packages','captions','faq','support','how-it-works'];
+    const sections=['packages','compare','captions','faq','support','how-it-works'];
     const targets=sections.map(id=>document.getElementById(id)).filter(Boolean);
     const spy=new IntersectionObserver(entries=>{
       const visible=entries.filter(entry=>entry.isIntersecting)
