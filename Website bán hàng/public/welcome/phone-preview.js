@@ -10,7 +10,7 @@
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer=matchMedia('(hover: hover) and (pointer: fine)');
   const cache=new Map();
-  let version='v2', items=[], cursor=0, request=0;
+  let version='v2', items=[], cursor=0, request=0, scene='send';
   const source={v1:'v1-caption-data.json',v2:'caption-data.json'};
   function valid(item){
     return typeof item.text==='string'&&typeof item.group==='string'&&
@@ -72,10 +72,33 @@
       group.textContent='Bản minh hoạ';
     }
   }
+  const scenes={camera:byId('phone-camera-scene'),send:byId('phone-send-scene')};
+  const sceneButtons={camera:byId('phone-camera-view'),send:byId('phone-send-view')};
+  function setScene(next){
+    if(!scenes[next])return;
+    scene=next;
+    for(const [key,node] of Object.entries(scenes))node.hidden=key!==scene;
+    for(const [key,button] of Object.entries(sceneButtons)){
+      button.classList.toggle('active',key===scene);
+      button.setAttribute('aria-pressed',String(key===scene));
+    }
+    frame?.setAttribute('aria-label',scene==='send'
+      ?'Màn hình gửi ảnh minh hoạ với caption trên ảnh'
+      :'Màn hình camera Locket minh hoạ');
+  }
+  sceneButtons.camera.addEventListener('click',()=>setScene('camera'));
+  sceneButtons.send.addEventListener('click',()=>setScene('send'));
+  byId('phone-shutter').addEventListener('click',()=>setScene('send'));
+  byId('phone-back-camera').addEventListener('click',()=>setScene('camera'));
+  byId('phone-send-demo').addEventListener('click',()=>{
+    status.textContent='Chỉ là bản xem thử — không gửi ảnh thật.';
+    status.setAttribute('aria-live','polite');
+  });
   buttons.v1.addEventListener('click',()=>setVersion('v1'));
   buttons.v2.addEventListener('click',()=>setVersion('v2'));
   function step(direction){
     if(!items.length)return;
+    if(scene==='camera')setScene('send');
     cursor=(cursor+direction+items.length)%items.length;
     render();
   }
@@ -108,5 +131,6 @@
       swipeStart=null;
     },{passive:true});
   }
+  setScene('send');
   void setVersion('v2');
 })();
