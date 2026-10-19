@@ -1,0 +1,7 @@
+import {createClient} from '@libsql/client';
+import {mkdirSync} from 'node:fs';
+mkdirSync(process.env.DATA_DIR||'./data',{recursive:true});
+const db=createClient({url:process.env.DATABASE_URL||'file:./data/app.db'});
+await db.executeMultiple(`CREATE TABLE IF NOT EXISTS access_codes (id TEXT PRIMARY KEY, label TEXT NOT NULL, hash TEXT NOT NULL UNIQUE, expires INTEGER NOT NULL, single_use INTEGER NOT NULL DEFAULT 0, session_hash TEXT, activated INTEGER, revoked INTEGER NOT NULL DEFAULT 0, created INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS orders (id INTEGER PRIMARY KEY,owner_hash TEXT NOT NULL UNIQUE,amount INTEGER NOT NULL,status TEXT NOT NULL,payment_account TEXT,link_id TEXT UNIQUE,checkout_url TEXT,code_cipher TEXT NOT NULL,code_hash TEXT NOT NULL UNIQUE,created INTEGER NOT NULL,checked INTEGER NOT NULL DEFAULT 0,paid INTEGER);
+CREATE INDEX IF NOT EXISTS access_session_idx ON access_codes(session_hash);`);db.close();
