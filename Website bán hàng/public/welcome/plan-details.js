@@ -69,6 +69,19 @@
     }
     return cached.get(which);
   }
+  const groupLabel=name=>({
+    '🔥 Trend TikTok & Threads':'🔥 Xu hướng TikTok và Threads',
+    '🤡 Meme & Câu cửa miệng':'🤡 Hài hước và câu cửa miệng',
+    '🧠 Vô tri & Brainrot':'🧠 Những câu vô tri vui nhộn',
+    '🌙 Mood & Chữa lành':'🌙 Tâm trạng và chữa lành',
+    '🥂 Tiếng Việt Premium · Sang & tinh tế':'🥂 Tiếng Việt sang và tinh tế',
+    '🍃 Tiếng Việt Premium · Văn thơ':'🍃 Tiếng Việt văn thơ',
+    '🪄 Tiếng Việt Premium · Hài có duyên':'🪄 Tiếng Việt hài có duyên',
+    '🧸 Teencode · Chê yêu':'🧸 Ngôn ngữ tuổi teen',
+    '✨ Aura · Slay & Flex':'✨ Cá tính và nổi bật',
+    '🌐 English Slang & Internet':'🌐 Tiếng lóng và mạng xã hội',
+    '🎨 Holiday Caption':'🎨 Theo mùa và ngày lễ'
+  })[name]||name;
   function norm(value){
     return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
       .toLocaleLowerCase('vi').replace(/đ/g,'d');
@@ -109,7 +122,7 @@
         const section=document.createElement('section');
         section.className='plan-caption-group';
         const heading=document.createElement('h4');
-        heading.textContent=item.group;
+        heading.textContent=groupLabel(item.group);
         const pills=document.createElement('div');
         pills.className='plan-caption-pills';
         section.append(heading,pills);
@@ -154,7 +167,7 @@
       libraryRows=data;
       const uniqueGroups=[...new Set(data.map(item=>item.group))];
       const select=$('plan-caption-category');
-      for(const group of uniqueGroups)select.add(new Option(group,group));
+      for(const group of uniqueGroups)select.add(new Option(groupLabel(group),group));
       $('plan-caption-total').textContent=version==='standard'
         ?'V1 · '+data.length+' caption tĩnh':'V2 · '+data.length+' caption';
       drawLibrary();
