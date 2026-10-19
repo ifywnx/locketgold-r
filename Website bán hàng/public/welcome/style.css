@@ -1479,3 +1479,157 @@ header nav .nav-cta:hover span{transform:translate(3px,-3px)}
 @media(prefers-reduced-motion:reduce){
   .plan-dialog[open]{animation:none!important}
 }
+
+
+/* Wave 2: support, transparency and information hierarchy */
+.trust-section{margin:94px 0 77px;scroll-margin-top:104px}
+.trust-heading{align-items:flex-end;gap:25px;margin-bottom:25px}
+.trust-heading h2{font-size:clamp(32px,4.3vw,47px);letter-spacing:-1.8px;line-height:1.22;margin:9px 0 0}
+.trust-heading h2 em{font-style:normal;background:linear-gradient(100deg,#b789bb,#dfad7c);background-clip:text;-webkit-background-clip:text;color:transparent}
+.trust-heading>p{max-width:345px;font-size:12px;line-height:1.9}
+.trust-grid{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.9fr);gap:19px;align-items:start}
+.faq-list{
+  padding:5px 23px;
+  border:1px solid #ece1eb;
+  border-radius:27px;
+  background:rgba(255,255,255,.91);
+  box-shadow:0 15px 40px #5b466217;
+  overflow:hidden;
+}
+.faq-item{padding:0;border:0;border-bottom:1px solid #eee9ef}
+.faq-item:last-child{border-bottom:0}
+.faq-item summary{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:19px;list-style:none;
+  min-height:69px;padding:17px 1px;
+  color:#413547;font-size:13px;line-height:1.55;font-weight:800;
+  cursor:pointer;
+  transition:color .22s ease;
+}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary:hover,.faq-item[open] summary{color:#815aa2}
+.faq-item summary>span{
+  flex-shrink:0;display:grid;place-items:center;
+  width:30px;height:30px;border-radius:50%;
+  border:1px solid #e7d9ec;background:#f9f5fb;
+  font-weight:500;font-size:19px;line-height:1;
+  color:#907d99;transition:transform .28s,background .28s;
+}
+.faq-item[open] summary>span{transform:rotate(45deg);background:#eee4f7;color:#765394}
+.faq-answer{padding:0 35px 19px 1px;color:#756b7d;font-size:12px;line-height:1.95}
+.faq-item:focus-within{border-radius:8px}
+.faq-item summary:focus-visible{outline:3px solid #aa8de2;outline-offset:-3px;border-radius:8px}
+.support-panel{
+  position:relative;isolation:isolate;
+  overflow:hidden;margin:0;padding:28px 25px 23px;
+  border-radius:28px;
+  background:linear-gradient(150deg,#f0e4fb 0%,#fbf5fc 43%,#fff4de 100%);
+  border:1px solid #fff;
+  box-shadow:0 20px 48px #795d861c;
+  scroll-margin-top:110px;
+}
+.support-panel::after{
+  content:"";position:absolute;z-index:-1;
+  width:260px;height:260px;right:-120px;bottom:-130px;
+  border-radius:50%;background:radial-gradient(circle,#d7b6f594,transparent 70%);
+  pointer-events:none;
+}
+.support-symbol{
+  display:grid;place-items:center;
+  width:49px;height:49px;border-radius:16px;
+  border:1px solid #ffffffea;background:#ffffffb7;
+  box-shadow:0 8px 20px #674f7919;
+  font-size:28px;line-height:1;color:#ad7cba;
+  margin-bottom:24px;
+}
+.support-panel .eyebrow{color:#9779a2;margin:0;font-size:10px}
+.support-panel h3{font-size:clamp(23px,2.7vw,30px);letter-spacing:-1.1px;margin:13px 0 15px;line-height:1.25}
+.support-panel h3 em{font-style:normal;color:#9a6baf}
+.support-panel>p:not(.eyebrow){font-size:11.5px;line-height:1.9;color:#73647c}
+.support-prep{
+  display:grid;gap:6px;
+  background:rgba(255,255,255,.72);border:1px solid #ffffffad;
+  border-radius:16px;padding:16px 17px;margin:17px 0;
+}
+.support-prep b{font-size:11px;color:#594363}
+.support-prep span{font-size:11px;line-height:1.7;color:#7d7286}
+.support-guide-link{
+  display:inline-flex;align-items:center;gap:12px;
+  background:#403047;color:#fff;
+  text-decoration:none;font-size:11px;font-weight:800;
+  border-radius:99px;padding:11px 15px;
+  box-shadow:0 7px 17px #583c692c;
+  transition:background .25s,transform .25s;
+}
+.support-guide-link:hover{background:#76538b;transform:translateY(-2px)}
+.support-panel .support-state{
+  margin:15px 0 0;font-size:10px!important;color:#887a90!important;
+}
+.policy-section{scroll-margin-top:108px;margin:70px 0 80px}
+.policy-top{display:flex;justify-content:space-between;align-items:end;gap:18px;margin-bottom:20px}
+.policy-top h2{font-size:clamp(27px,3.6vw,38px);letter-spacing:-1.5px;margin:8px 0 0}
+.policy-state{
+  flex-shrink:0;
+  border:1px solid #eadfda;background:#fff9f2;
+  border-radius:999px;padding:8px 13px;
+  font-size:10px;font-weight:700;color:#a37d61;
+}
+.policy-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.policy-card{
+  margin:0;padding:21px 19px;
+  border-radius:21px;
+  background:#ffffffdf;
+  border:1px solid #eee6ed;
+  box-shadow:0 10px 26px #55425e0d;
+  transition:box-shadow .25s ease,transform .25s ease;
+}
+.policy-card:hover{transform:translateY(-3px);box-shadow:0 16px 32px #55425e1b}
+.policy-icon{font-size:23px;display:block;color:#a681c5;line-height:1.1}
+.policy-card h3{font-size:15px;line-height:1.4;letter-spacing:-.3px;color:#4b3e54;margin:15px 0 8px}
+.policy-card p{font-size:11px;line-height:1.85;margin:0;color:#7c7281}
+.policy-disclaimer{font-size:10px;line-height:1.9;color:#968a99;margin:17px 0 0;max-width:980px}
+.site-footer{
+  display:grid;grid-template-columns:1.2fr 1.6fr auto;
+  gap:22px;align-items:start;
+  padding-top:28px;padding-bottom:35px;
+}
+.site-footer b{font-size:13px;color:#574763}
+.site-footer p{font-size:10px;line-height:1.9;margin:9px 0 0;max-width:330px;color:#9a8e9e}
+.site-footer .footer-links{display:flex;flex-wrap:wrap;gap:10px 17px;padding-top:2px}
+.site-footer .footer-links a{font-size:11px;text-decoration:none;color:#736780;font-weight:700}
+.site-footer .footer-links a:hover{color:#9f70b6;text-decoration:underline}
+.site-footer>span{font-size:10px;color:#a195a4;white-space:nowrap;padding-top:3px}
+@media(max-width:950px){
+  .trust-grid{grid-template-columns:minmax(0,1.25fr) minmax(250px,.85fr);gap:12px}
+  .faq-list{padding:5px 16px}
+  .support-panel{padding:25px 18px}
+  .policy-grid{gap:11px}
+  .site-footer{grid-template-columns:1fr 1fr}
+  .site-footer>span{grid-column:1/-1;padding:0}
+}
+@media(max-width:700px){
+  .trust-section{margin:59px 0 51px}
+  .trust-heading{display:block;margin-bottom:15px}
+  .trust-heading h2{font-size:32px;letter-spacing:-1.2px}
+  .trust-heading>p{margin-top:11px;max-width:420px}
+  .trust-grid{grid-template-columns:1fr;gap:13px}
+  .faq-list{padding:1px 15px;border-radius:20px}
+  .faq-item summary{min-height:62px;padding:13px 0;font-size:12px;gap:11px}
+  .faq-answer{font-size:11px;line-height:1.8;padding-right:6px}
+  .support-panel{padding:22px 19px;border-radius:23px}
+  .support-symbol{margin-bottom:16px}
+  .policy-section{margin:51px 0 55px}
+  .policy-top{display:block}
+  .policy-top h2{font-size:27px}
+  .policy-state{display:inline-block;margin-top:13px}
+  .policy-grid{grid-template-columns:1fr;gap:9px}
+  .policy-card{padding:16px;border-radius:17px}
+  .policy-card h3{margin:8px 0 4px;font-size:14px}
+  .policy-card p{font-size:11px}
+  .site-footer{padding:22px 17px 34px;grid-template-columns:1fr;gap:12px}
+  .site-footer .footer-links{gap:10px 16px}
+}
+@media(prefers-reduced-motion:reduce){
+  .faq-item summary>span,.policy-card,.support-guide-link{transition:none!important}
+  .policy-card:hover,.support-guide-link:hover{transform:none}
+}
