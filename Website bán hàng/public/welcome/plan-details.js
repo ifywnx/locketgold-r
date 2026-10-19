@@ -206,6 +206,22 @@
     lastTrigger?.focus({preventScroll:true});
   }
   byId('plan-dialog-close').addEventListener('click',close);
+  // Only the mobile grip starts a dismiss gesture; list scrolling stays native.
+  const sheetGrip=byId('mobile-sheet-handle');
+  if(sheetGrip){
+    let startY=null;
+    sheetGrip.addEventListener('touchstart',e=>{
+      if(e.touches.length===1)startY=e.touches[0].clientY;
+    },{passive:true});
+    sheetGrip.addEventListener('touchend',e=>{
+      if(startY===null||!e.changedTouches.length)return;
+      const distance=e.changedTouches[0].clientY-startY;
+      startY=null;
+      if(distance>65&&matchMedia('(max-width:700px)').matches)close();
+    },{passive:true});
+    sheetGrip.addEventListener('touchcancel',()=>{startY=null},{passive:true});
+  }
+
   dialog.addEventListener('click',event=>{
     const rect=dialog.getBoundingClientRect();
     const outside=event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom;
