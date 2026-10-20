@@ -14,6 +14,14 @@
   const mobileCart=$('an-store-mobile-cart');
   const mobileCartLabel=$('an-store-mobile-cart-label');
   let mode='demo',ready=false,selectedFromDialog=null;
+  function setIconLabel(node,key,text){
+    const glyph=document.createElement('span');
+    glyph.className='an-ui-icon';
+    glyph.dataset.anIcon=key;
+    glyph.setAttribute('aria-hidden','true');
+    node.replaceChildren(glyph,document.createTextNode(' '+text));
+    window.AnIcons?.mount(glyph);
+  }
   function ensureOwner(){
     let owner=localStorage.getItem('an-store-owner-v1');
     if(!owner||!/^[a-f0-9]{64}$/.test(owner)){
@@ -54,14 +62,17 @@
     if(mobileCart){mobileCart.hidden=!ready||!cart.size;document.body.classList.toggle('an-store-has-mobile-cart',ready&&cart.size>0);}
     if(mobileCartLabel)mobileCartLabel.textContent='Xem giỏ hàng · '+cart.size+' bộ · '+money(amount);
     button.disabled=!ready||!cart.size;
-    button.querySelector('span').textContent=cart.size?'↗':'＋';
+    const nextIcon=button.querySelector('[data-an-icon]');
+    if(nextIcon){nextIcon.dataset.anIcon=cart.size?'arrow':'plus';window.AnIcons?.mount(nextIcon);}
     for(const btn of root.querySelectorAll('[data-store-add]')){
-      btn.textContent=cart.has(btn.dataset.storeAdd)?'✓ Đã thêm · Chạm để bỏ':'＋ Thêm vào giỏ';
-      btn.setAttribute('aria-pressed',String(cart.has(btn.dataset.storeAdd)));
+      const selected=cart.has(btn.dataset.storeAdd);
+      setIconLabel(btn,selected?'check':'plus',selected?'Đã thêm · Chạm để bỏ':'Thêm vào giỏ');
+      btn.setAttribute('aria-pressed',String(selected));
     }
     const modalAdd=$('an-store-dialog-add');
     if(modalAdd&&selectedFromDialog){
-      modalAdd.textContent=cart.has(selectedFromDialog)?'✓ Đã thêm · Chạm để bỏ':'＋ Thêm vào giỏ';
+      const selected=cart.has(selectedFromDialog);
+      setIconLabel(modalAdd,selected?'check':'plus',selected?'Đã thêm · Chạm để bỏ':'Thêm vào giỏ');
     }
   }
   function toggle(id){
