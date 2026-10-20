@@ -105,9 +105,9 @@
       ready=true;
       modeLabel.textContent=mode==='demo'?'DÙNG THỬ · Không thu tiền':'THANH TOÁN THẬT';
       status.textContent=mode==='demo'
-        ?'Đây là giỏ hàng dùng thử. Bạn có thể tạo đơn để xem quy trình, không cần chuyển tiền.'
+        ?'Nhấn Thanh toán thử: đơn tự hoàn tất và hiện ngay nút cài/tải file mẫu. Số tiền thực trả là 0đ.'
         :'Thanh toán thật chỉ được bật khi chủ cửa hàng đã xác nhận giao hàng. Kiểm tra đơn trước khi tiếp tục.';
-      button.firstChild.textContent=mode==='demo'?'Tiếp tục đặt hàng thử ':'Tiếp tục thanh toán ';
+      button.firstChild.textContent=mode==='demo'?'Thanh toán thử (0đ) · Nhận file ':'Tiếp tục thanh toán ';
       update();
     }catch(error){
       ready=false;modeLabel.textContent='Không thể tải giá';button.disabled=true;
@@ -120,7 +120,7 @@
   $('an-store-dialog-add')?.addEventListener('click',()=>toggle(selectedFromDialog));
   button.addEventListener('click',async()=>{
     if(!ready||!cart.size)return;
-    button.disabled=true;status.textContent='Đang tạo đơn dùng thử…';
+    button.disabled=true;status.textContent=mode==='demo'?'Đang hoàn tất đơn thử để cấp file mẫu…':'Đang chuẩn bị thanh toán…';
     try{
       const response=await fetch('/api/store/checkout',{
         method:'POST',cache:'no-store',
@@ -130,7 +130,7 @@
       const data=await response.json();
       if(!response.ok||!data.orderCode)throw Error(data.error||'Chưa tạo được đơn, vui lòng thử lại');
       localStorage.setItem('an-store-last-order',String(data.orderCode));
-      // Local order details are always shown before any transfer to payOS.
+      // Demo is server-confirmed immediately; LIVE remains a separate payOS flow.
       location.assign('/store/checkout.html?order='+encodeURIComponent(data.orderCode));
     }catch(error){
       status.textContent=error?.message||'Tạo đơn không thành công';
