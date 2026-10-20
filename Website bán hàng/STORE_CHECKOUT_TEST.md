@@ -4,9 +4,9 @@
 
 **Lưu ý:** payOS hiện không có sandbox thanh toán độc lập. Chế độ **DEMO** dưới đây là giả lập **do website An thực hiện**, không gọi API ngân hàng. Nếu bật LIVE, payOS sử dụng kênh tiền thật. Xem [tài liệu môi trường test payOS](https://payos.vn/docs/moi-truong-test/).
 
-**Mặc định: DEMO.** Trang `/store/` có 5 bộ caption thử với giá được **kiểm tra lại trên server**: Trend & Meme 19k, Love & Mood 19k, Vietnamese Premium 29k, Gen Z & Slay 19k, Holiday Collection 29k. Đây là **giá thử**, chưa được xác nhận để bán thật.
+**Mặc định: DEMO.** Trang `/store/` có 7 bộ caption thử với giá được **kiểm tra lại trên server**: Xu hướng & Meme 19k, Gen Z & Slang 39k, Cà khịa & Phản ứng 19k, Tình cảm & Chữa lành 19k, Tiếng Việt tinh tế 29k, Mùa lễ & Kỷ niệm 19k, Sinh viên & Đời thường 19k. Đây là **giá thử**, chưa được xác nhận để bán thật.
 
-Luồng: Chọn một hoặc nhiều bộ → Giỏ hàng → POST `/api/store/checkout` → trang `/store/checkout.html?order=…` → giả lập hoàn tất hoặc chuyển đến payOS khi bật LIVE → GET trạng thái đơn.
+Luồng: Chọn một hoặc nhiều bộ → Giỏ hàng → POST `/api/store/checkout` → trang `/store/checkout.html?order=…` → **DEMO tự hoàn tất khi nhấn nút** hoặc chuyển đến payOS khi bật LIVE → GET trạng thái đơn.
 
 **Sau khi DEMO hoàn tất**, hệ thống chỉ cấp tệp **mẫu** (mỗi nhóm 1 caption) bằng link có chữ ký; không phát hành mã Gold hay thay đổi tính năng trả phí. Tệp đầy đủ chỉ có trong đơn LIVE đã xác minh (hiện LIVE bị khóa). Bản Caption Only đang thử nghiệm ở `/experiments/caption-only-trend-meme/` không tự động được giao cho khách. Không bật thanh toán thật trước khi hoàn tất kiểm thử tương thích, quyền phân phối và quy trình giao hàng.
 
@@ -16,13 +16,15 @@ API Key và Checksum Key là thông tin bí mật. Vì đã được chia sẻ, 
 
 `Website bán hàng/.env.example` chứa tên biến, không có giá trị thật.
 
+**Cài nhanh iPhone:** Có nút `shadowrocket://install?module=<signed URL>` chỉ hiện sau khi đơn DEMO đã tự hoàn tất. Đây là deep link được mô tả trong [wiki cộng đồng Shadowrocket](https://github.com/LOWERTOP/Shadowrocket/wiki/), không bảo đảm tương thích trên mọi iOS. Tải/nhập URL thủ công là phương án dự phòng. Nếu muốn làm thử một giao dịch payOS thật, phải cấu hình riêng, **không** dùng đơn DEMO như bằng chứng đã nhận tiền.
+
 ## 1. Chạy DEMO
 
 1. Deploy nhánh `main` với lệnh khởi động **`npm start`** từ thư mục `Website bán hàng`, vì script start chạy `scripts/init-db.mjs` để tạo bảng `store_orders`. Nếu dùng start command riêng, phải chạy migration trước.
 2. Để `STORE_PAYMENTS_MODE=demo` hoặc không khai báo. Không cần bất kỳ khóa payOS nào cho DEMO.
-3. Truy cập `/store/`, chọn 2–3 bộ và bấm tạo đơn.
-4. Ở `/store/checkout.html`, kiểm tra mã đơn/tổng tiền, bấm **Giả lập thanh toán thành công**.
-5. Xác nhận trạng thái `DEMO_COMPLETED` hiện ra. Không chuyển tiền thật, không cấp mã thật.
+3. Truy cập `/store/`, chọn 1–7 bộ và bấm **Thanh toán thử (0đ) · Nhận file**.
+4. Trang `/store/checkout.html` hiện đơn `DEMO_COMPLETED` ngay; không cần bấm xác nhận lần hai. Giá bán chỉ là giá tham khảo, tiền thực thu bằng **0đ**.
+5. Bấm **Cài gói bằng Shadowrocket** trên iPhone hoặc chọn **Sao chép liên kết cài** để thêm vào Cấu hình → Mô-đun → + → Thêm từ URL. Tải file `.sgmodule`, `.conf`, `.js`, `.json` nếu muốn kiểm tra. Đây là file **mẫu** (1 caption mỗi nhóm) và chưa được xác nhận tương thích thực tế.
 6. Thử mở `checkout.html` trong trình duyệt khác để kiểm tra phiên khác không xem được đơn; thử sửa giá qua request để xác minh server chỉ chấp nhận ID sản phẩm.
 
 Chế độ demo ghi đơn vào bảng `store_orders`; không ghi trạng thái `PAID` hoặc tạo mã `access_codes`. Các đơn demo có thể tích tụ, cần quản trị dọn riêng về sau.
@@ -62,7 +64,7 @@ Một đơn LIVE được payOS xác nhận có trạng thái `PAID_AWAITING_DEL
 
 ## 4. Các kiểm thử trước khi mở thật
 
-- [ ] Giá và danh sách ID chỉ do server quyết định; bỏ ID lạ, trùng, giỏ trống, quá 5 bộ.
+- [ ] Giá và danh sách ID chỉ do server quyết định; bỏ ID lạ, trùng, giỏ trống, quá 7 bộ.
 - [ ] DEMO chỉ được tải module/conf/JS/JSON có giới hạn 1 caption mỗi nhóm; không cấp quyền Gold.
 - [ ] Không thể xem/xác nhận đơn của trình duyệt khác.
 - [ ] Webhook giả hoặc sai chữ ký không cập nhật đơn.
