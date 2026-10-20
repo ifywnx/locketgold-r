@@ -1,0 +1,2138 @@
+[
+  {
+    "section": "🎨 Holiday Caption",
+    "items": [
+      {
+        "overlay_id": "caption:ifywnx_holiday_xuan_ve",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Xuân về ngập nắng",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#FAD59F",
+              "#E5AC9D"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🌷"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_xuan_mong_mo",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Một chiếc mùa xuân",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#B4DECE",
+              "#81C6A5"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🌸"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_tet_khai_xuan",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Khai xuân may mắn",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#E6BA62",
+              "#B88A42"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🍀"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_tet_xuan_sang",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Xuân sang rực rỡ",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F4BD6D",
+              "#E8A552",
+              "#DB8D36"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🌺"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_mua_xuan",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Xuân này mình có nhau",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#D52625",
+              "#8B1D36"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "💐"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_ha_cham_cua",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Hè chạm ngõ rồi",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#42C3CD",
+              "#2998C7"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🌞"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_he_ruc_ro",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Hè này phải thật chill",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F5A976",
+              "#D86A56"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🏖️"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_he_co_hen",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Một mùa hè xanh",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#66D3CF",
+              "#379FC0"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🌊"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:autumn_2026",
+        "source": "remote",
+        "caption": {
+          "background": {
+            "colors": [
+              "#FFE0A0",
+              "#F6A53A"
+            ]
+          },
+          "icon": {
+            "type": "emoji",
+            "data": "🍂"
+          },
+          "max_lines": 1,
+          "text": "Xin chào Mùa Thu",
+          "localized_text": {
+            "en": "Xin chào Mùa Thu",
+            "vn": "Xin chào Mùa Thu"
+          },
+          "text_color": "#292322",
+          "type": "static_content"
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_thu_trong_veo",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Thu trong veo",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#E9C687",
+              "#B68C57"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🍁"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_thu_nhe_nhang",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Hẹn nhau mùa thu",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#A86639",
+              "#603C2B"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "🍂"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_dong_den",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Đông đến thật rồi",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#AFC8E8",
+              "#779BC7"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "❄️"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_dong_am",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Đông này có nhau",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#AFBAD9",
+              "#8389B6"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🧣"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_dong_co_hen",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Trời lạnh, cần một cái ôm",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#B0D8E2",
+              "#7DA8C9"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "☃️"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:new_years_eve_2026",
+        "source": "remote",
+        "caption": {
+          "background": {
+            "colors": [
+              "#D43F32",
+              "#8F2437"
+            ]
+          },
+          "icon": {
+            "type": "emoji",
+            "data": "🥂"
+          },
+          "max_lines": 1,
+          "text": "Chúc mừng năm mới!",
+          "localized_text": {
+            "en": "Chúc mừng năm mới!",
+            "vn": "Chúc mừng năm mới!"
+          },
+          "text_color": "#FFFFFF",
+          "type": "static_content"
+        }
+      },
+      {
+        "overlay_id": "caption:new_years_day_2027",
+        "source": "remote",
+        "caption": {
+          "background": {
+            "colors": [
+              "#EAB05C",
+              "#C67E32"
+            ]
+          },
+          "icon": {
+            "type": "emoji",
+            "data": "💫"
+          },
+          "max_lines": 1,
+          "text": "Chúc mừng năm mới!",
+          "localized_text": {
+            "en": "Chúc mừng năm mới!",
+            "vn": "Chúc mừng năm mới!"
+          },
+          "text_color": "#292322",
+          "type": "static_content"
+        }
+      },
+      {
+        "overlay_id": "caption:new_years_day_2027_alternate",
+        "source": "remote",
+        "caption": {
+          "background": {
+            "colors": [
+              "#79282D",
+              "#C75121"
+            ]
+          },
+          "max_lines": 1,
+          "text": "Năm mới rực rỡ!",
+          "text_color": "#FFFFFF",
+          "type": "static_content",
+          "icon": {
+            "type": "emoji",
+            "data": "🎆"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_tet_chuc_mung",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Chúc mừng năm mới",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F2CF8B",
+              "#D9A354"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🧧"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_tet_an_khang",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "An khang thịnh vượng",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#DD9CA3",
+              "#C17490"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🌸"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_tet_tai_loc",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Tết đến lộc về",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#832B31",
+              "#CA4B2B"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "🪙"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_tet_li_xi",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Xin vía lì xì",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F2C757",
+              "#DA924A"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🧧"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_tet_giao_thua",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Đón giao thừa",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#D7393B",
+              "#9B2D3C"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "🎇"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_tet_ong_tao",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Ông Táo về trời",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#7FAAD2",
+              "#917FCD"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🐟"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_tet_mung_tuoi",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Mừng tuổi đầu năm",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#C64B30",
+              "#8F2936"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "🧧"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_international_childrens_day",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Vui Tết Thiếu nhi",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F4C66C",
+              "#D99739"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🎈"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_new_year_countdown",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Đếm ngược năm mới",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#822330",
+              "#D1421B"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "⏳"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_han_thuc",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Tết Hàn Thực",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#E6B550",
+              "#BD833D"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🍡"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_doan_ngo",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Tết Đoan Ngọ",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#8C2633",
+              "#D33F25"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "🍃"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_tet_nguyen_tieu",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Tết Nguyên Tiêu",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F6C667",
+              "#CF8E31"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🏮"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_tet_co_truyen",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Tết Việt trong tim",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#DC2837",
+              "#97253B"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "🧧"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_new_year_toast",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Cheers to new beginnings",
+          "max_lines": 2,
+          "background": {
+            "colors": [
+              "#F8B24C",
+              "#D67F20"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🥂"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_valentine",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Happy Valentine",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#CCA8D8",
+              "#A07FBF"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "💘"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_valentine_single",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Valentine của mình",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#ECA6A6",
+              "#D7748A"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "💌"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_white_day",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "White Day",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#A3C7BB",
+              "#79A99F"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🤍"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_international_womens_day",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Chúc mừng 8/3",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#E6C175",
+              "#DA9365"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🌷"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_vietnamese_womens_day",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Chúc mừng 20/10",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#CFAFD1",
+              "#A889C4"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "💐"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_seventh_day",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Thất tịch có đôi",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#E6C0AD",
+              "#BE8A8E"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "💞"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_ngay_hoa_hong",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Một ngày của yêu thương",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#BA5573",
+              "#764061"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "💌"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_april_30",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Mừng ngày 30/4",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#C35521",
+              "#832623"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "🇻🇳"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_may_1",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Ngày Quốc tế Lao động",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#E3AD83",
+              "#CA7385"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🛠️"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_national_day",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Tự hào Việt Nam",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F4CB91",
+              "#D56F67"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🇻🇳"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_hung_kings",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Nhớ ngày Giỗ Tổ",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#D53739",
+              "#A81725"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "🏮"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_quoc_khanh",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Mừng Quốc khánh 2/9",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F5CE8F",
+              "#D07460"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🇻🇳"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_ngay_gia_dinh",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Ngày Gia đình Việt Nam",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#CF4337",
+              "#9B2E36"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "🏡"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_co_do_sao_vang",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Rực rỡ cờ hoa",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#DB3A23",
+              "#9A2323"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "🇻🇳"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_ha_noi_10_10",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Hà Nội ngày trở về",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#E7A983",
+              "#D1708B"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🏛️"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_quan_doi_22_12",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Tự hào màu áo lính",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#C4433A",
+              "#9B2432"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "⭐"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_thanh_nien",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Tuổi trẻ Việt Nam",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#B2620C",
+              "#621616"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "🌟"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_sach_viet_nam",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Ngày Sách Việt Nam",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#DF3124",
+              "#991D22"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "📚"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_graduation",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Mừng ngày tốt nghiệp",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#C9AFD3",
+              "#9F86B7"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🎓"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_khai_giang",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Khai giảng rộn ràng",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#85BDC8",
+              "#4F96B1"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🎒"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_back_to_school",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Tựu trường rồi!",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#B7C7A4",
+              "#8DAA93"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "📚"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_mua_tot_nghiep",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Mùa tốt nghiệp tới rồi",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#D7AB91",
+              "#B87A7F"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🎓"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_teacher_day",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Tri ân thầy cô",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#97BFDC",
+              "#6C91BE"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "💐"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_sinh_vien",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Ngày của sinh viên",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#B8B4D7",
+              "#8987BC"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🎓"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_ngay_cua_me",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Ngày của Mẹ",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#BCCDAF",
+              "#8BAF98"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "💐"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_vu_lan",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Vu Lan báo hiếu",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#B9CEE0",
+              "#88B1C4"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🪷"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_ngay_cua_ba",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Ngày của Ba",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#A9CDCB",
+              "#7CACB8"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "💙"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_ngay_ong_ba",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Thương ông bà thật nhiều",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#BBC9C0",
+              "#91B7AA"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "👵"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_mid_autumn_moon",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Trung thu lung linh",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F8D68A",
+              "#C18D48"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🌕"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_tet_trung_thu",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Trung thu tròn vị",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F8DC8B",
+              "#DEA45C"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🥮"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_mid_autumn",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Trăng rằm đoàn viên",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F4CE82",
+              "#BD844D"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🏮"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_lantern_night",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Đêm hội trăng rằm",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#DBC499",
+              "#B77D61"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🥮"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_full_moon",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Rằm tháng Giêng",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#E2C686",
+              "#A6885F"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🌙"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_ram_thang_bay",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Rằm tháng Bảy bình an",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#EEB67A",
+              "#C3785F"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🪷"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_banh_troi",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Bánh trôi bánh chay",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#CBA3D1",
+              "#9D7CC5"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🍡"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_thanh_minh",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Tiết Thanh Minh",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#DAE4B9",
+              "#A9C9A1"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🌿"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_diet_sau_bo",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Mùng năm tháng năm",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#E7AF58",
+              "#DB7848"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🍑"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_phat_dan",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Mùa Phật Đản an lành",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F9C5D3",
+              "#F2A8B7"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🪷"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:halloween_2026",
+        "source": "remote",
+        "caption": {
+          "background": {
+            "colors": [
+              "#AE5D27",
+              "#642C2C"
+            ]
+          },
+          "icon": {
+            "type": "emoji",
+            "data": "🎃"
+          },
+          "max_lines": 1,
+          "text": "Halloween",
+          "localized_text": {
+            "en": "Halloween",
+            "vn": "Halloween"
+          },
+          "text_color": "#FFFFFF",
+          "type": "static_content"
+        }
+      },
+      {
+        "overlay_id": "caption:christmas_eve_2026",
+        "source": "remote",
+        "caption": {
+          "background": {
+            "colors": [
+              "#D2424B",
+              "#9E243A"
+            ]
+          },
+          "icon": {
+            "type": "emoji",
+            "data": "🕯️"
+          },
+          "max_lines": 1,
+          "text": "Giáng sinh an lành",
+          "localized_text": {
+            "en": "Giáng sinh an lành",
+            "vn": "Giáng sinh an lành"
+          },
+          "text_color": "#FFFFFF",
+          "type": "static_content"
+        }
+      },
+      {
+        "overlay_id": "caption:christmas_day_2026",
+        "source": "remote",
+        "caption": {
+          "background": {
+            "colors": [
+              "#3D845E",
+              "#236145"
+            ]
+          },
+          "icon": {
+            "type": "emoji",
+            "data": "🎄"
+          },
+          "max_lines": 1,
+          "text": "Giáng sinh an lành",
+          "localized_text": {
+            "en": "Giáng sinh an lành",
+            "vn": "Giáng sinh an lành"
+          },
+          "text_color": "#FFFFFF",
+          "type": "static_content"
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_christmas_vibes",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Merry Christmas",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#C05347",
+              "#8F3739"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "🎅"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_halloween_spooky",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Trick or Treat!",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#A9602B",
+              "#472D3C"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "👻"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_halloween_candy",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Kẹo hay bị ghẹo?",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#7D4D85",
+              "#4B2F5B"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "🍬"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_christmas_snow",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Let it snow",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#CCD6E9",
+              "#A0B2D3"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "❄️"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_birthday",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Happy Birthday!",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#E7B767",
+              "#CF8255"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🎂"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_anniversary",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Kỷ niệm của chúng mình",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#DFA7D5",
+              "#C696CA",
+              "#AE85BF"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "💑"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_birthday_wish",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Tuổi mới thật xinh",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#EEAB7F",
+              "#D6847E"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🎁"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_thay_thuoc",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Tri ân người thầy thuốc",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#A7D7C1",
+              "#74B5A0"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🩺"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_easter",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Happy Easter",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#8CC2AC",
+              "#60A593"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🐣"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_april_fools",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Cá tháng Tư",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#C84556",
+              "#8D385F"
+            ]
+          },
+          "text_color": "#FFFFFF",
+          "icon": {
+            "type": "emoji",
+            "data": "🐟"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_thanksgiving",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Thankful today",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#82B8DB",
+              "#8F82D6"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🦃"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_happiness_every_day",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Ngày nào cũng là ngày vui",
+          "max_lines": 2,
+          "background": {
+            "colors": [
+              "#F19568",
+              "#D76969"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🎊"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_tri_an_27_7",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Một lời tri ân",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#D2C8B1",
+              "#AEB49A"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🕊️"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_ngay_moi_truong",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Yêu hành tinh xanh",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#EBAA57",
+              "#D47046"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "🌍"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:ifywnx_holiday_doanh_nhan",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Chúc người làm kinh doanh",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#E0B184",
+              "#C47782"
+            ]
+          },
+          "text_color": "#292322",
+          "icon": {
+            "type": "emoji",
+            "data": "💼"
+          }
+        }
+      }
+    ]
+  },
+  {
+    "section": "🎊 Những mùa đáng nhớ · An sáng tác",
+    "items": [
+      {
+        "overlay_id": "caption:an_2026_holiday_001",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Đầu năm ưu tiên niềm vui",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#FFE6B8",
+              "#E8A9B3"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🎈"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_002",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Hái lộc bằng nụ cười",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#D6E9DD",
+              "#A6D0C5"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🌿"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_003",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Tết này về nhà sớm",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F2D7EB",
+              "#D6B7DE"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🎁"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_004",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Một chiếc xuân thật hiền",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#FFE6B8",
+              "#E8A9B3"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🎈"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_005",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Đếm ngược tới giao thừa",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#D6E9DD",
+              "#A6D0C5"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🌿"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_006",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Nắng tháng ba ghé chơi",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F2D7EB",
+              "#D6B7DE"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🎁"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_007",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Hè đến, tim nghỉ phép",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#FFE6B8",
+              "#E8A9B3"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🎈"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_008",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Một buổi chiều tháng sáu",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#D6E9DD",
+              "#A6D0C5"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🌿"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_009",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Tháng bảy có mưa nhẹ",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F2D7EB",
+              "#D6B7DE"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🎁"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_010",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Đèn phố lên mùa thu",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#FFE6B8",
+              "#E8A9B3"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🎈"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_011",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Hẹn nhau dưới lá vàng",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#D6E9DD",
+              "#A6D0C5"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🌿"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_012",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Mùa đông cần một chiếc ôm",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F2D7EB",
+              "#D6B7DE"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🎁"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_013",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Giáng sinh mở quà vui",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#FFE6B8",
+              "#E8A9B3"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🎈"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_014",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Lời chúc cuối năm",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#D6E9DD",
+              "#A6D0C5"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🌿"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_015",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Sinh nhật nhận thật nhiều thương",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F2D7EB",
+              "#D6B7DE"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🎁"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_016",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Một mùa tựu trường mới",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#FFE6B8",
+              "#E8A9B3"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🎈"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_017",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Trung thu tròn niềm vui",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#D6E9DD",
+              "#A6D0C5"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🌿"
+          }
+        }
+      },
+      {
+        "overlay_id": "caption:an_2026_holiday_018",
+        "source": "remote",
+        "caption": {
+          "type": "static_content",
+          "text": "Chạm vào ngày đầu tháng",
+          "max_lines": 1,
+          "background": {
+            "colors": [
+              "#F2D7EB",
+              "#D6B7DE"
+            ]
+          },
+          "text_color": "#48384B",
+          "icon": {
+            "type": "emoji",
+            "data": "🎁"
+          }
+        }
+      }
+    ]
+  }
+]

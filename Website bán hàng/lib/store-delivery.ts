@@ -1,5 +1,5 @@
 import {createHmac,timingSafeEqual} from 'node:crypto';
-import catalog from './store-catalog.json';
+import {captionPacks} from './caption-packs';
 import {STORE_PRODUCTS,type StoreProductId} from './store-products';
 
 export type StoreFileKind='sgmodule'|'conf'|'js'|'json';
@@ -39,7 +39,7 @@ export function makeLinks(origin:string,order:number,sku:StoreProductId){
 }
 type Entry={section:string,items:{overlay_id:string,source:string,caption:{type:string,text?:string}}[]};
 export function productGroups(sku:StoreProductId,demo:boolean){
-  const collections=(catalog.packs as Record<string,Entry[]>)[sku];
+  const collections=(captionPacks as Record<string,Entry[]>)[sku];
   if(!collections)throw new Error('Invalid caption collection');
   return collections.map(section=>({
     section:section.section,
