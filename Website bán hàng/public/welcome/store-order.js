@@ -31,16 +31,59 @@
         section.className='an-download-product';
         const title=document.createElement('h3');title.textContent=pack.name;section.append(title);
         const links=document.createElement('div');links.className='an-download-links';
-        for(const [kind,title] of [['sgmodule','Tệp cài (.sgmodule)'],['conf','Cấu hình (.conf)'],['js','Mã xử lý (.js)'],['json','Danh sách caption (.json)']]){
+        // Only use signed URLs returned from the current, verified order.
+        const safeLink=kind=>{
           const href=pack.links?.[kind];
-          if(typeof href!=='string')continue;
-          const parsed=new URL(href,location.origin);
-          if(parsed.origin!==location.origin)continue;
-          const link=document.createElement('a');link.href=parsed.href;link.textContent='↓ '+title;
+          if(typeof href!=='string')return null;
+          try{
+            const url=new URL(href,location.origin);
+            if(url.origin!==location.origin||url.protocol!=='https:'||
+               !url.pathname.endsWith('/'+pack.sku+'.'+kind)||
+               !url.searchParams.has('sig')||!url.searchParams.has('exp'))return null;
+            return url.href;
+          }catch{return null;}
+        };
+        const moduleLink=safeLink('sgmodule');
+        if(moduleLink){
+          const install=document.createElement('a');
+          install.className='an-install-primary';
+          install.href='shadowrocket://install?module='+encodeURIComponent(moduleLink);
+          install.rel='noreferrer';
+          install.setAttribute('aria-label','Cài thử bộ '+pack.name+' vào Shadowrocket trên iPhone');
+          const glyph=document.createElement('span');glyph.className='an-ui-icon';
+          glyph.dataset.anIcon='smartphone';glyph.setAttribute('aria-hidden','true');
+          install.append(glyph,document.createTextNode(' Cài gói bằng Shadowrocket'));
+          window.AnIcons?.mount(glyph);
+          links.append(install);
+          const copy=document.createElement('button');copy.type='button';copy.className='an-install-copy';
+          copy.textContent='Sao chép liên kết cài';
+          copy.addEventListener('click',async()=>{
+            try{
+              if(!navigator.clipboard?.writeText)throw Error('clipboard unavailable');
+              await navigator.clipboard.writeText(moduleLink);
+              copy.textContent='Đã sao chép liên kết';
+            }catch{
+              // A read-only field provides manual copying without asking for credentials.
+              const field=document.createElement('textarea');
+              field.className='an-install-url';field.readOnly=true;field.value=moduleLink;field.rows=2;
+              section.append(field);field.focus();field.select();
+              copy.textContent='Chọn và sao chép liên kết bên dưới';
+            }
+          });
+          links.append(copy);
+        }
+        for(const [kind,label] of [['sgmodule','Tải tệp cài .sgmodule'],['conf','Tải cấu hình .conf'],['js','Xem mã xử lý .js'],['json','Tải danh sách mẫu .json']]){
+          const href=safeLink(kind);if(!href)continue;
+          const link=document.createElement('a');link.href=href;link.textContent=label;
           link.rel='noreferrer';link.referrerPolicy='no-referrer';
+          if(kind!=='js')link.setAttribute('download','');
           links.append(link);
         }
-        section.append(links);fragment.append(section);
+        section.append(links);
+        const help=document.createElement('p');help.className='an-install-tip';
+        help.textContent='Trên iPhone: bấm Cài gói. Nếu không tự mở, sao chép liên kết rồi vào Shadowrocket → Cấu hình → Mô-đun → + → Thêm từ URL. Không cần cài cả .sgmodule và .conf cùng lúc.';
+        section.append(help);
+        fragment.append(section);
       }
       container.replaceChildren(fragment);area.hidden=false;
     }catch(error){
@@ -75,7 +118,7 @@
       if(safe)link.href=data.checkoutUrl;
       const messages={
         DEMO_PENDING:['Đơn dùng thử chưa hoàn tất','Bấm “Hoàn tất đơn dùng thử” để nhận tệp mẫu. Bạn không cần chuyển tiền.','pending'],
-        DEMO_COMPLETED:['Đã hoàn tất đơn dùng thử','Bạn có thể tải tệp mẫu phía dưới (mỗi nhóm một caption). Không có giao dịch ngân hàng hoặc quyền trả phí nào được cấp.','done'],
+        DEMO_COMPLETED:['Đã hoàn tất thanh toán thử','Đã tự xác nhận đơn dùng thử (0đ). Bên dưới có nút Cài gói và Tải file mẫu; mỗi nhóm chỉ gồm một caption để kiểm tra, không phát sinh giao dịch ngân hàng.','done'],
         CREATING:['Đang tạo đơn','Máy chủ đang chuẩn bị đơn. Chờ một chút rồi kiểm tra lại.','pending'],
         PENDING:['Đang chờ thanh toán','Chỉ thanh toán trên trang payOS chính thức. Sau đó quay lại đây để kiểm tra trạng thái đơn.','pending'],
         PAID_AWAITING_DELIVERY:['Đã nhận thanh toán','Giao dịch đã được xác minh. Tệp thuộc những bộ bạn mua nằm phía dưới; việc sử dụng trong Locket vẫn cần kiểm thử.','done'],
