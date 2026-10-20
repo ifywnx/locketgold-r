@@ -102,6 +102,10 @@
       $('order-mode').textContent=mode==='demo'?'Dùng thử · Không thu tiền':'Thanh toán thật · payOS';
       $('order-date').textContent=new Date(data.created).toLocaleString('vi-VN');
       $('order-total').textContent=money(data.amount);
+      const demoAmount=$('an-demo-amount');
+      if(demoAmount)demoAmount.hidden=mode!=='demo';
+      const amountLabel=$('order-total-label');
+      if(amountLabel)amountLabel.textContent=mode==='demo'?'Giá tham khảo của các gói':'Tổng tiền thanh toán';
       const frag=document.createDocumentFragment();
       for(const item of data.items||[]){
         const row=document.createElement('div');row.className='an-order-item';
