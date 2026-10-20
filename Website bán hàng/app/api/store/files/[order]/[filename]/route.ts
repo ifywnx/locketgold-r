@@ -1,3 +1,4 @@
+import {publicOrigin} from '../../../../../../lib/access';
 import {eq} from 'drizzle-orm';
 import {getDb} from '../../../../../../db';
 import {storeOrders} from '../../../../../../db/schema';
@@ -24,7 +25,7 @@ export async function GET(req:Request,{params}:Context){
   let purchased:unknown;
   try{purchased=JSON.parse(saved.itemsJson)}catch{return new Response('Lỗi dữ liệu đơn.',{status:500})}
   if(!Array.isArray(purchased)||!purchased.includes(sku))return new Response('Bộ caption này không thuộc đơn.',{status:403});
-  const origin=new URL(req.url).origin;
+  const origin=publicOrigin(req);
   const jsUrl=origin+'/api/store/files/'+encodeURIComponent(String(id))+'/'+sku+'.js?exp='+expiry+'&sig='+signature;
   let body:string,type:string;
   switch(kind){

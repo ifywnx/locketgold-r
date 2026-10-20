@@ -1,3 +1,4 @@
+import {publicOrigin} from '../../../../lib/access';
 import {and,eq,gt,count,lt} from 'drizzle-orm';
 import {getDb} from '../../../../db';
 import {storeOrders} from '../../../../db/schema';
@@ -31,7 +32,7 @@ export async function POST(r:Request){
  if(mode==='demo')return json({orderCode:id,amount:quote.amount,items:quote.items,mode,
    status:'DEMO_COMPLETED',checkoutUrl:'/store/checkout.html?order='+id});
  try{
-   const origin=new URL(r.url).origin;
+   const origin=publicOrigin(r);
    const s=secrets();
    const base={amount:quote.amount,cancelUrl:origin+'/store/checkout.html?order='+id+'&result=cancel',
     description:'An Store',orderCode:id,

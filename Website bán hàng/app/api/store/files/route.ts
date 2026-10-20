@@ -1,3 +1,4 @@
+import {publicOrigin} from '../../../../lib/access';
 import {and,eq} from 'drizzle-orm';
 import {getDb} from '../../../../db';
 import {storeOrders} from '../../../../db/schema';
@@ -19,7 +20,7 @@ export async function GET(req:Request){
   if(!Array.isArray(keys)||!keys.every(k=>typeof k==='string'&&productExists(k)))
     return json({error:'Danh sách sản phẩm không hợp lệ.'},500);
   try{
-    const origin=new URL(req.url).origin;
+    const origin=publicOrigin(req);
     return json({orderCode:orderId,mode:demo?'demo':'live',
       note:demo?'File DEMO: chỉ 1 caption thử cho mỗi nhóm. Không cấp gói đã mua.':'Bộ caption: chưa xác minh khả năng hoạt động trên Locket thực tế.',
       packs:keys.map(k=>makeLinks(origin,orderId,k))});

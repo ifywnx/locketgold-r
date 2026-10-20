@@ -10,4 +10,8 @@ export async function valid(token:string){if(!/^[a-f0-9]{64}$/.test(token))retur
 export async function admin(){const h=await headers();const value=h.get('authorization')||'';const password=process.env.ADMIN_PASSWORD;if(!password||password.length<24)return false;const expected='Basic '+Buffer.from('admin:'+password).toString('base64');const hash=(s:string)=>createHash('sha256').update(s).digest();return timingSafeEqual(hash(value),hash(expected));}
 export const secureHeaders={'Cache-Control':'no-store, private','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff'};
 export function json(data:unknown,status=200){return Response.json(data,{status,headers:secureHeaders})}
-export function sameOrigin(r:Request){return r.headers.get('origin')===new URL(r.url).origin}
+export function publicOrigin(r:Request){
+ const domain=process.env.RAILWAY_PUBLIC_DOMAIN;
+ return domain?'https://'+domain:new URL(r.url).origin;
+}
+export function sameOrigin(r:Request){return r.headers.get('origin')===publicOrigin(r)}
