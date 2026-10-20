@@ -18,16 +18,18 @@ export async function POST(r:Request){
  let body:unknown;
  try{if(Number(r.headers.get('content-length')||0)>4096)return json({error:'Dữ liệu quá lớn.'},413);body=await r.json()}catch{return json({error:'Giỏ hàng không hợp lệ.'},400)}
  const quote=quoteStoreCart((body as {items?:unknown})?.items);
- if(!quote)return json({error:'Chọn 1–5 bộ caption hợp lệ.'},400);
+ if(!quote)return json({error:'Vui lòng chọn từ 1 đến 7 bộ caption hợp lệ.'},400);
  const db=getDb(),now=Date.now(),mode=storeMode(),ownerHash=await digest(token);
  const [rate]=await db.select({n:count()}).from(storeOrders).where(gt(storeOrders.created,now-60000));
  if((rate?.n||0)>=15)return json({error:'Có nhiều yêu cầu. Vui lòng thử lại sau một phút.'},429);
  const id=now*1000+crypto.getRandomValues(new Uint32Array(1))[0]%1000;
  const itemsJson=JSON.stringify(quote.items);
+ // Test orders complete immediately after the customer presses the checkout
+ // button. This is NOT a settled payment, never use status PAID for a demo.
  await db.insert(storeOrders).values({id,ownerHash,itemsJson,amount:quote.amount,mode,
-   status:mode==='demo'?'DEMO_PENDING':'CREATING',created:now});
+   status:mode==='demo'?'DEMO_COMPLETED':'CREATING',created:now});
  if(mode==='demo')return json({orderCode:id,amount:quote.amount,items:quote.items,mode,
-   checkoutUrl:'/store/checkout.html?order='+id});
+   status:'DEMO_COMPLETED',checkoutUrl:'/store/checkout.html?order='+id});
  try{
    const origin=new URL(r.url).origin;
    const s=secrets();
