@@ -70,18 +70,18 @@
     return cached.get(which);
   }
   const groupLabel=name=>({
-    '🔥 Trend TikTok & Threads':'🔥 Xu hướng TikTok và Threads',
-    '🤡 Meme & Câu cửa miệng':'🤡 Hài hước và câu cửa miệng',
-    '🧠 Vô tri & Brainrot':'🧠 Những câu vô tri vui nhộn',
-    '🌙 Mood & Chữa lành':'🌙 Tâm trạng và chữa lành',
-    '🥂 Tiếng Việt Premium · Sang & tinh tế':'🥂 Tiếng Việt sang và tinh tế',
-    '🍃 Tiếng Việt Premium · Văn thơ':'🍃 Tiếng Việt văn thơ',
-    '🪄 Tiếng Việt Premium · Hài có duyên':'🪄 Tiếng Việt hài có duyên',
-    '🧸 Teencode · Chê yêu':'🧸 Ngôn ngữ tuổi teen',
-    '✨ Aura · Slay & Flex':'✨ Cá tính và nổi bật',
-    '🌐 English Slang & Internet':'🌐 Tiếng lóng và mạng xã hội',
-    '🎨 Holiday Caption':'🎨 Theo mùa và ngày lễ'
-  })[name]||name;
+    '🔥 Trend TikTok & Threads':'Xu hướng TikTok và Threads',
+    '🤡 Meme & Câu cửa miệng':'Hài hước và câu cửa miệng',
+    '🧠 Vô tri & Brainrot':'Những câu vô tri vui nhộn',
+    '🌙 Mood & Chữa lành':'Tâm trạng và chữa lành',
+    '🥂 Tiếng Việt Premium · Sang & tinh tế':'Tiếng Việt sang và tinh tế',
+    '🍃 Tiếng Việt Premium · Văn thơ':'Tiếng Việt văn thơ',
+    '🪄 Tiếng Việt Premium · Hài có duyên':'Tiếng Việt hài có duyên',
+    '🧸 Teencode · Chê yêu':'Ngôn ngữ tuổi teen',
+    '✨ Aura · Slay & Flex':'Cá tính và nổi bật',
+    '🌐 English Slang & Internet':'Tiếng lóng và mạng xã hội',
+    '🎨 Holiday Caption':'Theo mùa và ngày lễ'
+  })[name]||String(name||'').replace(/^[^\p{L}\p{N}]+/u,'');
   function norm(value){
     return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
       .toLocaleLowerCase('vi').replace(/đ/g,'d');
