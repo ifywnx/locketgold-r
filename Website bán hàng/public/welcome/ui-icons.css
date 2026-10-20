@@ -1,0 +1,47 @@
+/* An / coherent interface icons. Caption glyphs are intentionally untouched. */
+.an-ui-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:19px;height:19px;vertical-align:middle;color:inherit}
+.an-ui-icon>svg{display:block;width:100%;height:100%;overflow:visible}
+.an-icon-label{display:inline-flex;align-items:center;gap:7px;vertical-align:middle}
+.an-icon-label .an-ui-icon{width:16px;height:16px}
+.hero-highlights>span{display:inline-flex;align-items:center;gap:7px}
+.hero-highlights .an-ui-icon{width:16px;height:16px;color:#9d75b5}
+.an-choose-card .an-choice-icon{background:#fff;border:1px solid #ece4f1;color:#8161ab;box-shadow:0 5px 18px #50406012}
+.an-choice-icon .an-ui-icon{width:23px;height:23px}
+.an-choose-card-alt .an-choice-icon{background:#fffafc;color:#bd6f94}
+.an-choose-card .an-choice-arrow .an-ui-icon{width:19px;height:19px}
+.step-emoji{display:inline-flex!important;align-items:center;justify-content:center}
+.step-emoji .an-ui-icon{width:27px;height:27px;stroke-width:1.9}
+.support-symbol .an-ui-icon{width:35px;height:35px}
+.policy-icon .an-ui-icon{width:28px;height:28px}
+.kicker-spark .an-ui-icon{width:15px;height:15px}
+.plan-featured-ribbon .an-ui-icon{width:13px;height:13px}
+.an-mobile-package-actions .an-ui-icon,.plan-more .an-ui-icon,.support-guide-link .an-ui-icon{width:16px;height:16px}
+.trend-heading .eyebrow .an-ui-icon{width:14px;height:14px}
+.trend-motion{display:inline-flex;gap:7px;align-items:center;justify-content:center}
+.trend-motion .an-ui-icon{width:16px;height:16px}
+.an-store-page .an-store-hero-points>span{display:inline-flex;align-items:center;gap:7px}
+.an-store-hero-points .an-ui-icon{width:15px;height:15px}
+.an-store-page .an-store-item-top>span:first-child{display:inline-flex;align-items:center;gap:7px}
+.an-store-page .an-store-item-top .an-category-icon{width:25px;height:25px;display:inline-grid;place-items:center;border:1px solid #ffffffb8;border-radius:8px;background:#ffffff9e;box-shadow:0 3px 9px #49305b12}
+.an-store-page .an-store-item-top .an-category-icon .an-ui-icon{width:15px;height:15px}
+.an-store-page .store-trend .an-category-icon{color:#b9783b;background:#fff6e6}
+.an-store-page .store-love .an-category-icon{color:#bf648c;background:#fff1f7}
+.an-store-page .store-premium .an-category-icon{color:#9269b5;background:#f8efff}
+.an-store-page .store-genz .an-category-icon{color:#667dcc;background:#f0f2ff}
+.an-store-page .store-holiday .an-category-icon{color:#478e7c;background:#eaf8f0}
+.an-store-page .store-future .an-category-icon{color:#827389;background:#f9f6fa}
+.an-store-page .an-store-hero-cta .an-ui-icon{width:18px;height:18px}
+.an-store-page .an-shop-test-note>span{background:#fff5dc;border:1px solid #f4e4b8}
+.an-store-page .an-shop-test-note .an-ui-icon{width:16px;height:16px;color:#8a6a36}
+.an-store-page .an-store-cart-link .an-ui-icon{width:16px;height:16px}
+.an-store-page .an-store-mobile-cart .an-ui-icon{width:19px;height:19px}
+.an-store-page .an-store-item>button .an-ui-icon{width:15px;height:15px}
+.an-store-page .an-store-item>button{gap:7px}
+.an-store-page .an-store-item>button .an-icon-label{font-size:inherit}
+.an-store-page .an-store-item .an-store-add .an-ui-icon{width:16px;height:16px}
+.an-shop-steps>div>b{background:#f0e7f9;color:#775491}
+@media(max-width:700px){
+ .an-store-page .an-store-item-top .an-category-icon{width:28px;height:28px}
+ .an-store-page .an-store-item-top .an-category-icon .an-ui-icon{width:16px;height:16px}
+ .an-store-page .an-store-mobile-cart:not([hidden]){gap:11px}
+}
