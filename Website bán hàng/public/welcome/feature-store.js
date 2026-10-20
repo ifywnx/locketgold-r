@@ -4,159 +4,105 @@
   const dialog=document.getElementById('an-store-dialog');
   if(!root||!dialog)return;
   const $=id=>document.getElementById(id);
-  // Keep catalog groups anchored to the GitHub source; do not manufacture captions.
-  const packs={
-    trend:{name:'Xu hướng & Hài hước',groups:['🔥 Trend TikTok & Threads','🤡 Meme & Câu cửa miệng','🧠 Vô tri & Brainrot']},
-    love:{name:'Tình cảm & Tâm trạng',groups:['💘 Tình cảm & Thả thính','🌙 Mood & Chữa lành']},
-    premium:{name:'Tiếng Việt tinh tế',groups:['🥂 Tiếng Việt Premium · Sang & tinh tế','🍃 Tiếng Việt Premium · Văn thơ','🪄 Tiếng Việt Premium · Hài có duyên']},
-    genz:{name:'Gen Z & Cá tính',groups:['🧸 Teencode · Chê yêu','✨ Aura · Slay & Flex','🌐 English Slang & Internet']},
-    holiday:{name:'Lễ hội & Các mùa',groups:['🎨 Holiday Caption']}
+  const labels={
+    trend:'Xu hướng & Meme',genz:'Gen Z & Slang',reaction:'Cà khịa & Phản ứng',
+    love:'Tình cảm & Chữa lành',premium:'Tiếng Việt tinh tế',
+    holiday:'Mùa lễ & Kỷ niệm',daily:'Sinh viên & Đời thường'
   };
-  let all=[],selected='trend',shown=28,lastTrigger=null,loading=null;
-  const groupLabel=name=>({
-    '🔥 Trend TikTok & Threads':'Xu hướng TikTok và Threads',
-    '🤡 Meme & Câu cửa miệng':'Hài hước và câu cửa miệng',
-    '🧠 Vô tri & Brainrot':'Những câu vô tri vui nhộn',
-    '🌙 Mood & Chữa lành':'Tâm trạng và chữa lành',
-    '🥂 Tiếng Việt Premium · Sang & tinh tế':'Tiếng Việt sang và tinh tế',
-    '🍃 Tiếng Việt Premium · Văn thơ':'Tiếng Việt văn thơ',
-    '🪄 Tiếng Việt Premium · Hài có duyên':'Tiếng Việt hài có duyên',
-    '🧸 Teencode · Chê yêu':'Ngôn ngữ tuổi teen',
-    '✨ Aura · Slay & Flex':'Cá tính và nổi bật',
-    '🌐 English Slang & Internet':'Tiếng lóng và mạng xã hội',
-    '🎨 Holiday Caption':'Theo mùa và ngày lễ'
-  })[name]||String(name||'').replace(/^[^\p{L}\p{N}]+/u,'');
+  const groupLabel=s=>String(s||'').replace(/^[^\p{L}\p{N}]+/u,'').replace(/ · An sáng tác$/u,'');
   const normalize=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase();
-  const colorsValid=colors=>Array.isArray(colors)&&colors.length>=2&&colors.every(c=>/^#[a-f0-9]{6}([a-f0-9]{2})?$/i.test(c));
-
-  async function getCatalog(){
-    if(!loading){
-      loading=fetch('/welcome/caption-data.json',{cache:'no-cache'}).then(res=>{
-        if(!res.ok)throw Error('Không thể tải thư viện');
-        return res.json();
-      }).then(entries=>{
-        if(!Array.isArray(entries))throw Error('Dữ liệu caption không hợp lệ');
-        all=entries.filter(x=>typeof x.text==='string'&&typeof x.group==='string'&&
-          typeof x.ink==='string'&&/^#[a-f0-9]{6}([a-f0-9]{2})?$/i.test(x.ink)&&colorsValid(x.colors));
-        return all;
-      }).catch(error=>{loading=null;throw error});
-    }
+  const isColor=s=>typeof s==='string'&&/^#[a-f0-9]{6}([a-f0-9]{2})?$/i.test(s);
+  const entries={};let current='trend',shown=9,trigger=null,loading=null,rotate=0;
+  function sourceValid(item){return typeof item?.text==='string'&&typeof item.group==='string'&&Array.isArray(item.colors)&&item.colors.length>=2&&item.colors.every(isColor)&&isColor(item.ink);}
+  function load(){
+    if(!loading)loading=fetch('/store/catalog.json',{cache:'no-cache'}).then(res=>{
+      if(!res.ok)throw Error('Chưa tải được bộ caption');return res.json();
+    }).then(data=>{
+      if(data.format!=='an-store-preview-v2'||!data.packs)throw Error('Định dạng thư viện không hợp lệ');
+      for(const [sku,p] of Object.entries(data.packs)){
+        if(!Object.hasOwn(labels,sku)||!Array.isArray(p.samples)||!Number.isInteger(p.count))continue;
+        entries[sku]={samples:p.samples.filter(sourceValid),count:p.count};
+      }
+      return entries;
+    }).catch(error=>{loading=null;throw error});
     return loading;
   }
-  const members=key=>all.filter(item=>packs[key].groups.includes(item.group));
   function pill(item){
     const el=document.createElement('span');
     el.className='an-store-pill';
     el.style.backgroundImage='linear-gradient(180deg,'+item.colors.join(',')+')';
     el.style.color=item.ink;
-    if(item.icon){
-      const icon=document.createElement('span');
-      icon.textContent=item.icon;
-      icon.setAttribute('aria-hidden','true');
-      el.append(icon);
-    }
-    const content=document.createElement('span');
-    content.textContent=item.text;
-    el.append(content);
+    if(item.icon){const emoji=document.createElement('span');emoji.textContent=item.icon;emoji.setAttribute('aria-hidden','true');el.append(emoji);}
+    const text=document.createElement('span');text.textContent=item.text;el.append(text);
     return el;
   }
   function populateCards(){
-    for(const key of Object.keys(packs)){
-      const count=$('feature-store').querySelector('[data-store-count="'+key+'"]');
-      const preview=$('feature-store').querySelector('[data-store-sample="'+key+'"]');
-      const items=members(key);
-      if(count)count.textContent=items.length+' câu';
+    for(const sku of Object.keys(labels)){
+      const data=entries[sku];if(!data)continue;
+      const count=root.querySelector('[data-store-count="'+sku+'"]');
+      if(count)count.textContent=data.count+' câu';
+      const preview=root.querySelector('[data-store-sample="'+sku+'"]');
       if(!preview)continue;
-      const fragment=document.createDocumentFragment();
-      const seen=new Set();
-      for(const entry of items){
-        if(!entry.text||seen.has(entry.group))continue;
-        fragment.append(pill(entry));
-        seen.add(entry.group);
-        if(seen.size===3)break;
-      }
-      preview.replaceChildren(fragment);
+      const out=document.createDocumentFragment();
+      for(const item of data.samples.slice(0,3))out.append(pill(item));
+      preview.replaceChildren(out);
     }
+  }
+  function renderStage(){
+    const place=$('an-brand-preview');if(!place)return;
+    const keys=['genz','love','premium','trend','daily','holiday','reaction'];
+    const frag=document.createDocumentFragment();
+    for(let i=0;i<3;i++){
+      const sku=keys[(i+rotate)%keys.length],data=entries[sku];
+      if(!data||!data.samples.length)continue;
+      const pillItem=data.samples[(rotate+i*3)%data.samples.length];
+      const row=document.createElement('div');row.className='an-brand-sample';
+      row.append(pill(pillItem));
+      frag.append(row);
+    }
+    place.replaceChildren(frag);
   }
   function render(){
-    const items=members(selected);
+    const data=entries[current];if(!data)return;
     const q=normalize($('an-store-search').value.trim());
-    const matching=q?items.filter(item=>normalize([item.text,item.icon,item.group].join(' ')).includes(q)):items;
-    const subset=matching.slice(0,shown);
-    const frame=document.createDocumentFragment();
-    let previousGroup='';
-    for(const item of subset){
-      if(item.group!==previousGroup){
-        const h=document.createElement('h4');
-        h.className='an-store-group-heading';
-        h.textContent=groupLabel(item.group);
-        frame.append(h);
-        previousGroup=item.group;
-      }
-      frame.append(pill(item));
+    const filtered=q?data.samples.filter(item=>normalize([item.text,item.icon,groupLabel(item.group)].join(' ')).includes(q)):data.samples;
+    const shownItems=filtered.slice(0,shown);
+    const out=document.createDocumentFragment();let previous='';
+    for(const item of shownItems){
+      if(item.group!==previous){const heading=document.createElement('h4');heading.className='an-store-group-heading';heading.textContent=groupLabel(item.group);out.append(heading);previous=item.group;}
+      out.append(pill(item));
     }
-    if(!subset.length){
-      const empty=document.createElement('p');
-      empty.className='an-store-empty';
-      empty.textContent='Không có caption phù hợp với từ khóa.';
-      frame.append(empty);
-    }
-    $('an-store-gallery').replaceChildren(frame);
-    $('an-store-showing').textContent='Đang xem '+subset.length+' / '+matching.length+' câu';
-    $('an-store-more').hidden=shown>=matching.length;
+    if(!shownItems.length){const p=document.createElement('p');p.className='an-store-empty';p.textContent='Không có mẫu phù hợp. Bạn thử từ khóa khác nhé.';out.append(p);}
+    $('an-store-gallery').replaceChildren(out);
+    $('an-store-showing').textContent='Đang xem '+shownItems.length+' / '+data.count+' câu của bộ (mẫu chọn lọc)';
+    $('an-store-more').hidden=shown>=filtered.length;
   }
-  function showPack(key,button){
-    if(!packs[key])return;
-    selected=key;shown=28;lastTrigger=button;
-    $('an-store-dialog-title').textContent=packs[key].name;
+  function openPack(sku,button){
+    if(!entries[sku])return;
+    current=sku;shown=9;trigger=button;
+    $('an-store-dialog-title').textContent=labels[sku];
     $('an-store-search').value='';
-    $('an-store-dialog-subtitle').textContent='Bạn đang xem câu chữ và màu gốc. Giá chỉ để thử đặt hàng, chưa thu tiền thật.';
+    $('an-store-dialog-subtitle').textContent=entries[sku].count+' câu trong bộ. Đây là các mẫu chọn lọc để xem nội dung và màu trước khi chọn.';
     render();
-    if(typeof dialog.showModal==='function')dialog.showModal();
-    else dialog.setAttribute('open','');
+    if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');
   }
-  function hidePack(){
-    if(dialog.open&&typeof dialog.close==='function')dialog.close();
-    else dialog.removeAttribute('open');
-    lastTrigger?.focus({preventScroll:true});
+  function closePack(){
+    if(dialog.open&&typeof dialog.close==='function')dialog.close();else dialog.removeAttribute('open');
+    trigger?.focus({preventScroll:true});
   }
-  root.querySelectorAll('[data-store-filter]').forEach(button=>{
-    button.addEventListener('click',()=>{
-      const category=button.dataset.storeFilter;
-      root.querySelectorAll('[data-store-filter]').forEach(tab=>{
-        const active=tab===button;
-        tab.classList.toggle('is-active',active);
-        tab.setAttribute('aria-pressed',String(active));
-      });
-      root.querySelectorAll('[data-store-type]').forEach(card=>{
-        card.hidden=category!=='all'&&card.dataset.storeType!==category;
-      });
-    });
-  });
-  root.querySelectorAll('[data-store-preview]').forEach(button=>{
-    button.addEventListener('click',async()=>{
-      try{
-        await getCatalog();
-        showPack(button.dataset.storePreview,button);
-      }catch{
-        const target=root.querySelector('[data-store-count="'+button.dataset.storePreview+'"]');
-        if(target)target.textContent='Chưa tải được mẫu';
-      }
-    });
-  });
-  $('an-store-search').addEventListener('input',()=>{shown=28;render()});
-  $('an-store-more').addEventListener('click',()=>{
-    shown+=28;render();
-  });
-  $('an-store-dialog-close').addEventListener('click',hidePack);
-  dialog.addEventListener('click',event=>{
-    const rect=dialog.getBoundingClientRect();
-    if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)hidePack();
-  });
-  void getCatalog().then(populateCards).catch(()=>{
-    for(const key of Object.keys(packs)){
-      const el=root.querySelector('[data-store-count="'+key+'"]');
-      if(el)el.textContent='Chưa tải được dữ liệu';
-    }
-  });
+  root.querySelectorAll('[data-store-filter]').forEach(tab=>tab.addEventListener('click',()=>{
+    const filter=tab.dataset.storeFilter;
+    root.querySelectorAll('[data-store-filter]').forEach(t=>{const active=t===tab;t.classList.toggle('is-active',active);t.setAttribute('aria-pressed',String(active));});
+    root.querySelectorAll('[data-store-type]').forEach(card=>{card.hidden=filter==='caption'?card.dataset.storeType!=='caption':card.dataset.storeType==='caption';});
+  }));
+  root.querySelectorAll('[data-store-preview]').forEach(button=>button.addEventListener('click',async()=>{
+    try{await load();openPack(button.dataset.storePreview,button)}
+    catch{const count=root.querySelector('[data-store-count="'+button.dataset.storePreview+'"]');if(count)count.textContent='Chưa tải được dữ liệu';}
+  }));
+  $('an-store-search').addEventListener('input',()=>{shown=9;render()});
+  $('an-store-more').addEventListener('click',()=>{shown+=9;render()});
+  $('an-store-dialog-close').addEventListener('click',closePack);
+  dialog.addEventListener('click',event=>{const rect=dialog.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)closePack();});
+  $('an-preview-next')?.addEventListener('click',()=>{rotate=(rotate+1)%7;renderStage()});
+  void load().then(()=>{populateCards();renderStage()}).catch(()=>{for(const sku of Object.keys(labels)){const count=root.querySelector('[data-store-count="'+sku+'"]');if(count)count.textContent='Chưa tải được mẫu';}});
 })();
