@@ -12,7 +12,14 @@
   function setMotion() {
     marquee.classList.toggle('motion-paused',paused);
     motion.setAttribute('aria-pressed',String(!paused));
-    motion.textContent=paused?'▶ Tiếp tục chạy':'❚❚ Tạm dừng';
+    const glyph=document.createElement('span');
+    glyph.className='an-ui-icon';
+    glyph.setAttribute('data-an-icon',paused?'play':'pause');
+    glyph.setAttribute('aria-hidden','true');
+    const words=document.createElement('span');
+    words.textContent=paused?'Tiếp tục':'Tạm dừng';
+    motion.replaceChildren(glyph,words);
+    window.AnIcons?.mount(glyph);
   }
   motion.addEventListener('click',()=>{paused=!paused;setMotion()});
 
