@@ -33,7 +33,7 @@
     icon.hidden=!item.icon;
     capsule.style.backgroundImage='linear-gradient(180deg,'+item.colors.join(',')+')';
     capsule.style.color=item.ink;
-    if(group)group.textContent=item.group;
+    if(group)group.textContent=item.group.replace(/^[^\p{L}\p{N}]+/u,'');
     status.textContent=String(index+1).padStart(2,'0')+' / '+items.length;
     if(!reduce.matches){
       capsule.classList.remove('is-swapping');
