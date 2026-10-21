@@ -232,3 +232,19 @@ body.an-home-page,body.an-store-page{background-color:#fcf9fc;color:var(--an-ink
     gap:18px;
   }
 }
+
+/* Prevent decorative hero glows/orbit rings from widening the mobile viewport.
+   The phone itself and all touch/3D interactions remain unchanged. */
+@media(max-width:700px){
+  .an-home-page .hero::before{
+    left:35%;
+    width:65%;
+    max-width:320px;
+  }
+  .an-home-page .an-v5-stage::after{
+    width:78%;
+    max-width:320px;
+    height:54%;
+    transform:translateX(-50%);
+  }
+}
