@@ -98,6 +98,24 @@ def mobile_checks(browser):
                           position:c.position,overflowX:c.overflowX,scrollWidth:el.scrollWidth};})
                       .filter(r=>r.width>0 && r.right>innerWidth+5)
                       .sort((a,b)=>b.right-a.right).slice(0,12)""")
+                    visible=page.evaluate("""() => {
+                      const clipped=(el)=>{for(let p=el.parentElement;p;p=p.parentElement){
+                        if(['hidden','clip','scroll','auto'].includes(getComputedStyle(p).overflowX)) return true;
+                      }return false};
+                      return [...document.querySelectorAll('body *')].map(el=>{
+                        const r=el.getBoundingClientRect();
+                        return {tag:el.tagName.toLowerCase(),id:el.id,cls:String(el.className).slice(0,70),
+                          left:Math.round(r.left),right:Math.round(r.right),
+                          client:el.clientWidth,scroll:el.scrollWidth};})
+                        .filter((r,i)=>r.right>innerWidth+5 && !clipped(document.querySelectorAll('body *')[i]))
+                        .sort((a,b)=>b.right-a.right).slice(0,18)
+                    }""")
+                    bounds=page.evaluate("""() => ['body','main','header','.hero','.hero-stage','.an-v5-stage','.an-v5-wrap','#packages','.caption-gallery','#caption-marquee'].map(q=>{
+                      const e=document.querySelector(q),r=e?.getBoundingClientRect();
+                      return {q,right:Math.round(r?.right||0),client:e?.clientWidth,scroll:e?.scrollWidth};
+                    })""")
+                    print(f"VISIBLE OVERFLOW {short} {width}px: {visible}",flush=True)
+                    print(f"BOUNDS {short} {width}px: {bounds}",flush=True)
                     print(f"OVERFLOW {short} {width}px: {offenders}", flush=True)
                 assert excess <= 7, f"horizontal overflow {excess}px at {width}px"
                 return f"{short} {width}px overflow={excess}px"
