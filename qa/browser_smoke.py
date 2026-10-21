@@ -72,6 +72,21 @@ def desktop_checks(browser):
         assert page.locator("#phone-send-scene").is_visible()
         return "camera-to-send flow"
     check("iPhone camera mock flow", camera)
+
+    def marquee_always_scrolling():
+        tracks = page.locator("#caption-marquee .caption-track")
+        tracks.first.wait_for(state="visible",timeout=15000)
+        assert tracks.count() == 3, f"Expected 3 scrolling rows, got {tracks.count()}"
+        assert page.locator("#caption-motion").count() == 0, "Pause button still exists"
+        before = tracks.evaluate_all("(els) => els.map(el => getComputedStyle(el).animationPlayState)")
+        assert all(x == "running" for x in before), f"Marquee unexpectedly paused: {before}"
+        page.locator("#caption-marquee").hover()
+        page.wait_for_timeout(250)
+        after = tracks.evaluate_all("(els) => els.map(el => getComputedStyle(el).animationPlayState)")
+        assert all(x == "running" for x in after), f"Marquee paused when hovered: {after}"
+        return f"{tracks.count()} caption rows still running on hover"
+    check("Caption marquee runs without pause control", marquee_always_scrolling)
+
     check("Desktop screenshot", lambda: safe_screenshot(page,"home-desktop.png"))
     check("Desktop no JS uncaught exceptions", lambda: (_ for _ in ()).throw(AssertionError(str(errors[:5]))) if errors else "none")
     page.close()
