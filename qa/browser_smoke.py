@@ -90,6 +90,15 @@ def mobile_checks(browser):
                 opening(page,path)
                 page.wait_for_timeout(700)
                 excess = page.evaluate("document.documentElement.scrollWidth - document.documentElement.clientWidth")
+                if excess>7:
+                    offenders=page.evaluate("""() => [...document.querySelectorAll('body *')]
+                      .map(el=>{const r=el.getBoundingClientRect(),c=getComputedStyle(el);
+                        return {tag:el.tagName.toLowerCase(),id:el.id,cls:String(el.className).slice(0,90),
+                          x:Math.round(r.x),right:Math.round(r.right),width:Math.round(r.width),
+                          position:c.position,overflowX:c.overflowX,scrollWidth:el.scrollWidth};})
+                      .filter(r=>r.width>0 && r.right>innerWidth+5)
+                      .sort((a,b)=>b.right-a.right).slice(0,12)""")
+                    print(f"OVERFLOW {short} {width}px: {offenders}", flush=True)
                 assert excess <= 7, f"horizontal overflow {excess}px at {width}px"
                 return f"{short} {width}px overflow={excess}px"
             check(f"Mobile layout: {short} at {width}px",width_check)
