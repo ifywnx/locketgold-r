@@ -1,27 +1,11 @@
 'use strict';
 (async () => {
   const marquee=document.getElementById('caption-marquee');
-  const motion=document.getElementById('caption-motion');
   const status=document.getElementById('trend-status');
-  if(!marquee||!motion||!status)return;
+  if(!marquee||!status)return;
 
-  const prefersLess=window.matchMedia('(prefers-reduced-motion: reduce)');
-  let paused=prefersLess.matches;
+  // Always animate the marquee; CSS honors prefers-reduced-motion for accessibility.
   const groupName='🔥 Trend TikTok & Threads';
-
-  function setMotion() {
-    marquee.classList.toggle('motion-paused',paused);
-    motion.setAttribute('aria-pressed',String(!paused));
-    const glyph=document.createElement('span');
-    glyph.className='an-ui-icon';
-    glyph.setAttribute('data-an-icon',paused?'play':'pause');
-    glyph.setAttribute('aria-hidden','true');
-    const words=document.createElement('span');
-    words.textContent=paused?'Tiếp tục':'Tạm dừng';
-    motion.replaceChildren(glyph,words);
-    window.AnIcons?.mount(glyph);
-  }
-  motion.addEventListener('click',()=>{paused=!paused;setMotion()});
 
   function makeCaption(item){
     const capsule=document.createElement('span');
@@ -72,9 +56,7 @@
     }
     marquee.replaceChildren(fragment);
     status.textContent=trend.length+' câu caption mẫu · Giữ nguyên chữ, biểu tượng và màu sắc.';
-    setMotion();
   }catch(error){
     status.textContent='Chưa tải được caption mẫu. Bạn hãy tải lại trang nhé.';
-    motion.disabled=true;
   }
 })();
