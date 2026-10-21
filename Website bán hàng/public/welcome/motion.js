@@ -163,10 +163,4 @@
       link.addEventListener('blur',()=>link.style.transform='');
     });
   }
-  // Freeze the constantly scrolling caption strips while users read them.
-  const marquee=document.getElementById('caption-marquee');
-  if(marquee&&finePointer.matches){
-    marquee.addEventListener('mouseenter',()=>marquee.classList.add('is-hovered'));
-    marquee.addEventListener('mouseleave',()=>marquee.classList.remove('is-hovered'));
-  }
 })();
