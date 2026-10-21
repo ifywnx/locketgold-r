@@ -85,6 +85,35 @@
     });
   }
 
+  // Preserve the existing interactive iPhone demo while adding restrained depth.
+  // Pointer motion is limited to desktop; touch swipe and all V1/V2 controls remain untouched.
+  if(!reduced.matches && finePointer.matches && !mobile.matches){
+    const phone=document.getElementById('an-v5-device');
+    if(phone){
+      let tiltFrame=0,tiltX=-2,tiltY=-5;
+      const paint=()=>{
+        phone.style.setProperty('--an-phone-tilt-x',tiltX.toFixed(2)+'deg');
+        phone.style.setProperty('--an-phone-tilt-y',tiltY.toFixed(2)+'deg');
+        tiltFrame=0;
+      };
+      phone.addEventListener('pointermove',event=>{
+        const rect=phone.getBoundingClientRect();
+        if(!rect.width||!rect.height)return;
+        const x=Math.max(-.5,Math.min(.5,(event.clientX-rect.left)/rect.width-.5));
+        const y=Math.max(-.5,Math.min(.5,(event.clientY-rect.top)/rect.height-.5));
+        tiltX=-2-y*8;
+        tiltY=-5+x*12;
+        if(!tiltFrame)tiltFrame=requestAnimationFrame(paint);
+      },{passive:true});
+      const resetPhone=()=>{
+        tiltX=-2;tiltY=-5;
+        if(!tiltFrame)tiltFrame=requestAnimationFrame(paint);
+      };
+      phone.addEventListener('pointerleave',resetPhone);
+      phone.addEventListener('pointercancel',resetPhone);
+    }
+  }
+
   // Scroll-synced mini navigation: mirrors the actual sections, no fake state.
   if('IntersectionObserver' in window){
     const links=[...document.querySelectorAll('header nav a[href^="#"]')];
