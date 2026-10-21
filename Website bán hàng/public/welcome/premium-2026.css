@@ -203,3 +203,32 @@ body.an-home-page,body.an-store-page{background-color:#fcf9fc;color:var(--an-ink
   .an-store-page .an-store-item>button,.an-order-page .an-order-actions>*,
   .an-studio-page button{transition:none!important;animation:none!important}
 }
+
+/* V1/V2 layout correction: the landing page does not load feature-store.css,
+   which originally supplied the two-column override for .plans.plans-two.
+   Without this rule the legacy three-column .plans grid leaves an empty slot. */
+.an-home-page #packages .plans.plans-two{
+  display:grid;
+  width:100%;
+  max-width:none;
+  margin-left:0;
+  margin-right:0;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:20px;
+  align-items:stretch;
+}
+.an-home-page #packages .plans.plans-two .plan-shell{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
+.an-home-page #packages .plans.plans-two .plan-shell>.plan{
+  width:100%;
+  flex:1;
+}
+@media(max-width:700px){
+  .an-home-page #packages .plans.plans-two{
+    grid-template-columns:minmax(0,1fr);
+    gap:18px;
+  }
+}
