@@ -95,6 +95,20 @@ jobs:
           assert any(p['id']=='trend' and p['demo']==1 for p in report['productPopularity'])
           print('PASS authentication / no-store / 0 VND demo isolation / verified revenue / paging / filters / popularity')
           PY
+      - name: Install browser automation
+        run: |
+          python3 -m pip install playwright==1.56.0
+          python3 -m playwright install --with-deps chromium
+      - name: Test desktop and iPhone-size admin dashboard
+        run: python3 qa/admin_smoke.py
+      - name: Upload dashboard screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: an-store-admin-preview
+          path: Website bán hàng/qa/artifacts/
+          retention-days: 3
+          if-no-files-found: ignore
       - name: Show logs if tests fail
         if: failure()
         run: tail -80 /tmp/an-store-admin-qa.log || true
