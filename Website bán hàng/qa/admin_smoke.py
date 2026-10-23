@@ -22,7 +22,7 @@ def validate(browser, width, height, mobile):
     assert page.get_by_text('CHẾ ĐỘ DEMO').count()>0,'Payment mode no longer clearly labeled'
     assert page.locator('body').evaluate('el => el.scrollWidth - el.clientWidth') <= 4, 'Page horizontal overflow'
     page.screenshot(path=str(OUT/f'admin-{width}.png'),full_page=True,animations='disabled')
-    page.get_by_role('button',name='Đơn hàng').click()
+    page.get_by_role('button',name='Đơn hàng',exact=True).click()
     page.get_by_text('SỔ ĐƠN HÀNG').wait_for()
     page.get_by_text('#5001').wait_for()
     page.get_by_role('button',name='Chi tiết').first.click()
