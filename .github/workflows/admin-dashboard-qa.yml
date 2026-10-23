@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - feat/an-store-admin-dashboard-20261023
+      - fix/admin-mobile-orders-20261023
   workflow_dispatch:
 permissions:
   contents: read
