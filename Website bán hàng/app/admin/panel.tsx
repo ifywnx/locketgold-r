@@ -214,6 +214,28 @@ export default function Panel(){
               <div><span className="ops-eyebrow">SỔ ĐƠN HÀNG</span><h2>{report.pagination.total.toLocaleString('vi-VN')} đơn phù hợp</h2></div>
               <button className="ops-export" type="button" disabled={!report.orders.length} onClick={exportCurrentPage}>↓ Xuất CSV trang này</button>
             </div>
+            <div className="ops-mobile-orders" aria-label="Đơn hàng trên thiết bị di động">
+              {report.orders.map(order=><article className="ops-mobile-order" key={order.id}>
+                <div className="ops-mobile-order-top">
+                  <strong>#{order.id}</strong>
+                  <span className={'ops-order-mode '+(order.mode==='demo'?'is-demo':'is-live')}>{order.mode==='demo'?'Đơn demo 0đ':'Đơn thật'}</span>
+                </div>
+                <p className="ops-mobile-order-date">{fmtTime(order.created)}</p>
+                <span className={'ops-status '+(order.status==='DEMO_COMPLETED'||order.status==='PAID_AWAITING_DELIVERY'?'is-completed':'')}>{labels[order.status]||order.status}</span>
+                <div className="ops-mobile-order-summary">
+                  <span>{order.products.length?order.products.map(p=>p.name).join(', '):'Không rõ sản phẩm'}</span>
+                </div>
+                <div className="ops-mobile-order-bottom">
+                  <div><small>Giá tham khảo</small><strong>{fmtMoney(order.quotedAmount)}</strong></div>
+                  <button className="ops-detail" type="button" aria-expanded={expanded===order.id} onClick={()=>setExpanded(expanded===order.id?null:order.id)}>{expanded===order.id?'Thu gọn':'Xem chi tiết'}</button>
+                </div>
+                {expanded===order.id&&<div className="ops-mobile-order-detail">
+                  <div><b>Điều kiện lấy file</b><p>{order.eligibleForFiles?'Đủ điều kiện tạo liên kết, chưa xác nhận đã tải':'Chưa đủ điều kiện'}</p></div>
+                  <div><b>Thanh toán xác minh</b><p>{order.mode==='demo'?'Không, demo 0đ':order.paid?fmtTime(order.paid):'Chưa có xác nhận'}</p></div>
+                </div>}
+              </article>)}
+              {!report.orders.length&&<p className="ops-empty">Không có đơn phù hợp bộ lọc.</p>}
+            </div>
             <div className="ops-table-scroll">
               <table className="ops-table">
                 <thead><tr><th>Mã đơn</th><th>Thời gian</th><th>Loại</th><th>Trạng thái</th><th>Giá tham khảo</th><th></th></tr></thead>
