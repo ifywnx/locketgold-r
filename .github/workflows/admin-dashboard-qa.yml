@@ -14,7 +14,6 @@ jobs:
       run:
         working-directory: Website bán hàng
     env:
-      NODE_ENV: production
       DATABASE_URL: file:./data/admin-qa.db
       DATA_DIR: ./data
       ADMIN_PASSWORD: integration-only-strong-credential-2026
