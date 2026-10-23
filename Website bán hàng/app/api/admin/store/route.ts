@@ -1,4 +1,4 @@
-import {and, count, desc, eq, gte, sql, type SQL} from 'drizzle-orm';
+import {and, count, desc, eq, gte, isNotNull, sql, type SQL} from 'drizzle-orm';
 import {getDb} from '../../../../db';
 import {storeOrders} from '../../../../db/schema';
 import {admin, json} from '../../../../lib/access';
@@ -43,7 +43,7 @@ export async function GET(request:Request){
   const now=Date.now(),start=now-days*86400000;
   const db=getDb(),rangeWhere=gte(storeOrders.created,start);
   const filtered=whereClause(start,mode,status,search);
-  const [totalResult,orders,groups,trend]=await Promise.all([
+  const [totalResult,orders,groups,trend,verifiedPaid]=await Promise.all([
     db.select({value:count()}).from(storeOrders).where(filtered),
     db.select({
       id:storeOrders.id,itemsJson:storeOrders.itemsJson,amount:storeOrders.amount,
@@ -59,12 +59,14 @@ export async function GET(request:Request){
       day:sql<string>`date(${storeOrders.created}/1000,'unixepoch','+7 hours')`,
       mode:storeOrders.mode,n:count()
     }).from(storeOrders).where(rangeWhere)
-      .groupBy(sql`date(${storeOrders.created}/1000,'unixepoch','+7 hours')`,storeOrders.mode)
+      .groupBy(sql`date(${storeOrders.created}/1000,'unixepoch','+7 hours')`,storeOrders.mode),
+    db.select({n:count(),total:sql<number>`coalesce(sum(${storeOrders.amount}),0)`})
+      .from(storeOrders).where(and(rangeWhere,eq(storeOrders.mode,'live'),eq(storeOrders.status,'PAID_AWAITING_DELIVERY'),isNotNull(storeOrders.paid)))
   ]);
   const groupCount=(m:string,s:string)=>num(groups.find(row=>row.mode===m&&row.status===s)?.n);
   const demoCount=groups.filter(row=>row.mode==='demo').reduce((n,row)=>n+num(row.n),0);
   const liveCount=groups.filter(row=>row.mode==='live').reduce((n,row)=>n+num(row.n),0);
-  const livePaid=groups.find(row=>row.mode==='live'&&row.status==='PAID_AWAITING_DELIVERY');
+  const livePaid=verifiedPaid[0];
   const total=num(totalResult[0]?.value);
   const timeline=new Map<string,{date:string,demo:number,live:number}>();
   for(let index=days-1;index>=0;index--){
@@ -116,7 +118,7 @@ export async function GET(request:Request){
       allOrders:demoCount+liveCount,demoOrders:demoCount,liveOrders:liveCount,
       verifiedLiveOrders:num(livePaid?.n),verifiedRevenue:num(livePaid?.total),
       awaitingPayment:groupCount('live','CREATING')+groupCount('live','PENDING'),
-      eligibleForFiles:groupCount('demo','DEMO_COMPLETED')+groupCount('live','PAID_AWAITING_DELIVERY'),
+      eligibleForFiles:groupCount('demo','DEMO_COMPLETED')+num(livePaid?.n),
       errors:groupCount('demo','ERROR')+groupCount('live','ERROR')
     },
     trend:[...timeline.values()],productPopularity,
