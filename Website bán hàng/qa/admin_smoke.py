@@ -24,16 +24,17 @@ def validate(browser, width, height, mobile):
     page.screenshot(path=str(OUT/f'admin-{width}.png'),full_page=True,animations='disabled')
     page.get_by_role('button',name='Đơn hàng',exact=True).click()
     page.get_by_text('SỔ ĐƠN HÀNG').wait_for()
-    page.get_by_text('#5001').wait_for()
     if mobile:
+        page.locator('.ops-mobile-order-top strong').first.wait_for()
         page.locator('.ops-mobile-orders').wait_for(state='visible')
         assert not page.locator('.ops-table-scroll').is_visible(), 'Desktop table shown on mobile'
         page.locator('.ops-mobile-order .ops-detail').first.click()
-        page.get_by_text('Điều kiện lấy file').wait_for()
+        page.locator('.ops-mobile-order-detail').get_by_text('Điều kiện lấy file').wait_for()
     else:
         page.locator('.ops-table-scroll').wait_for(state='visible')
+        page.locator('.ops-table tbody td strong').first.wait_for()
         page.locator('.ops-table .ops-detail').first.click()
-        page.get_by_text('Các bộ trong đơn').wait_for()
+        page.locator('.ops-table .ops-order-detail').get_by_text('Các bộ trong đơn').wait_for()
     assert page.locator('body').evaluate('el => el.scrollWidth - el.clientWidth') <= 4,'Order list overflows viewport'
     page.screenshot(path=str(OUT/f'orders-{width}.png'),full_page=True,animations='disabled')
     page.get_by_role('button',name='Mã kích hoạt').click()
