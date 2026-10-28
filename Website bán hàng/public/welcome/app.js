@@ -3,8 +3,8 @@ const $=id=>document.getElementById(id);
 const plans={standard:{price:49000,name:'An · Locket V1'},v2:{price:89000,name:'Locket V2'},plus:{price:129000,name:'V2 + Shadowrocket'}};
 let plan='standard',order=null,paid=false,accountRequest=0;
 const money=n=>n.toLocaleString('vi-VN')+'đ';
-function select(value,restore=false){if(order&&!restore)return;if(value==='plus'&&!restore)value='v2';if(!plans[value])value='standard';plan=value;document.querySelectorAll('[data-plan]').forEach(el=>{const on=el.dataset.plan===plan;el.classList.toggle('selected',on);el.setAttribute('aria-pressed',String(on));el.querySelector('.choose').textContent=on?'● Đang chọn':'○ Chọn gói này'});$('selection').textContent=plans[plan].name+' · '+money(plans[plan].price);$('buy').textContent=cfg.paymentsEnabled?'Thanh toán '+money(plans[plan].price)+' →':'Thanh toán chưa mở';$('buy').disabled=!cfg.paymentsEnabled;}
-document.querySelectorAll('[data-plan]').forEach(el=>el.onclick=()=>select(el.dataset.plan));
+function select(value,restore=false){if(order&&!restore)return;if(value==='plus'&&!restore)value='v2';if(!plans[value])value='standard';plan=value;document.querySelectorAll('[data-plan]').forEach(el=>{const on=el.dataset.plan===plan;el.classList.toggle('selected',on);el.setAttribute('aria-pressed',String(on));el.querySelector('.choose').textContent=on?'● Đang chọn':'○ Chọn gói này'});$('selection').textContent=plans[plan].name+' · '+money(plans[plan].price);$('buy').textContent=cfg.paymentsEnabled?'Thanh toán '+money(plans[plan].price)+' →':'Thanh toán chưa mở';$('buy').disabled=!cfg.paymentsEnabled;if(cfg.installPreview){$('buy').textContent='Xem phần cài đặt · Không thanh toán →';$('buy').disabled=false;}}
+document.querySelectorAll('[data-plan]').forEach(el=>el.onclick=()=>{select(el.dataset.plan);if(cfg.installPreview)render('preview',plan,true)});
 function installLink(session,file,title){
  const link=document.createElement('a');link.className='button dark';link.textContent=title;
  const url=(cfg.backend||location.origin)+'/download/'+encodeURIComponent(session)+'/'+file;
@@ -15,7 +15,7 @@ function render(session,packageId,demo=false){
  prepareInstallation();accountRequest++;
  $('apple-email').value='Đang tải…';$('apple-password').value='';$('apple-password').type='password';$('copy-status').textContent='';$('copy-password').disabled=$('reveal').disabled=true;
  if(packageId==='plus'&&!demo)loadAccount(session);
- $('downloads').hidden=false;$('demo-note').hidden=true;$('apple').hidden=packageId!=='plus';$('cards').replaceChildren();
+ $('downloads').hidden=false;$('demo-note').hidden=!demo;if(demo)$('demo-note').textContent=plans[packageId].name+' · Xem thử giao diện, không thu tiền. Tải file cần mã kích hoạt hợp lệ.';$('apple').hidden=packageId!=='plus';$('cards').replaceChildren();
  const options=[
  ['ifywnx-Locket-Captions.sgmodule','1 · Cài module Locket','Nhập module vào Shadowrocket.','Cài module →'],
  ['ifywnx-Locket-Config.conf','2 · Cài cấu hình','Nhập rồi chọn cấu hình. Cấu hình này đã có quy tắc Locket: tắt module trùng trước khi bật kết nối.','Cài cấu hình →'],
@@ -24,7 +24,7 @@ function render(session,packageId,demo=false){
  ];
  for(const [file,title,description,label] of options){
  const card=document.createElement('article'),h=document.createElement('h3'),p=document.createElement('p');h.textContent=title;p.textContent=description;
- card.append(h,p,installLink(session,file,label));$('cards').append(card);
+ const action=demo?document.createElement('button'):installLink(session,file,label);if(demo){action.className='button dark';action.type='button';action.textContent=label;action.disabled=true;action.title='Cần mã kích hoạt hợp lệ để tải file';}card.append(h,p,action);$('cards').append(card);
  }
  $('downloads').scrollIntoView({behavior:'smooth'});
 }
@@ -39,7 +39,7 @@ function token(key){let v=localStorage.getItem(key);if(!v){v=Array.from(crypto.g
 async function api(url,options={}){const r=await fetch(url,{...options,cache:'no-store'});let d;try{d=await r.json()}catch{throw Error('Chưa kết nối được dịch vụ. Vui lòng thử lại sau.')}if(!r.ok)throw Error(d.error||'Yêu cầu chưa thành công.');return d}
 function showOrder(){select(order.plan,true);document.querySelectorAll('[data-plan]').forEach(el=>el.disabled=true);$('buy').hidden=true;$('checkout').hidden=false;$('checkout').href=order.checkoutUrl;$('payment-status').textContent='Đơn #'+order.orderCode+' · '+money(order.amount)+'. Hoàn tất payOS rồi quay lại đây nhận mã.'}
 async function check(){if(!order||paid||document.visibilityState!=='visible')return;try{const d=await api('/api/payments?order='+order.orderCode,{headers:{Authorization:'Bearer '+localStorage.getItem('ifywnx-v8-owner')}});if(d.status==='PAID'){paid=true;$('checkout').hidden=true;$('code').value=d.code;$('payment-status').textContent='Đã thanh toán. Đang mở bộ cài…';try{await activate(d.code);$('payment-status').textContent='Đã thanh toán. Bộ cài của bạn ở bên dưới.'}catch(e){$('access-message').textContent=e.message;$('payment-status').textContent='Đã thanh toán. Bấm Kích hoạt mã để thử lại.'}}else if(['CANCELLED','EXPIRED','ERROR'].includes(d.status)){order=null;localStorage.removeItem('ifywnx-v8-order');localStorage.removeItem('ifywnx-v8-owner');$('checkout').hidden=true;$('buy').hidden=false;document.querySelectorAll('[data-plan]').forEach(el=>el.disabled=false);$('payment-status').textContent='Đơn đã huỷ hoặc hết hạn. Bạn có thể chọn gói và tạo đơn mới.'}}catch(e){$('payment-status').textContent=e.message}}
-$('buy').onclick=async()=>{if(!cfg.paymentsEnabled){$('payment-status').textContent='Thanh toán đang được kết nối. Vui lòng quay lại sau.';return}$('buy').disabled=true;try{order=await api('/api/payments',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token('ifywnx-v8-owner')},body:JSON.stringify({plan})});if(order.amount!==plans[plan].price||order.plan!==plan)throw Error('Máy chủ chưa hỗ trợ đúng gói đã chọn. Chưa mở thanh toán.');localStorage.setItem('ifywnx-v8-order',JSON.stringify(order));showOrder();window.location.assign(order.checkoutUrl)}catch(e){order=null;$('payment-status').textContent=e.message}finally{$('buy').disabled=false}};
+$('buy').onclick=async()=>{if(cfg.installPreview){render('preview',plan,true);return}if(!cfg.paymentsEnabled){$('payment-status').textContent='Thanh toán đang được kết nối. Vui lòng quay lại sau.';return}$('buy').disabled=true;try{order=await api('/api/payments',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token('ifywnx-v8-owner')},body:JSON.stringify({plan})});if(order.amount!==plans[plan].price||order.plan!==plan)throw Error('Máy chủ chưa hỗ trợ đúng gói đã chọn. Chưa mở thanh toán.');localStorage.setItem('ifywnx-v8-order',JSON.stringify(order));showOrder();window.location.assign(order.checkoutUrl)}catch(e){order=null;$('payment-status').textContent=e.message}finally{$('buy').disabled=false}};
 async function activate(code){
  let session=token('ifywnx-activation-v2:'+code);
  async function request(){return api('/api/access',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,session})})}
