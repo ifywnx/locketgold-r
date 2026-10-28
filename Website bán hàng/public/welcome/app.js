@@ -15,7 +15,7 @@ function render(session,packageId,demo=false){
  prepareInstallation();accountRequest++;
  $('apple-email').value='Đang tải…';$('apple-password').value='';$('apple-password').type='password';$('copy-status').textContent='';$('copy-password').disabled=$('reveal').disabled=true;
  if(packageId==='plus'&&!demo)loadAccount(session);
- $('downloads').hidden=false;$('demo-note').hidden=!demo;if(demo)$('demo-note').textContent=plans[packageId].name+' · Xem thử giao diện, không thu tiền. Tải file cần mã kích hoạt hợp lệ.';$('apple').hidden=packageId!=='plus';$('cards').replaceChildren();
+ $('downloads').hidden=false;$('demo-note').hidden=!demo;if(demo)$('demo-note').textContent=plans[packageId].name+' · Bộ cài thử, không thu tiền.';$('apple').hidden=packageId!=='plus';$('cards').replaceChildren();
  const options=[
  ['ifywnx-Locket-Captions.sgmodule','1 · Cài module Locket','Nhập module vào Shadowrocket.','Cài module →'],
  ['ifywnx-Locket-Config.conf','2 · Cài cấu hình','Nhập rồi chọn cấu hình. Cấu hình này đã có quy tắc Locket: tắt module trùng trước khi bật kết nối.','Cài cấu hình →'],
@@ -24,7 +24,7 @@ function render(session,packageId,demo=false){
  ];
  for(const [file,title,description,label] of options){
  const card=document.createElement('article'),h=document.createElement('h3'),p=document.createElement('p');h.textContent=title;p.textContent=description;
- const action=demo?document.createElement('button'):installLink(session,file,label);if(demo){action.className='button dark';action.type='button';action.textContent=label;action.disabled=true;action.title='Cần mã kích hoạt hợp lệ để tải file';}card.append(h,p,action);$('cards').append(card);
+ const action=installLink(session,file,label);if(demo){const version=packageId==='standard'?'v1':'v2';const name=file.endsWith('.mobileconfig')?'An-Locket-DNS.mobileconfig':file.endsWith('.conf')?'An-Locket.conf':'An-Locket.sgmodule';const url=location.origin+'/api/install-test/'+version+'/'+name;action.href=name.endsWith('.mobileconfig')?url:'shadowrocket://config/add/'+url;}card.append(h,p,action);$('cards').append(card);
  }
  $('downloads').scrollIntoView({behavior:'smooth'});
 }
