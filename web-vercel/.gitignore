@@ -1,0 +1,11 @@
+node_modules/
+.next/
+app/
+lib/
+db/
+public/
+scripts/
+next.config.ts
+tsconfig.json
+postcss.config.mjs
+next-env.d.ts
