@@ -9,11 +9,11 @@ for version,expected in [("v1",107),("v2",300),("v3",705)]:
     with urlopen(uri,timeout=12) as r:
         data=json.load(r)
     assert len(data)==expected,(version,len(data))
-    for filename in ["An-Locket.sgmodule","Locket_Unlocked.js"]:
-        with urlopen(base+f"/api/install-test/{version}/{filename}",timeout=15) as response:
-            body=response.read()
-            assert response.status==200 and len(body)>200,(version,filename)
-print("PASS: three datasets and versioned read-only test assets")
+    with urlopen(base+f"/api/install-test/{version}/An-Preview.sgmodule",timeout=15) as response:
+        body=response.read()
+        assert response.status==200 and b"an-store-preview.invalid" in body
+        assert b"api.revenuecat.com" not in body and b"[MITM]" not in body
+print("PASS: three datasets and safe read-only import previews")
 
 with sync_playwright() as p:
     browser=p.chromium.launch(headless=True)

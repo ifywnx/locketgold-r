@@ -31,6 +31,14 @@ with sync_playwright() as p:
         assert page.evaluate("""() => document.getElementById('compare').compareDocumentPosition(document.getElementById('store-qa-tools')) & Node.DOCUMENT_POSITION_FOLLOWING""")
         assert page.locator("#demo-checkout").count()==1
         assert page.evaluate("window.IFYWNX_CONFIG.paymentsEnabled===false")
+        page.locator("#buy").click()
+        assert page.locator("#downloads").is_visible()
+        assert page.locator("#preview-guide").is_visible()
+        assert page.locator("#downloads details.guide").first.is_hidden()
+        hrefs=page.locator("#cards a").evaluate_all("(els) => els.map(x => x.href)")
+        assert len(hrefs)==2,hrefs
+        assert hrefs[0].startswith("shadowrocket://install?module="),hrefs
+        assert hrefs[1].endswith("/api/install-test/v1/An-Preview.sgmodule"),hrefs
         # Customer can share the version; no order gets created.
         page.locator("#packages [data-plan=v2]").click()
         assert "Locket V2 · 89.000đ" in page.locator("#selection").inner_text()
