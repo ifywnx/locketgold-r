@@ -19,7 +19,7 @@ with sync_playwright() as p:
         assert page.locator("#packages .plan-shell").count()==3
         assert page.locator("#packages [data-plan=v1]").count()==0 # V1 maps to legacy standard plan
         assert "49.000đ" in page.locator("#selection").inner_text()
-        assert "Bảng giá" in page.locator("header nav").inner_text()
+        assert "Bảng giá" in page.locator("header nav").text_content()
         assert page.evaluate("""() => {
           const s=['packages','compare','captions','how-it-works','faq','versions','policies'];
           return s.every((id,i)=>i===0||document.getElementById(id).compareDocumentPosition(document.getElementById(s[i-1]))&2)
