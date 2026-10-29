@@ -122,6 +122,14 @@ struct SettingsView: View {
                     }
                 }
 
+                Section("Quản lý tài khoản") {
+                    NavigationLink {
+                        PrivacySafetyView()
+                    } label: {
+                        Label("An toàn, chặn & thông báo", systemImage: "hand.raised.fill")
+                    }
+                }
+
                 Section("Quyền riêng tư") {
                     Text("Không sử dụng Telegram, không yêu cầu danh bạ, không tích hợp quảng cáo.")
                     Text("Chia sẻ đám mây chỉ tới người nhận đã được chọn. Phải thiết lập Supabase và kiểm thử chính sách trước khi phát hành.")
