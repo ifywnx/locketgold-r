@@ -75,10 +75,6 @@ extension SocialService {
         var next: [String: URL] = [:]
         for message in messages {
             guard let path = message.media_path else { continue }
-            if let previous = mediaURLs[path] {
-                next[path] = previous
-                continue
-            }
             if let url = try? await api.storage.from("chat_media")
                 .createSignedURL(path: path, expiresIn: 900) {
                 next[path] = url
