@@ -16,6 +16,7 @@ final class CloudService: ObservableObject {
     @Published var reactions: [UUID: String] = [:]
     @Published var requesterNames: [UUID: String] = [:]
     @Published var authorNames: [UUID: String] = [:]
+    @Published var authorBadges: [UUID: String] = [:]
     @Published var viewerNames: [UUID: [String]] = [:]
     @Published var busy = false
     @Published var errorMessage: String?
@@ -76,6 +77,7 @@ final class CloudService: ObservableObject {
             reactions = [:]
             requesterNames = [:]
             authorNames = [:]
+            authorBadges = [:]
             viewerNames = [:]
         } catch {
             errorMessage = error.localizedDescription
@@ -89,7 +91,7 @@ final class CloudService: ObservableObject {
 
         do {
             myProfile = try await client.from("profiles")
-                .select("id,handle,display_name")
+                .select("id,handle,display_name,badge_style")
                 .eq("id", value: userID.uuidString)
                 .single().execute().value
 
@@ -101,7 +103,7 @@ final class CloudService: ObservableObject {
             var loadedFriends: [RemoteProfile] = []
             for edge in edges {
                 if let found: RemoteProfile = try? await client.from("profiles")
-                    .select("id,handle,display_name")
+                    .select("id,handle,display_name,badge_style")
                     .eq("id", value: edge.friend_id.uuidString)
                     .single().execute().value {
                     loadedFriends.append(found)
@@ -118,7 +120,7 @@ final class CloudService: ObservableObject {
             var names: [UUID: String] = [:]
             for request in requests {
                 if let profile: RemoteProfile = try? await client.from("profiles")
-                    .select("id,handle,display_name")
+                    .select("id,handle,display_name,badge_style")
                     .eq("id", value: request.from_user.uuidString)
                     .single().execute().value {
                     names[request.from_user] = profile.display_name + " (@" + profile.handle + ")"
@@ -145,13 +147,17 @@ final class CloudService: ObservableObject {
             var namesOfAuthors: [UUID: String] = [:]
             for authorID in Set(loadedMoments.map(\.author_id)) {
                 if let profile: RemoteProfile = try? await client.from("profiles")
-                    .select("id,handle,display_name")
+                    .select("id,handle,display_name,badge_style")
                     .eq("id", value: authorID.uuidString)
                     .single().execute().value {
                     namesOfAuthors[authorID] = profile.display_name
                 }
             }
             authorNames = namesOfAuthors
+            authorBadges = Dictionary(uniqueKeysWithValues: loadedMoments.compactMap { moment in
+                if moment.author_id == userID { return (moment.author_id, myProfile?.badge_style ?? "heart") }
+                return (moment.author_id, friends.first(where: { $0.id == moment.author_id })?.badge_style ?? "heart")
+            }.reduce(into: [UUID: String]()) { $0[$1.0] = $1.1 }.map { ($0.key, $0.value) })
             if let latestURL = loadedMoments.first(where: { !$0.isVideo })?.signedURL,
                let (data, _) = try? await URLSession.shared.data(from: latestURL) {
                 WidgetBridge.saveLatest(data: data)
@@ -271,7 +277,7 @@ final class CloudService: ObservableObject {
             var names: [String] = []
             for item in records {
                 if let profile: RemoteProfile = try? await client.from("profiles")
-                    .select("id,handle,display_name")
+                    .select("id,handle,display_name,badge_style")
                     .eq("id", value: item.viewer_id.uuidString)
                     .single().execute().value {
                     names.append(profile.display_name + " (@" + profile.handle + ")")
@@ -302,6 +308,17 @@ final class CloudService: ObservableObject {
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+
+    func updateBadge(_ style: String) async {
+        guard let client, let userID else { return }
+        do {
+            try await client.from("profiles")
+                .update(["badge_style": style])
+                .eq("id", value: userID.uuidString)
+                .execute()
+            await refresh()
+        } catch { errorMessage = error.localizedDescription }
     }
 
     func updateProfile(displayName: String) async {
