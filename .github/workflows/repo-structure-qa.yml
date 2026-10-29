@@ -1,7 +1,7 @@
 name: Repo structure and legacy route QA
 on:
   push:
-    branches: [refactor/structure-canonical-assets-20261029]
+    branches: [refactor/structure-canonical-assets-20261029, feat/version-manifest-comparison-20261029]
   workflow_dispatch:
 permissions:
   contents: read
@@ -29,6 +29,7 @@ jobs:
           npm ci --no-audit --no-fund
           npm run build
           node scripts/build-install-assets.mjs --check
+          node qa/version-catalog.test.mjs
           test -f lib/install-test-assets.json
       - name: Start isolated preview
         run: |
