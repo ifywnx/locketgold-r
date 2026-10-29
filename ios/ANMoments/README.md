@@ -2,7 +2,13 @@
 
 Independent SwiftUI photo-moment app. **Not** an extracted Locket binary, Gold bypass, or Telegram-gated mod.
 
-Read **FEATURE_AUDIT_V1_1.md** for the authoritative feature matrix, and **SOCIAL_SETUP.md** for separate backend setup. **No Mac/iPhone build has been verified.**
+**Latest feature set: 1.2 source candidate.** Read
+**FEATURE_AUDIT_V1_2.md** for the actual feature matrix and
+**RELEASE_CHECKLIST_V1_2.md** for ordered server setup and security tests.
+Do not apply these SQL migrations to an existing app database.
+
+**No successful Mac/Xcode build, real iPhone test, live Supabase deployment,
+two-user RLS verification, or APNs push test has been observed here.**
 
 ## What is already implemented
 
@@ -16,7 +22,14 @@ Read **FEATURE_AUDIT_V1_1.md** for the authoritative feature matrix, and **SOCIA
 - Manual refresh of shared photos/videos, cloud emoji reactions, viewed-by receipts, unfriend, delete your own cloud moments
 - Custom camera themes, custom badges, generated alternate icons, local streak restoration
 - Direct/group text chat, stored activity inbox and opt-in daily local reminder
-- Account blocking, reporting and pending-account-deletion request via optional social backend
+- Account blocking, reporting, JSON metadata export and server-side deletion Edge Function
+- Private photo/video attachments in chat; group photo sharing
+- Foreground Realtime events with polling fallback; signed attachment URLs
+- Manual contact invitation by SMS/deep link (never bulk uploads contacts)
+- Favorite-friend widget preference (refreshes when app is used)
+- Cloud photo recap and user-supplied rights-cleared audio mix
+- Cloud streak ledger and restore RPC (UTC calendar, separate SQL migration)
+- Optional APNs device tokens and authenticated notification worker (paid Apple signing + configuration required)
 - Optional WidgetKit/App Groups reference code with colored borders
 
 ## Important limitations (do not mistake these for implemented features)
@@ -25,7 +38,7 @@ Read **FEATURE_AUDIT_V1_1.md** for the authoritative feature matrix, and **SOCIA
 - Local friend labels never deliver images to another iPhone
 - Widget requires Apple App Groups capability, device build and testing; excluded from the default project
 - Local-only recap and text chat source exist, but there is **no official Locket Gold subscription integration**
-- Account deletion is a **request queue** rather than a completed server-side erasure
+- Account deletion Edge Function is written but **not deployed**; queue remains a fallback if server setup is incomplete
 - Chat has no E2EE, APNs background push, media attachments or guaranteed real-time delivery
 - No professional security audit, no verified Xcode device build in this environment
 - A new Supabase project, schema, and publishable key are required for real sharing
@@ -52,7 +65,7 @@ If XcodeGen complains about the external Supabase package, use File > Packages >
 ## Enable real multi-device photo sharing
 
 1. Create a **separate** Supabase project (do not reuse ORBIT production credentials).
-2. Run Backend/schema.sql, then Backend/social_extensions.sql in the SQL Editor. Read SOCIAL_SETUP.md.
+2. Run the SQL files in the exact order in RELEASE_CHECKLIST_V1_2.md. Read SOCIAL_SETUP.md.
 3. In Authentication > Email Templates > Magic Link, include \`{{ .Token }}\` to deliver an OTP code, or configure matching OTP settings.
 4. Open App/BackendConfig.swift; paste the **Project URL** and **publishable/anon** key. NEVER paste service_role/secret keys.
 5. Rebuild and install on two iPhones using two different email accounts.
@@ -76,7 +89,7 @@ Widget reference code is in Widget/. Apple officially recommends a WidgetKit ext
 - App/ANMomentsApp.swift: root navigation, visual theme
 - App/BackendConfig.swift: opt-in cloud configuration
 - App/CloudService.swift: auth, friends, cloud moments, storage, database
-- App/SocialService.swift & App/SocialHubView.swift: direct/group text chat
+- App/SocialService.swift, App/SocialHubView.swift, ChatAttachmentService.swift: direct/group text/media chat
 - App/PrivacySafetyView.swift, ActivityInboxView.swift: safety and in-app inbox
 - App/PhotoEditorView.swift & RecapExporter.swift: text/stickers and local video recap
 - App/MomentsCalendarView.swift: calendar history
@@ -87,7 +100,8 @@ Widget reference code is in Widget/. Apple officially recommends a WidgetKit ext
 - App/MemoriesView.swift: grid and share
 - App/SettingsView.swift: settings and data controls
 - Backend/schema.sql: tables, RLS, private bucket, invitation functions
-- Backend/social_extensions.sql: private conversations, moderation queues, blocking and events
+- Backend/social_extensions.sql, media_extensions.sql, streak_extensions.sql, push_extensions.sql: isolated backend extensions
+- supabase/functions/: verified user-account deletion and protected APNs event workers
 - Widget/: optional WidgetKit demo
 
 ## References
