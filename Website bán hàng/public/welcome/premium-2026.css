@@ -404,3 +404,42 @@ body.an-home-page,body.an-store-page{background-color:#fcf9fc;color:var(--an-ink
   .an-home-page .sales-mobile-quick strong{font-size:12px}
 }
 @media(prefers-reduced-motion:reduce){.an-home-page .sales-action{transition:none}}
+
+
+/* Demo checkout is isolated from the actual payment/access flow. */
+.an-home-page .an-demo-checkout{margin:66px 0 70px;scroll-margin-top:90px}
+.an-home-page .demo-shell{border:1px solid #e9dce9;border-radius:24px;padding:26px;background:#fffafde6;box-shadow:0 18px 45px #42244f12}
+.an-home-page .demo-topline{display:flex;justify-content:space-between;align-items:center;gap:15px;padding-bottom:14px;border-bottom:1px solid #f0e7f0}
+.an-home-page .demo-topline strong{font-size:16px;color:#5c4868}
+.an-home-page .demo-topline span{color:#8a4e77;background:#f7e6f2;border:1px solid #e8cae0;padding:7px 12px;border-radius:99px;font-size:10px;font-weight:800}
+.an-home-page .demo-form-row{margin:21px 0 16px;display:grid;gap:8px;max-width:500px}
+.an-home-page .demo-form-row label{font-size:12px;font-weight:800}
+.an-home-page .demo-form-row select{min-width:0;width:100%;min-height:48px;border-radius:12px;border:1px solid #d9c9df;background:#fff;padding:10px 14px;color:#513f5e;font-size:14px}
+.an-home-page #demo-summary,.an-home-page #demo-status{font-size:12px;line-height:1.7;color:#7d6a83}
+.an-home-page #demo-status[data-error=true]{color:#9d3e54}
+.an-home-page .demo-step-actions{display:flex;gap:9px;flex-wrap:wrap;margin:17px 0}
+.an-home-page .demo-step-actions button{min-height:48px;font-size:12px}
+.an-home-page .demo-step-actions button:disabled{opacity:.48;cursor:not-allowed}
+.an-home-page .demo-order{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:18px 0}
+.an-home-page .demo-order[hidden],.an-home-page .demo-files[hidden]{display:none}
+.an-home-page .demo-order>div{padding:13px 15px;background:#f7f2fa;border-radius:15px;min-width:0}
+.an-home-page .demo-order small{display:block;font-size:10px;color:#907d94;margin-bottom:5px}
+.an-home-page .demo-order strong{overflow-wrap:anywhere;font-size:12px;color:#584366}
+.an-home-page .demo-files{border-top:1px solid #eae0ec;margin-top:20px;padding-top:18px}
+.an-home-page .demo-files h3{font-size:20px;margin-bottom:8px}
+.an-home-page .demo-files p{font-size:12px;color:#7b6881;line-height:1.7}
+.an-home-page .demo-downloads{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}
+.an-home-page .demo-download{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;color:#584174;background:#f2e9f9;border:1px solid #e0cbe9;border-radius:12px;padding:11px 14px;font-weight:800;font-size:12px;min-height:44px}
+.an-home-page .demo-download:hover{background:#e9d9f4}
+.an-home-page .demo-restore{margin:22px 0;border-top:1px solid #ebe1ee;padding-top:18px;max-width:780px}
+.an-home-page .demo-restore summary{cursor:pointer;font-size:12px;font-weight:800;color:#624d73;margin-bottom:12px}
+.an-home-page .demo-restore label{display:block;margin:12px 0 7px;font-size:12px;color:#715e7c}
+.an-home-page .demo-restore textarea{display:block;width:100%;max-width:100%;min-width:0;resize:vertical;border-radius:10px;padding:12px;background:#fff;border:1px solid #e1d3e5;font-size:12px;overflow-wrap:anywhere}
+.an-home-page .demo-restore button{margin-top:9px}
+@media(max-width:700px){
+ .an-home-page .demo-shell{padding:18px 14px;border-radius:19px}
+ .an-home-page .demo-order{grid-template-columns:1fr}
+ .an-home-page .demo-step-actions{display:grid;grid-template-columns:1fr}
+ .an-home-page .demo-downloads{display:grid;grid-template-columns:1fr}
+ .an-home-page .demo-step-actions button{width:100%}
+}
