@@ -2,7 +2,7 @@ import bundles from '../../../../../lib/install-test-assets.json';
 import {publicOrigin,secureHeaders} from '../../../../../lib/access';
 export async function GET(r:Request,{params}:{params:Promise<{version:string,file:string}>}){
  const {version,file}=await params;
- if(version!=='v1'&&version!=='v2')return new Response('Not found',{status:404});
+ if(!['v1','v2','v3'].includes(version))return new Response('Not found',{status:404});
  const files=bundles[version] as Record<string,string>;
  const source=file==='An-Locket.conf'?'An-Locket.sgmodule':file;
  if(!Object.hasOwn(files,source))return new Response('Not found',{status:404});
