@@ -1,9 +1,16 @@
 import catalog from '../../../../lib/version-catalog.json';
-import {admin,json,sameOrigin} from '../../../../lib/access';
+import {admin,json} from '../../../../lib/access';
 import {issueTestToken} from '../../../../lib/version-test';
 
 export async function POST(r:Request){
-  if(!sameOrigin(r))return json({error:'Yêu cầu không cùng nguồn.'},403);
+  // Next can normalize r.url to localhost behind a proxy. Compare to the
+  // actual requested Host as well; a browser cannot set Origin arbitrarily.
+  const origin=r.headers.get('origin');
+  const requestHost=r.headers.get('host');
+  const canonical=new URL(r.url).origin;
+  const hostOrigin=requestHost?new URL(r.url).protocol+'//'+requestHost:null;
+  if(!origin||(origin!==canonical&&origin!==hostOrigin))
+    return json({error:'Yêu cầu không cùng nguồn.'},403);
   if(!await admin())return json({error:'Sai mật khẩu quản trị hoặc chưa cấu hình ADMIN_PASSWORD.'},401);
   let version:unknown;
   try{version=(await r.json()).version}catch{return json({error:'Dữ liệu không hợp lệ.'},400)}
