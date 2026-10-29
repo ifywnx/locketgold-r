@@ -154,10 +154,10 @@ final class CloudService: ObservableObject {
                 }
             }
             authorNames = namesOfAuthors
-            authorBadges = Dictionary(uniqueKeysWithValues: loadedMoments.compactMap { moment in
-                if moment.author_id == userID { return (moment.author_id, myProfile?.badge_style ?? "heart") }
-                return (moment.author_id, friends.first(where: { $0.id == moment.author_id })?.badge_style ?? "heart")
-            }.reduce(into: [UUID: String]()) { $0[$1.0] = $1.1 }.map { ($0.key, $0.value) })
+            authorBadges = Dictionary(uniqueKeysWithValues: friends.map {
+                ($0.id, $0.badge_style ?? "heart")
+            })
+            authorBadges[userID] = myProfile?.badge_style ?? "heart"
             if let latestURL = loadedMoments.first(where: { !$0.isVideo })?.signedURL,
                let (data, _) = try? await URLSession.shared.data(from: latestURL) {
                 WidgetBridge.saveLatest(data: data)
