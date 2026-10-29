@@ -166,6 +166,10 @@ final class CloudService: ObservableObject {
             if let latestURL = latest?.signedURL,
                let (data, _) = try? await URLSession.shared.data(from: latestURL) {
                 WidgetBridge.saveLatest(data: data)
+            } else {
+                // A missing favorite image must not leave another sender's
+                // photo visible in the shared widget cache.
+                WidgetBridge.saveLatest(data: nil)
             }
         } catch {
             errorMessage = error.localizedDescription
