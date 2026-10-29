@@ -1,5 +1,5 @@
-import {productExists,productConfig,productJson,productScript} from '../../../../../../../lib/store-delivery';
-import {publicOrigin,secureHeaders} from '../../../../../../../lib/access';
+import {productExists,productConfig,productJson,productScript} from '../../../../../../lib/store-delivery';
+import {publicOrigin,secureHeaders} from '../../../../../../lib/access';
 export async function GET(r:Request,{params}:{params:Promise<{sku:string,kind:string}>}){
  const {sku,kind}=await params;
  if(!productExists(sku)||!['sgmodule','conf','js','json'].includes(kind))return new Response('Not found',{status:404,headers:secureHeaders});
