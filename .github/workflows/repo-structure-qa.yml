@@ -1,7 +1,7 @@
 name: Repo structure and legacy route QA
 on:
   push:
-    branches: [main, feat/caption-studio-2-favorites-20261029]
+    branches: [main, feat/caption-studio-2-favorites-20261029, feat/studio3-version-explorer-20261029]
   workflow_dispatch:
 permissions:
   contents: read
@@ -49,6 +49,7 @@ jobs:
           python3 qa/repository_routes_smoke.py
           python3 qa/version_trio_smoke.py
           python3 qa/studio2_smoke.py
+          python3 qa/studio3_smoke.py
       - name: Print logs on failure
         if: failure()
         run: tail -100 /tmp/repo-smoke.log || true
