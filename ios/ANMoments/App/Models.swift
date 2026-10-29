@@ -44,6 +44,7 @@ struct RemoteProfile: Codable, Identifiable {
     let id: UUID
     var handle: String
     var display_name: String
+    var badge_style: String? = nil
 }
 
 struct FriendEdge: Decodable {
