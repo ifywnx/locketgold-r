@@ -35,7 +35,7 @@
     v3:{
       eyebrow:'GÓI V3 · BỘ ĐẦY ĐỦ 705 CAPTION',
       name:'Locket V3',
-      price:'Chưa công bố',
+      price:'129.000đ',
       summary:'Bản V2 đầy đủ trước đây được chuyển thành V3, giữ nguyên 705 caption tĩnh thuộc 21 nhóm chủ đề.',
       features:[
         '705 caption tĩnh và 11 kiểu caption động từ bản V2 cũ.',

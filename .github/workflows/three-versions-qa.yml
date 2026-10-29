@@ -1,7 +1,7 @@
 name: Three-version captions and preview QA
 on:
   push:
-    branches: [feat/three-versions-107-300-705]
+    branches: [feat/three-versions-107-300-705, fix/v3-price-129k-20261029]
   workflow_dispatch:
 permissions:
   contents: read
