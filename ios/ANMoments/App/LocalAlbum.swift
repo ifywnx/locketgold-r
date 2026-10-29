@@ -44,9 +44,7 @@ final class LocalAlbum: ObservableObject {
             try? data.write(to: root.appendingPathComponent("friends.json"), options: .atomic)
         }
         // No-op when App Groups is not available on the signing profile.
-        let lastImageData = moments.first.flatMap {
-            try? Data(contentsOf: root.appendingPathComponent($0.fileName))
-        }
+        let lastImageData = moments.first.flatMap { image(for: $0)?.jpegData(compressionQuality: 0.7) }
         WidgetBridge.saveLatest(data: lastImageData)
     }
 
@@ -56,12 +54,27 @@ final class LocalAlbum: ObservableObject {
         }
         let name = UUID().uuidString + ".jpg"
         try compressed.write(to: root.appendingPathComponent(name), options: .atomic)
-        moments.insert(LocalMoment(caption: caption, fileName: name, recipients: recipients), at: 0)
+        moments.insert(LocalMoment(caption: caption, fileName: name, mediaKind: "photo", recipients: recipients), at: 0)
         save()
     }
 
+    func addVideo(fileURL: URL, caption: String, recipients: [String]) async throws {
+        try await VideoMedia.validate(fileURL)
+        let name = UUID().uuidString + ".mov"
+        try fm.copyItem(at: fileURL, to: root.appendingPathComponent(name))
+        moments.insert(LocalMoment(caption: caption, fileName: name, mediaKind: "video", recipients: recipients), at: 0)
+        save()
+    }
+
+    func videoURL(for moment: LocalMoment) -> URL? {
+        guard moment.isVideo else { return nil }
+        return root.appendingPathComponent(moment.fileName)
+    }
+
     func image(for moment: LocalMoment) -> UIImage? {
-        UIImage(contentsOfFile: root.appendingPathComponent(moment.fileName).path)
+        let location = root.appendingPathComponent(moment.fileName)
+        if moment.isVideo { return VideoMedia.thumbnail(location) }
+        return UIImage(contentsOfFile: location.path)
     }
 
     func react(to id: UUID, emoji: String) {
