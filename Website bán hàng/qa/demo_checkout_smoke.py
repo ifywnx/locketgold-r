@@ -36,6 +36,9 @@ for version,amount,total in [("v1",49000,107),("v2",89000,300),("v3",129000,705)
     assert quote["order"]["amount"]==amount
     assert quote["order"]["paid"] is False
     assert quote["order"]["status"]=="DEMO_PENDING"
+    status,inspected=request("/api/demo/inspect",{"quoteToken":quote["quoteToken"]})
+    assert status==200 and inspected["order"]["status"]=="DEMO_PENDING"
+    assert inspected["order"]["version"]==version and inspected["order"]["paid"] is False
     status,denied=request(f"/api/demo/files/{version}/sample.json?ticket={quote['quoteToken']}")
     assert status==403,(version,status,denied)
     status,confirmed=request("/api/demo/complete",{"quoteToken":quote["quoteToken"]})
@@ -62,6 +65,8 @@ for version,amount,total in [("v1",49000,107),("v2",89000,300),("v3",129000,705)
             else:
                 assert b"DEMO" in data and b"Gold" in data
     wrong="v2" if version!="v2" else "v1"
+    status,_=request("/api/demo/inspect",{"quoteToken":receipt})
+    assert status==403  # signed receipt cannot be used as a pending quote
     status,_=request(f"/api/demo/files/{wrong}/sample.json?ticket={receipt}")
     assert status==403,(version,wrong,status)
     status,_=request("/api/demo/restore",{"receiptToken":receipt[:-2]+"xy"})
@@ -69,11 +74,16 @@ for version,amount,total in [("v1",49000,107),("v2",89000,300),("v3",129000,705)
     print("PASS demo API quote -> confirm -> restore -> version-only samples",version)
 for phase in ("quote","fulfilled"):
     expired=mint_old("v3",phase,5000)
-    if phase=="quote":status,_=request("/api/demo/complete",{"quoteToken":expired})
+    if phase=="quote":
+        status,_=request("/api/demo/inspect",{"quoteToken":expired})
+        assert status==410,(phase,status)
+        status,_=request("/api/demo/complete",{"quoteToken":expired})
     else:status,_=request("/api/demo/files/v3/sample.json?ticket="+expired)
     assert status==410,(phase,status)
 status,_=request("/api/demo/checkout",{"version":"plus"})
 assert status==400
+status,_=request("/api/demo/inspect",{"quoteToken":"invalid"},origin="https://foreign.invalid")
+assert status==403
 status,_=request("/api/demo/checkout",{"version":"v3"},origin="https://foreign.invalid")
 assert status==403
 status,_=request("/api/payments",{"plan":"standard"})
@@ -96,10 +106,19 @@ with sync_playwright() as p:
         page.locator("#demo-order").wait_for(state="visible",timeout=8000)
         assert page.locator("#demo-order-status").inner_text()=="Chờ xác nhận DEMO"
         assert page.locator("#demo-files").is_hidden()
+        assert "Phiếu chờ" in page.locator("#demo-expires").inner_text()
+        # A pending signed quote survives refresh and is verified server-side.
+        page.reload(wait_until="networkidle")
+        page.locator("#demo-order").wait_for(state="visible",timeout=8000)
+        assert page.locator("#demo-order-status").inner_text()=="Chờ xác nhận DEMO"
+        assert page.locator("#demo-confirm").is_enabled()
         page.locator("#demo-confirm").click()
         page.locator("#demo-files").wait_for(state="visible",timeout=8000)
         assert "Đã xác nhận" in page.locator("#demo-order-status").inner_text()
         assert page.locator("#demo-delivery a").count()==3
+        assert "Biên nhận mẫu" in page.locator("#demo-expires").inner_text()
+        assert page.evaluate("sessionStorage.getItem('an-store-demo-pending-v1')") is None
+        assert page.evaluate("!!sessionStorage.getItem('an-store-demo-receipt-v1')")
         with page.expect_download() as result:
             page.locator("#demo-delivery a").first.click()
         downloaded=json.loads(open(result.value.path(),encoding="utf8").read())
@@ -121,6 +140,12 @@ with sync_playwright() as p:
         assert page.locator("#demo-files").is_hidden()
         assert page.locator("#demo-order").is_hidden()
         assert "49.000đ" in page.locator("#demo-summary").inner_text()
+        assert page.locator("#demo-expires").is_hidden()
+        page.evaluate("sessionStorage.setItem('an-store-demo-pending-v1','invalid')")
+        page.reload(wait_until="networkidle")
+        assert page.locator("#demo-order").is_hidden()
+        assert page.locator("#demo-confirm").is_disabled()
+        assert page.evaluate("sessionStorage.getItem('an-store-demo-pending-v1')") is None
         overflow=page.evaluate("document.documentElement.scrollWidth-document.documentElement.clientWidth")
         assert overflow<=7,(width,overflow)
         assert not errors,errors[:3]

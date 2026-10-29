@@ -443,3 +443,7 @@ body.an-home-page,body.an-store-page{background-color:#fcf9fc;color:var(--an-ink
  .an-home-page .demo-downloads{display:grid;grid-template-columns:1fr}
  .an-home-page .demo-step-actions button{width:100%}
 }
+
+/* Phase 3: DEMO quote / receipt live expiry. */
+.an-home-page .demo-expiry{margin:14px 0 8px;padding:11px 14px;border:1px solid #ddcfeb;border-radius:13px;background:#faf5ff;color:#5c4075;font-size:12px;font-weight:750;line-height:1.7}
+.an-home-page .demo-expiry[hidden]{display:none}
