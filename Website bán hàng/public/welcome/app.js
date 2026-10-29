@@ -1,10 +1,16 @@
 const cfg=window.IFYWNX_CONFIG;
 const $=id=>document.getElementById(id);
-const plans={standard:{price:49000,name:'An · Locket V1'},v2:{price:89000,name:'Locket V2'},v3:{price:129000,name:'Locket V3',checkoutReady:false},plus:{price:129000,name:'V2 + Shadowrocket'}};
+const catalog=window.AN_STORE_VERSION_CATALOG;
+if(!catalog||catalog.paymentStatus!=='disabled')throw Error('Không thể xác minh trạng thái phiên bản.');
+const plans=Object.fromEntries(catalog.versions.map(v=>[v.planId,{price:v.priceVnd,name:v.name,version:v.id,checkoutReady:false}]));
+// Legacy Plus is retained only for historical authenticated orders, never new sales.
+plans.plus={price:129000,name:'V2 + Shadowrocket',version:'v2',checkoutReady:false};
 let plan='standard',order=null,paid=false,accountRequest=0;
 const money=n=>n.toLocaleString('vi-VN')+'đ';
 function select(value,restore=false){if(order&&!restore)return;if(value==='plus'&&!restore)value='v2';if(!plans[value])value='standard';plan=value;document.querySelectorAll('[data-plan]').forEach(el=>{const on=el.dataset.plan===plan;el.classList.toggle('selected',on);el.setAttribute('aria-pressed',String(on));el.querySelector('.choose').textContent=on?'● Đang chọn':'○ Chọn gói này'});$('selection').textContent=plans[plan].name+' · '+(plans[plan].price===null?'Giá chưa công bố':money(plans[plan].price));$('buy').textContent=cfg.paymentsEnabled&&plans[plan].price!==null?'Thanh toán '+money(plans[plan].price)+' →':'Thanh toán chưa mở';$('buy').disabled=!cfg.paymentsEnabled||plans[plan].checkoutReady===false;if(cfg.installPreview){$('buy').textContent='Xem phần cài đặt · Không thanh toán →';$('buy').disabled=false;}}
 document.querySelectorAll('[data-plan]').forEach(el=>el.onclick=()=>{select(el.dataset.plan);if(cfg.installPreview)render('preview',plan,true)});
+// Comparison controls select a version without scrolling to the download section.
+window.AnStoreSelectPlan=(value)=>select(value);
 function installLink(session,file,title){
  const link=document.createElement('a');link.className='button dark';link.textContent=title;
  const url=(cfg.backend||location.origin)+'/download/'+encodeURIComponent(session)+'/'+file;
@@ -23,7 +29,7 @@ function render(session,packageId,demo=false){
  ];
  for(const [file,title,description,label] of options){
  const card=document.createElement('article'),h=document.createElement('h3'),p=document.createElement('p');h.textContent=title;p.textContent=description;
- const action=installLink(session,file,label);if(demo){const version=packageId==='standard'?'v1':packageId==='v3'?'v3':'v2';const name=file.endsWith('.mobileconfig')?'An-Locket-DNS.mobileconfig':file.endsWith('.conf')?'An-Locket.conf':'An-Locket.sgmodule';const url=location.origin+'/api/install-test/'+version+'/'+name;action.href=name.endsWith('.mobileconfig')?url:'shadowrocket://config/add/'+url;}card.append(h,p,action);$('cards').append(card);
+ const action=installLink(session,file,label);if(demo){const version=plans[packageId]?.version||'v1';const name=file.endsWith('.mobileconfig')?'An-Locket-DNS.mobileconfig':file.endsWith('.conf')?'An-Locket.conf':'An-Locket.sgmodule';const url=location.origin+'/api/install-test/'+version+'/'+name;action.href=name.endsWith('.mobileconfig')?url:'shadowrocket://config/add/'+url;}card.append(h,p,action);$('cards').append(card);
  }
  $('downloads').scrollIntoView({behavior:'smooth'});
 }
