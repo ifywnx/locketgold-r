@@ -1,0 +1,71 @@
+name: Version roadmap and retired store safety
+on:
+  push:
+    branches:
+      - feat/version-roadmap-retire-captions-20261029
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: Website bán hàng
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      DATABASE_URL: file:./data/version-qa.db
+      DATA_DIR: ./data
+      STORE_PAYMENTS_MODE: demo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: Website bán hàng/package-lock.json
+      - name: Install dependencies and build
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+      - name: Make isolated historic demo order
+        run: |
+          node scripts/init-db.mjs
+          node --input-type=module <<'NODE'
+          import {createClient} from '@libsql/client';
+          import {createHash} from 'node:crypto';
+          const db=createClient({url:process.env.DATABASE_URL});
+          const hash=createHash('sha256').update('a'.repeat(64)).digest('hex');
+          await db.execute({sql:'INSERT INTO store_orders (id,owner_hash,items_json,amount,mode,status,created) VALUES (?,?,?,?,?,?,?)',
+            args:[5001,hash,JSON.stringify(['genz']),39000,'demo','DEMO_COMPLETED',Date.now()]});
+          db.close();
+          NODE
+      - name: Start local service in demo mode
+        run: |
+          npm start > /tmp/version-qa.log 2>&1 &
+          for i in $(seq 1 50); do
+            if curl -fsS http://127.0.0.1:3000/api/health >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          tail -60 /tmp/version-qa.log
+          exit 1
+      - name: Install Chromium and regression runner
+        run: |
+          python3 -m pip install playwright==1.56.0
+          python3 -m playwright install --with-deps chromium
+      - name: Browser and API tests
+        run: python3 qa/version_roadmap_smoke.py
+      - name: Upload version roadmap previews
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: an-store-version-roadmap
+          path: |
+            /tmp/version-roadmap-desktop.png
+            /tmp/version-roadmap-mobile.png
+          retention-days: 3
+          if-no-files-found: ignore
+      - name: Show server errors
+        if: failure()
+        run: tail -100 /tmp/version-qa.log || true
