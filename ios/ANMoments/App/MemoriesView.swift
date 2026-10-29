@@ -99,7 +99,11 @@ struct MemoriesView: View {
                                 .accessibilityLabel("Lịch kỷ niệm")
                         }
                         NavigationLink {
-                            RecapView()
+                            if cloud.enabled {
+                                CloudRecapView()
+                            } else {
+                                RecapView()
+                            }
                         } label: {
                             Image(systemName: "film.stack")
                                 .accessibilityLabel("Tạo video kỷ niệm")
