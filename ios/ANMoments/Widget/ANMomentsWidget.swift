@@ -5,6 +5,7 @@ import UIKit
 struct LatestEntry: TimelineEntry {
     let date: Date
     let image: UIImage?
+    let theme: String
 }
 
 struct LatestProvider: TimelineProvider {
@@ -14,11 +15,12 @@ struct LatestProvider: TimelineProvider {
             forSecurityApplicationGroupIdentifier: group
         )?.appendingPathComponent("latest.jpg")
         let image = url.flatMap { UIImage(contentsOfFile: $0.path) }
-        return LatestEntry(date: Date(), image: image)
+        let theme = UserDefaults(suiteName: group)?.string(forKey: "widget.theme") ?? "gold"
+        return LatestEntry(date: Date(), image: image, theme: theme)
     }
 
     func placeholder(in context: Context) -> LatestEntry {
-        LatestEntry(date: Date(), image: nil)
+        LatestEntry(date: Date(), image: nil, theme: "gold")
     }
 
     func getSnapshot(in context: Context, completion: @escaping (LatestEntry) -> Void) {
@@ -35,6 +37,17 @@ struct LatestProvider: TimelineProvider {
 
 struct LatestWidgetView: View {
     let entry: LatestEntry
+
+    private var borderColor: Color {
+        switch entry.theme {
+        case "rose": .pink
+        case "lavender": .purple
+        case "ocean": .cyan
+        case "forest": .green
+        case "night": .indigo
+        default: .orange
+        }
+    }
 
     var body: some View {
         ZStack {
@@ -56,6 +69,9 @@ struct LatestWidgetView: View {
                 .foregroundStyle(.black.opacity(0.8))
                 .padding()
             }
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: 18).strokeBorder(borderColor, lineWidth: 6)
         }
         .containerBackground(for: .widget) { Color.white }
         .widgetURL(URL(string: "anmoments://open"))
