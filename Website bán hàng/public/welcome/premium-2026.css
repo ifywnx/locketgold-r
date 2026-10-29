@@ -311,3 +311,22 @@ body.an-home-page,body.an-store-page{background-color:#fcf9fc;color:var(--an-ink
 @media(prefers-reduced-motion:reduce){
   .an-home-page .an-version-card{transition:none!important}
 }
+
+
+/* Three genuinely distinct version cards; preserve mobile stack and motion. */
+.an-home-page #packages .plans.plans-three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
+.an-home-page #packages .plans.plans-three .plan-shell{display:flex;flex-direction:column;min-width:0}
+.an-home-page #packages .plans.plans-three .plan-shell>.plan{width:100%;flex:1;padding:23px 19px;min-width:0}
+.an-home-page #packages .plans.plans-three .plan h3{font-size:clamp(20px,2vw,25px)}
+.an-home-page #packages .plans.plans-three .plan strong{font-size:clamp(25px,2.75vw,36px);white-space:nowrap}
+.an-home-page #packages .plans.plans-three .plan strong span{font-size:11px;white-space:normal}
+.an-home-page #packages .plans.plans-three .plan-more{font-size:12px}
+.an-home-page .an-v5-version{flex-wrap:wrap;max-width:min(100%,355px)}
+.an-home-page .an-v5-version button{white-space:nowrap}
+@media(max-width:850px){.an-home-page #packages .plans.plans-three{grid-template-columns:minmax(0,1fr);gap:17px}}
+@media(max-width:700px){
+ .an-home-page #packages .plans.plans-three .plan-shell>.plan{padding:23px 20px}
+ .an-home-page .an-v5-heading{align-items:flex-start;flex-wrap:wrap}
+ .an-home-page .an-v5-version{flex-shrink:1}
+ .an-home-page .an-v5-version button{padding:7px 8px;font-size:9px}
+}

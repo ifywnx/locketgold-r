@@ -10,11 +10,11 @@
   if(!phone||!capsule||!label||!icon||!status)return;
 
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
-  const buttons={v1:$('preview-v1'),v2:$('preview-v2')};
+  const buttons={v1:$('preview-v1'),v2:$('preview-v2'),v3:$('preview-v3')};
   const panes={camera:$('phone-camera-scene'),send:$('phone-send-scene')};
-  const sources={v1:'v1-caption-data.json',v2:'caption-data.json'};
+  const sources={v1:'v1-caption-data.json',v2:'v2-caption-data.json',v3:'caption-data.json'};
   const cache=new Map();
-  let version='v2',scene='send',items=[],index=0,sequence=0;
+  let version='v3',scene='send',items=[],index=0,sequence=0;
 
   function setScene(next){
     if(!panes[next])return;
@@ -54,7 +54,7 @@
           typeof item.group==='string'&&typeof item.ink==='string'&&
           Array.isArray(item.colors)&&item.colors.length>=2&&item.colors.every(c=>/^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(c)));
         // Trend is used as a relevant storefront preview, not as a replacement for the full library.
-        const trend=which==='v2'?valid.filter(item=>item.group==='🔥 Trend TikTok & Threads'):[];
+        const trend=which==='v3'?valid.filter(item=>item.group==='🔥 Trend TikTok & Threads'):[];
         const result=trend.length?trend:valid;
         if(!result.length)throw Error('Không có caption xem trước');
         return result;
@@ -99,6 +99,7 @@
 
   buttons.v1?.addEventListener('click',()=>selectVersion('v1'));
   buttons.v2?.addEventListener('click',()=>selectVersion('v2'));
+  buttons.v3?.addEventListener('click',()=>selectVersion('v3'));
   $('phone-prev')?.addEventListener('click',()=>step(-1));
   $('phone-next')?.addEventListener('click',()=>step(1));
   $('phone-camera-view')?.addEventListener('click',()=>setScene(scene==='camera'?'send':'camera'));
@@ -124,5 +125,5 @@
   phone.addEventListener('touchcancel',()=>{touch=null},{passive:true});
 
   setScene('send');
-  void selectVersion('v2');
+  void selectVersion('v3');
 })();

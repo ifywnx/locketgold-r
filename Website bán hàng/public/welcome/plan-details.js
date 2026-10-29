@@ -19,17 +19,31 @@
       hasSamples:true
     },
     v2:{
-      eyebrow:'GÓI V2 · NHIỀU BIỂU TƯỢNG',
+      eyebrow:'GÓI V2 · 300 CAPTION ĐƯỢC CHỌN LỌC',
       name:'Locket V2',
       price:'89.000đ',
-      summary:'Phù hợp với người đã có Shadowrocket, muốn nhiều kiểu caption, biểu tượng và màu sắc.',
+      summary:'Bộ trung gian có 300 caption tĩnh, được chọn lọc từ đủ 21 nhóm chủ đề của V3. Tệp xem trước giữ nguyên màu và biểu tượng gốc.',
       features:[
         'Bộ cấu hình V2, tệp cài đặt và hướng dẫn sử dụng.',
-        'Nhiều bộ caption theo chủ đề, kèm biểu tượng và màu chuyển sắc.',
-        'Thiết lập khung ảnh tiện ích và thông số quay video 30 giây theo mô tả nguồn (chưa kiểm chứng thực tế).',
+        '300 caption tĩnh thuộc 21 nhóm, cùng 11 kiểu caption động.',
+        'Các thiết lập khác kế thừa từ bộ nguồn; khả năng hoạt động cần kiểm chứng trên thiết bị.',
         'Không kèm tài khoản tải Shadowrocket — bạn cần có ứng dụng sẵn.'
       ],
       note:'Các caption bên dưới là ví dụ minh hoạ từ dữ liệu trang web. Cách hiện và tính tương thích trong Locket phụ thuộc ứng dụng và thiết bị.',
+      hasSamples:true
+    },
+    v3:{
+      eyebrow:'GÓI V3 · BỘ ĐẦY ĐỦ 705 CAPTION',
+      name:'Locket V3',
+      price:'Chưa công bố',
+      summary:'Bản V2 đầy đủ trước đây được chuyển thành V3, giữ nguyên 705 caption tĩnh thuộc 21 nhóm chủ đề.',
+      features:[
+        '705 caption tĩnh và 11 kiểu caption động từ bản V2 cũ.',
+        'Giữ nguyên icon, gradient và cấu hình nguồn đã có.',
+        'Có bản xem trước và tệp thử, chưa mở thanh toán.',
+        'Khả năng hoạt động trên Locket thật chưa được xác minh.'
+      ],
+      note:'V3 là bộ V2 đầy đủ trước đây được đổi tên, không phải cam kết kích hoạt thành công chức năng trả phí của Locket.',
       hasSamples:true
     },
     plus:{
@@ -53,10 +67,10 @@
   const safeText=(node,value)=>{node.textContent=value;return node};
   const $=id=>byId(id);
 
-  function datasetFor(version){return version==='standard'?'v1':'v2'}
+  function datasetFor(version){return version==='standard'?'v1':version==='v3'?'v3':'v2'}
   function dataFor(which){
     if(!cached.has(which)){
-      const url=which==='v1'?'v1-caption-data.json':'caption-data.json';
+      const url=which==='v1'?'v1-caption-data.json':which==='v2'?'v2-caption-data.json':'caption-data.json';
       cached.set(which,fetch(url,{cache:'no-cache'})
         .then(response=>{if(!response.ok)throw Error('Không tải được dữ liệu');return response.json()})
         .then(data=>{
@@ -156,11 +170,11 @@
     $('plan-caption-grid').replaceChildren();
     $('plan-caption-count').textContent='Đang tải thư viện caption…';
     $('plan-caption-more').hidden=true;
-    $('plan-caption-title').textContent=version==='standard'?'Thư viện caption V1':'Thư viện caption V2 · V15';
+    $('plan-caption-title').textContent=version==='standard'?'Thư viện caption V1':version==='v2'?'Thư viện caption V2 · 300 mẫu':'Thư viện caption V3 · 705 mẫu';
     $('plan-caption-description').textContent=version==='standard'
       ?'107 caption tĩnh từ V1 với màu, icon gốc. Ngoài ra V1 còn 11 kiểu caption động không có nội dung cố định để xem trước.'
-      :'705 caption bản xem trước V2 trên website, đủ 21 chủ đề, đúng nội dung và màu gradient trong dữ liệu GitHub.';
-    $('plan-caption-total').textContent=version==='standard'?'V1 · 107 caption':'V2 · 705 caption';
+       :version==='v2'?'300 caption tĩnh chọn lọc từ 21 chủ đề của V3, giữ nguyên biểu tượng và gradient.':'705 caption tĩnh từ bộ V2 cũ, nay là V3; đủ 21 chủ đề, giữ nguyên nội dung và màu gốc.';
+    $('plan-caption-total').textContent=version==='standard'?'V1 · 107 caption':version==='v2'?'V2 · 300 caption':'V3 · 705 caption';
     try{
       const data=await dataFor(dataset);
       if(request!==libraryLoading || active!==version)return;
@@ -169,7 +183,7 @@
       const select=$('plan-caption-category');
       for(const group of uniqueGroups)select.add(new Option(groupLabel(group),group));
       $('plan-caption-total').textContent=version==='standard'
-        ?'V1 · '+data.length+' caption tĩnh':'V2 · '+data.length+' caption';
+        ?'V1 · '+data.length+' caption tĩnh':(version==='v2'?'V2':'V3')+' · '+data.length+' caption';
       drawLibrary();
     }catch{
       if(request!==libraryLoading || active!==version)return;
@@ -192,7 +206,7 @@
     safeText(byId('plan-dialog-kicker'),details.eyebrow);
     safeText(byId('plan-dialog-title'),details.name);
     safeText(byId('plan-dialog-subtitle'),details.summary);
-    safeText(byId('plan-dialog-price'),details.price+' / gói');
+    safeText(byId('plan-dialog-price'),details.price==='Chưa công bố'?details.price:details.price+' / gói');
     safeText(byId('plan-dialog-note'),details.note);
     const list=byId('plan-dialog-features');
     list.replaceChildren();
