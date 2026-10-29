@@ -95,7 +95,7 @@ function dataStats(arr){
   return {
     count:arr.length,
     groups:new Set(arr.map(x=>x.group)).size,
-    uniqueIds:new Set(arr.map(x=>x.id||x.group+'|'+x.text)).size,
+    uniqueIds:new Set(arr.map(x=>x.id||[x.group,x.text,x.icon,JSON.stringify(x.colors)].join('|'))).size,
     icons:arr.filter(x=>x.icon).length,
     gradients:arr.filter(x=>Array.isArray(x.colors)&&x.colors.length>=2).length
   }
