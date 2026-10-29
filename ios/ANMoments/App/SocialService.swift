@@ -17,6 +17,8 @@ struct ChatMessage: Codable, Identifiable {
     let conversation_id: UUID
     let sender_id: UUID
     let body: String
+    let media_path: String?
+    let media_kind: String?
     let created_at: String
 }
 
@@ -60,6 +62,7 @@ private struct DeletionPayload: Encodable {
 final class SocialService: ObservableObject {
     @Published var rooms: [ChatRoom] = []
     @Published var messages: [UUID: [ChatMessage]] = [:]
+    @Published var mediaURLs: [String: URL] = [:]
     @Published var events: [ActivityEvent] = []
     @Published var blockedUsers: Set<UUID> = []
     @Published var errorMessage: String?
@@ -69,6 +72,7 @@ final class SocialService: ObservableObject {
     func clearSensitiveCache() {
         rooms = []
         messages = [:]
+        mediaURLs = [:]
         events = []
         blockedUsers = []
         errorMessage = nil
@@ -94,11 +98,12 @@ final class SocialService: ObservableObject {
         guard let client = client(cloud) else { return }
         do {
             let fetched: [ChatMessage] = try await client.from("chat_messages")
-                .select("id,conversation_id,sender_id,body,created_at")
+                .select("id,conversation_id,sender_id,body,media_path,media_kind,created_at")
                 .eq("conversation_id", value: room.uuidString)
                 .order("created_at", ascending: false)
                 .limit(150).execute().value
             messages[room] = Array(fetched.reversed())
+            await loadAttachmentURLs(messages[room] ?? [], cloud: cloud)
         } catch { errorMessage = error.localizedDescription }
     }
 
