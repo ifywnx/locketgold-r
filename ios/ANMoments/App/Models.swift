@@ -69,3 +69,10 @@ enum MomentFormat {
         value.formatted(.dateTime.day().month(.abbreviated).hour().minute())
     }
 }
+
+struct PublishParams: Encodable {
+    let p_id: UUID
+    let p_path: String
+    let p_caption: String
+    let p_recipients: [UUID]
+}
