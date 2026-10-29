@@ -5,12 +5,20 @@
   const token=localStorage.getItem('an-store-owner-v1');
   const money=n=>Number(n||0).toLocaleString('vi-VN')+'đ';
   const valid=Number.isSafeInteger(id)&&id>0&&/^[a-f0-9]{64}$/.test(token||'');
+  const demoItems=(new URLSearchParams(location.search).get('items')||'').split(',').filter(Boolean);
+  const demoPreview=new URLSearchParams(location.search).get('demo')==='1'&&demoItems.length>0;
   let mode=null,currentStatus=null,pollCount=0;
   $('order-id').textContent=valid?String(id):'Không hợp lệ';
   const report=(text,state='pending')=>{
     $('order-message').textContent=text;
     $('order-state').dataset.state=state;
   };
+  if(demoPreview){
+    $('order-id').textContent='XEM THỬ'; $('order-mode').textContent='Dùng thử · Không thu tiền'; $('order-date').textContent=new Date().toLocaleString('vi-VN'); $('order-total').textContent='0đ'; $('order-state').textContent='Đã mở bộ cài thử'; report('Các file mẫu đã sẵn sàng.','done');
+    const area=$('an-order-downloads'),container=$('an-download-products'); area.hidden=false; container.replaceChildren();
+    demoItems.forEach(sku=>{const section=document.createElement('div');section.className='an-download-product';const h=document.createElement('h3');h.textContent=sku;const links=document.createElement('div');links.className='an-download-links';[['sgmodule','Cài module'],['conf','Tải .conf'],['js','Xem .js'],['json','Tải .json']].forEach(([kind,label])=>{const a=document.createElement('a');a.href='/api/store/demo/'+encodeURIComponent(sku)+'/'+kind;a.textContent=label;a.rel='noreferrer';if(kind!=='js')a.download='';links.append(a)});section.append(h,links);container.append(section)});
+    return;
+  }
   if(!valid){
     $('order-state').textContent='Không tìm thấy phiên đơn';
     report('Hãy trở lại cửa hàng An và tạo đơn bằng chính điện thoại hoặc trình duyệt này.','warning');

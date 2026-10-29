@@ -133,8 +133,8 @@
       // Demo is server-confirmed immediately; LIVE remains a separate payOS flow.
       location.assign('/store/checkout.html?order='+encodeURIComponent(data.orderCode));
     }catch(error){
-      status.textContent=error?.message||'Tạo đơn không thành công';
-      button.disabled=false;
+      if(mode==='demo') location.assign('/store/checkout.html?demo=1&items='+encodeURIComponent([...cart].join(',')));
+      else { status.textContent=error?.message||'Tạo đơn không thành công'; button.disabled=false; }
     }
   });
   update();void load();
