@@ -66,6 +66,15 @@ final class SocialService: ObservableObject {
     @Published var notice: String?
     @Published var loading = false
 
+    func clearSensitiveCache() {
+        rooms = []
+        messages = [:]
+        events = []
+        blockedUsers = []
+        errorMessage = nil
+        notice = nil
+    }
+
     private func client(_ cloud: CloudService) -> SupabaseClient? {
         guard cloud.userID != nil else { return nil }
         return cloud.sharedClient
