@@ -30,7 +30,7 @@ Website bán hàng/app/api/install-test/[version]/[file]/route.ts
 | `/captions/studio-effects.css` | `/welcome/captions/studio-effects.css` | Next rewrite |
 | `/welcome/images/locket-welcome-ifywnx-v5.png` | `/images/locket-welcome-ifywnx-v5.png` | Next rewrite |
 
-Hai trang HTML `/captions/index.html` và `/welcome/captions/index.html` được giữ vì có đường dẫn tương đối riêng; chỉ dữ liệu và scripts dùng chung.
+Trang HTML Studio chuẩn chỉ ở `/captions/index.html`; bookmark `/welcome/captions/index.html` được Next.js redirect tới trang này. Các đường dẫn tài nguyên cũ vẫn được rewrite để giữ tương thích.
 
 ## Không được phá vỡ khi refactor
 
