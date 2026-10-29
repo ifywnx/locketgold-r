@@ -48,6 +48,19 @@ struct FeedView: View {
                                 if let caption = moment.caption, !caption.isEmpty {
                                     Text(caption).font(.body)
                                 }
+                                HStack(spacing: 15) {
+                                    ForEach(["❤️", "😂", "🥰", "🔥"], id: \.self) { emoji in
+                                        Button(emoji) {
+                                            Task { await cloud.react(to: moment.id, emoji: emoji) }
+                                        }
+                                        .font(.title2)
+                                        .accessibilityLabel("Thả \(emoji)")
+                                    }
+                                    Spacer()
+                                    if let myReaction = cloud.reactions[moment.id] {
+                                        Text(myReaction).font(.title2)
+                                    }
+                                }
                                 if moment.author_id == cloud.userID {
                                     Button("Xóa khoảnh khắc", role: .destructive) {
                                         Task { await cloud.delete(moment) }
