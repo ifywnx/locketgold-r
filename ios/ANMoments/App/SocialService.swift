@@ -172,22 +172,15 @@ final class SocialService: ObservableObject {
     }
 
     func block(handle: String, cloud: CloudService) async {
-        guard let client = client(cloud), let me = cloud.userID else { return }
+        guard let client = client(cloud) else { return }
+        let normalized = handle.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !normalized.isEmpty else { return }
         do {
-            let normalized = handle.trimmingCharacters(in: .whitespacesAndNewlines)
-                .replacingOccurrences(of: "@", with: "").lowercased()
-            let profile: RemoteProfile = try await client.from("profiles")
-                .select("id,handle,display_name,badge_style")
-                .eq("handle", value: normalized).single().execute().value
-            guard profile.id != me else {
-                errorMessage = "Bạn không thể chặn chính mình."
-                return
-            }
-            try await client.rpc("block_account",
-                params: BlockPayload(p_other: profile.id)).execute()
+            try await client.rpc("block_handle",
+                params: ["p_handle": normalized]).execute()
             await loadBlocks(cloud)
             await cloud.refresh()
-            notice = "Đã chặn @" + normalized
+            notice = "Đã chặn @" + normalized.replacingOccurrences(of: "@", with: "")
         } catch { errorMessage = error.localizedDescription }
     }
 
@@ -202,18 +195,14 @@ final class SocialService: ObservableObject {
     }
 
     func report(handle: String, category: String, details: String, cloud: CloudService) async {
-        guard let client = client(cloud), let me = cloud.userID else { return }
-        let normalized = handle.trimmingCharacters(in: .whitespacesAndNewlines)
-            .replacingOccurrences(of: "@", with: "").lowercased()
+        guard let client = client(cloud) else { return }
         do {
-            let profile: RemoteProfile = try await client.from("profiles")
-                .select("id,handle,display_name,badge_style")
-                .eq("handle", value: normalized).single().execute().value
-            try await client.from("user_reports").insert(
-                ReportPayload(reporter_id: me, reported_id: profile.id,
-                    category: category, details: String(details.prefix(1000)))
-            ).execute()
-            notice = "Đã ghi nhận báo cáo. Cần người quản trị xử lý."
+            try await client.rpc("report_handle", params: [
+                "p_handle": handle.trimmingCharacters(in: .whitespacesAndNewlines),
+                "p_category": category,
+                "p_details": String(details.prefix(1000))
+            ]).execute()
+            notice = "Đã lưu báo cáo vào hàng chờ kiểm duyệt."
         } catch { errorMessage = error.localizedDescription }
     }
 
