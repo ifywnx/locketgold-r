@@ -1,9 +1,35 @@
-# Website bán hàng — nền tảng chuẩn bị
+# Website An Store — nguồn triển khai chính
 
-Sao chép từ website độc lập cũ, chưa deploy. Tắt thanh toán và chế độ tải công khai thử nghiệm. Bộ assets nhúng vẫn là bộ cũ; CHƯA nối v1/v2 ở thư mục gốc. Không công bố bản này để bán trước khi hoàn thành tích hợp và kiểm thử.
+Nguồn giao diện, API, admin và dữ liệu phiên bản nằm **ở thư mục này**, không nằm trong `web-vercel/`.
 
-Cần làm tiếp: mô hình nhiều sản phẩm; phân quyền tải theo sản phẩm/phiên bản; nối v1/v2; cấu hình kho dữ liệu bền vững và payOS; đăng nhập admin; kiểm thử thanh toán, kích hoạt, cập nhật và thu hồi. Giao diện còn nhãn cũ, chưa thiết kế lại.
+## Vị trí chính
 
-Mã hiện tại dùng Next.js và SQLite/libSQL. SQLite dạng file cần hosting có ổ lưu bền vững. Nếu dùng Vercel/Netlify, chuyển sang cơ sở dữ liệu từ xa và kiểm tra phần khởi tạo DB trước khi deploy. Tên miền nối sau khi chọn hosting.
+- `app/`: trang Next.js, API, quyền tải, dashboard và tra cứu đơn.
+- `public/welcome/`: trang chủ, mô phỏng iPhone 3D, CSS, caption mẫu V1/V2/V3 và JS giao diện.
+- `public/captions/`: Caption Studio gốc, chỉ một bộ tệp `catalog.json`, `studio.js`, `studio-effects.*`.
+- `public/welcome/captions/index.html`: giữ trang cũ, các tài nguyên được Next.js rewrite sang `/captions/`.
+- `lib/`: mã giao dịch, thư viện caption lịch sử, bảo mật và `private-assets.ts` (giữ cho đơn cũ).
+- `scripts/build-install-assets.mjs`: tạo lại `lib/install-test-assets.json` từ nguồn chuẩn `../v1`, `../v2`, `../v3`.
+- `qa/`: smoke test API và iPhone/desktop.
 
-Không có khóa thật trong .env.example. Không dùng lại mật khẩu/khóa đã chia sẻ. Không đưa .env, CA, database hoặc token vào Git.
+## Chạy thử
+
+```sh
+cd "Website bán hàng"
+npm ci
+npm run dev
+```
+
+`npm run build` tự đồng bộ bộ cài theo phiên bản rồi build Next.js. `npm run start` yêu cầu đã build trước.
+
+Vercel lấy từ project `an-store` ở `web-vercel/`; `prepare.mjs` copy nguồn hiện có và chạy generator. Không cập nhật trực tiếp các tệp mirror.
+
+## Dữ liệu và giao dịch
+
+- V1: 107, V2: 300, V3: 705 caption tĩnh.
+- Giá hiển thị: V1 49.000đ; V2 89.000đ; V3 129.000đ. **Không bật thanh toán thật khi dọn code.**
+- `/api/install-test/v1|v2|v3/[file]` tạo phản hồi từ gói vừa build.
+- Các API đơn cũ và file có chữ ký vẫn tồn tại; không xóa hay thay đổi mã cấp quyền cũ.
+- `ADMIN_DASHBOARD.md` mô tả quyền quản trị.
+
+Không commit `.env`, SQLite, khóa payOS, phiên khách hoặc mã kích hoạt.
