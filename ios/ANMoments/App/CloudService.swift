@@ -16,6 +16,7 @@ final class CloudService: ObservableObject {
     @Published var reactions: [UUID: String] = [:]
     @Published var requesterNames: [UUID: String] = [:]
     @Published var authorNames: [UUID: String] = [:]
+    @Published var viewerNames: [UUID: [String]] = [:]
     @Published var busy = false
     @Published var errorMessage: String?
     @Published var infoMessage: String?
@@ -75,6 +76,7 @@ final class CloudService: ObservableObject {
             reactions = [:]
             requesterNames = [:]
             authorNames = [:]
+            viewerNames = [:]
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -131,7 +133,7 @@ final class CloudService: ObservableObject {
             reactions = Dictionary(uniqueKeysWithValues: mine.map { ($0.moment_id, $0.emoji) })
 
             var loadedMoments: [RemoteMoment] = try await client.from("moments")
-                .select("id,author_id,storage_path,caption,created_at")
+                .select("id,author_id,storage_path,media_kind,caption,created_at")
                 .order("created_at", ascending: false)
                 .limit(100).execute().value
 
@@ -150,7 +152,7 @@ final class CloudService: ObservableObject {
                 }
             }
             authorNames = namesOfAuthors
-            if let latestURL = loadedMoments.first?.signedURL,
+            if let latestURL = loadedMoments.first(where: { !$0.isVideo })?.signedURL,
                let (data, _) = try? await URLSession.shared.data(from: latestURL) {
                 WidgetBridge.saveLatest(data: data)
             }
@@ -184,29 +186,45 @@ final class CloudService: ObservableObject {
     }
 
     func publish(image: UIImage, caption: String, recipients: [UUID]) async -> Bool {
-        guard let client, let userID else { return false }
         guard let bytes = ImageProcessor.jpeg(image) else {
             errorMessage = "Không thể mã hóa ảnh."
             return false
         }
+        return await publishData(bytes, mediaKind: "photo", fileExtension: "jpg", recipients: recipients, caption: caption)
+    }
+
+    func publishVideo(url: URL, caption: String, recipients: [UUID]) async -> Bool {
+        do {
+            try await VideoMedia.validate(url)
+            let data = try Data(contentsOf: url)
+            return await publishData(data, mediaKind: "video", fileExtension: "mov", recipients: recipients, caption: caption)
+        } catch {
+            errorMessage = error.localizedDescription
+            return false
+        }
+    }
+
+    private func publishData(_ bytes: Data, mediaKind: String, fileExtension: String,
+                             recipients: [UUID], caption: String) async -> Bool {
+        guard let client, let userID else { return false }
         busy = true
         defer { busy = false }
-
         let momentID = UUID()
-        let path = "\(userID.uuidString)/\(momentID.uuidString).jpg"
+        let path = "\(userID.uuidString)/\(momentID.uuidString).\(fileExtension)"
         do {
-            try await client.storage.from("moments").upload(path: path, file: bytes)
+            try await client.storage.from("moments").upload(
+                path: path, file: bytes,
+                options: FileOptions(contentType: mediaKind == "video" ? "video/quicktime" : "image/jpeg")
+            )
             do {
-                // One database transaction saves the moment AND recipient list.
-                // Avoids partially shared posts if permission checks fail.
-                try await client.rpc("publish_moment", params: PublishParams(
+                try await client.rpc("publish_moment", params: PublishMediaParams(
                     p_id: momentID,
                     p_path: path,
                     p_caption: caption,
-                    p_recipients: recipients
+                    p_recipients: recipients,
+                    p_media_kind: mediaKind
                 )).execute()
             } catch {
-                // Reclaim the upload if the database transaction failed.
                 _ = try? await client.storage.from("moments").remove(paths: [path])
                 throw error
             }
@@ -228,6 +246,38 @@ final class CloudService: ObservableObject {
                     onConflict: "moment_id,sender_id"
                 ).execute()
             reactions[momentID] = emoji
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func recordView(_ moment: RemoteMoment) async {
+        guard let client, let userID, moment.author_id != userID else { return }
+        do {
+            try await client.rpc("record_moment_view",
+                params: ["p_moment": moment.id.uuidString]).execute()
+        } catch {
+            // Viewing must not prevent the rest of the feed from rendering.
+        }
+    }
+
+    func loadViewers(_ moment: RemoteMoment) async {
+        guard let client, let userID, moment.author_id == userID else { return }
+        do {
+            let records: [MomentViewer] = try await client.from("moment_views")
+                .select("viewer_id")
+                .eq("moment_id", value: moment.id.uuidString)
+                .execute().value
+            var names: [String] = []
+            for item in records {
+                if let profile: RemoteProfile = try? await client.from("profiles")
+                    .select("id,handle,display_name")
+                    .eq("id", value: item.viewer_id.uuidString)
+                    .single().execute().value {
+                    names.append(profile.display_name + " (@" + profile.handle + ")")
+                }
+            }
+            viewerNames[moment.id] = names
         } catch {
             errorMessage = error.localizedDescription
         }
