@@ -85,7 +85,7 @@ create policy "blocks_own_delete" on public.user_blocks
 
 create policy "reports_submit_self" on public.user_reports
   for insert to authenticated
-  with check(reporter_id = (select auth.uid()));
+  with check(reporter_id = (select auth.uid()) and status = 'pending');
 create policy "reports_read_self" on public.user_reports
   for select to authenticated
   using(reporter_id = (select auth.uid()));
@@ -284,6 +284,48 @@ begin
     on conflict do nothing;
 end;
 $$;
+
+
+-- Username lookup occurs inside vetted functions; the public profiles list
+-- remains restricted by RLS.
+create or replace function public.block_handle(p_handle text)
+returns void language plpgsql security definer set search_path = ''
+as $
+declare v_target uuid;
+begin
+  if auth.uid() is null then raise exception 'Authentication required'; end if;
+  select id into v_target from public.profiles
+  where handle = lower(trim(both '@' from trim(p_handle)));
+  if v_target is null then raise exception 'Account not found'; end if;
+  perform public.block_account(v_target);
+end;
+$;
+
+create or replace function public.report_handle(
+  p_handle text, p_category text, p_details text
+) returns uuid language plpgsql security definer set search_path = ''
+as $
+declare v_target uuid; v_id uuid;
+begin
+  if auth.uid() is null then raise exception 'Authentication required'; end if;
+  if p_category not in ('spam','harassment','inappropriate','other')
+     or char_length(coalesce(p_details,'')) > 1000 then
+    raise exception 'Invalid report'; end if;
+  select id into v_target from public.profiles
+  where handle = lower(trim(both '@' from trim(p_handle)));
+  if v_target is null then raise exception 'Account not found'; end if;
+  if v_target = auth.uid() then raise exception 'Cannot report yourself'; end if;
+  insert into public.user_reports(reporter_id,reported_id,category,details)
+    values(auth.uid(),v_target,p_category,coalesce(p_details,''))
+    returning id into v_id;
+  return v_id;
+end;
+$;
+
+revoke all on function public.block_handle(text) from public;
+revoke all on function public.report_handle(text,text,text) from public;
+grant execute on function public.block_handle(text) to authenticated;
+grant execute on function public.report_handle(text,text,text) to authenticated;
 
 -- Notifications remain inside the app. These do NOT send APNs notifications.
 create or replace function public.on_chat_notification()
