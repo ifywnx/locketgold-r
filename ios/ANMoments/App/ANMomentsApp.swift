@@ -5,6 +5,7 @@ struct ANMomentsApp: App {
     @StateObject private var album = LocalAlbum()
     @StateObject private var cloud = CloudService()
     @StateObject private var appearance = AppearanceSettings()
+    @StateObject private var social = SocialService()
 
     var body: some Scene {
         WindowGroup {
@@ -12,6 +13,7 @@ struct ANMomentsApp: App {
                 .environmentObject(album)
                 .environmentObject(cloud)
                 .environmentObject(appearance)
+                .environmentObject(social)
                 .tint(Theme.ink)
         }
     }
@@ -52,8 +54,8 @@ struct MainTabs: View {
             CaptureView()
                 .tabItem { Label("Chụp ảnh", systemImage: "camera.fill") }
                 .tag(1)
-            FriendsView()
-                .tabItem { Label("Bạn bè", systemImage: "person.2.fill") }
+            SocialHubView()
+                .tabItem { Label("Kết nối", systemImage: "bubble.left.and.bubble.right.fill") }
                 .tag(2)
             MemoriesView()
                 .tabItem { Label("Kỷ niệm", systemImage: "square.grid.2x2.fill") }
