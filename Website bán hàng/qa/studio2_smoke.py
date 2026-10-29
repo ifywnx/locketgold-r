@@ -66,7 +66,11 @@ with sync_playwright() as p:
         page.locator(".card button").filter(has_text="Xoá").click()
         assert page.locator("#selected").inner_text()=="0"
         assert page.locator("#favorite-total").inner_text()=="1"
-        assert page.evaluate("document.documentElement.scrollWidth-document.documentElement.clientWidth")<=5
+        overflow=page.evaluate("document.documentElement.scrollWidth-document.documentElement.clientWidth")
+        culprits=page.evaluate("""() => [...document.querySelectorAll('body *')]
+            .filter(el => el.getBoundingClientRect().right > innerWidth+5)
+            .slice(0,8).map(el => [el.tagName,el.id,Math.round(el.getBoundingClientRect().right)])""")
+        assert overflow<=5, f"{width}px horizontal overflow={overflow}; elements={culprits}"
         assert not errors,errors
         print(f"PASS Studio 2 favorites, backups, copy, search, delete at {width}px")
         context.close()
