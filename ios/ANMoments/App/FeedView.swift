@@ -31,7 +31,12 @@ struct FeedView: View {
                         }
                         ForEach(cloud.moments) { moment in
                             VStack(alignment: .leading, spacing: 12) {
-                                header("Khoảnh khắc chia sẻ", date: moment.date)
+                                header(
+                                    moment.author_id == cloud.userID
+                                        ? "Khoảnh khắc của bạn"
+                                        : (cloud.authorNames[moment.author_id] ?? "Bạn bè"),
+                                    date: moment.date
+                                )
                                 AsyncImage(url: moment.signedURL) { phase in
                                     switch phase {
                                     case .success(let image):
