@@ -38,7 +38,8 @@ struct FeedView: View {
                                     moment.author_id == cloud.userID
                                         ? "Khoảnh khắc của bạn"
                                         : (cloud.authorNames[moment.author_id] ?? "Bạn bè"),
-                                    date: moment.date
+                                    date: moment.date,
+                                    badge: cloud.authorBadges[moment.author_id]
                                 )
                                 if moment.isVideo {
                                     if let url = moment.signedURL {
@@ -106,7 +107,7 @@ struct FeedView: View {
                         if album.moments.isEmpty { emptyState }
                         ForEach(album.moments) { moment in
                             VStack(alignment: .leading, spacing: 12) {
-                                header("Khoảnh khắc của bạn", date: moment.createdAt)
+                                header("Khoảnh khắc của bạn", date: moment.createdAt, badge: appearance.badgeStyle.rawValue)
                                 if moment.isVideo, let url = album.videoURL(for: moment) {
                                     MomentVideoPlayer(url: url)
                                         .frame(height: 340)
@@ -190,12 +191,19 @@ struct FeedView: View {
         }
     }
 
-    private func header(_ label: String, date: Date) -> some View {
+    private func header(_ label: String, date: Date, badge: String? = nil) -> some View {
         HStack {
             Image(systemName: "person.crop.circle.fill")
                 .font(.title2).foregroundStyle(appearance.cameraTheme.accent)
             VStack(alignment: .leading) {
-                Text(label).fontWeight(.semibold)
+                HStack(spacing: 6) {
+                    Text(label).fontWeight(.semibold)
+                    if let badge, let style = AppearanceSettings.BadgeStyle(rawValue: badge), style != .none {
+                        Image(systemName: style.symbol)
+                            .font(.caption)
+                            .foregroundStyle(appearance.cameraTheme.accent)
+                    }
+                }
                 Text(MomentFormat.date(date))
                     .font(.caption).foregroundStyle(Theme.muted)
             }
