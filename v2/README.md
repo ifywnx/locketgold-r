@@ -1,7 +1,7 @@
-# An Locket V2
+# An Locket V2 (300 caption)
 
-Nguồn: V15 chính, bản An.
-
-Cùng cấu trúc module, 3 script, DNS cũ và ảnh popup. Giữ logic riêng của bản nguồn. Các ID caption và URL tài khoản xã hội giữ nguyên để tương thích.
-
-Đây là mẫu phân phối: máy chủ phải thay __ASSET_BASE__ bằng URL tải có quyền truy cập cho đúng phiên bản, cả trong module và JS. Không đưa mẫu trực tiếp vào Shadowrocket.
+Phiên bản trung gian giữa V1 và V3, được chọn lọc từ 705 caption V3 (21 nhóm), giữ 11 overlay động.
+- 300 caption tĩnh; 11 kiểu động (tổng 311 overlay khai báo).
+- Bộ V3 lưu nguyên cấu hình trước đây tại ../v3/.
+- Không thay cơ chế đăng nhập, thanh toán hoặc quyền truy cập ứng dụng bên thứ ba.
+- Caption trên website là bản xem trước; tính tương thích cần thử trên thiết bị.
