@@ -24,6 +24,8 @@ jobs:
           node-version: '24'
           cache: npm
           cache-dependency-path: Website bán hàng/package-lock.json
+      - name: Regenerate version assets from canonical directories
+        run: node scripts/build-install-assets.mjs
       - name: Validate version catalogs match module content
         run: |
           node --input-type=module <<'NODE'
