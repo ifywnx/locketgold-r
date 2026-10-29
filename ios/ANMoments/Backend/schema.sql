@@ -34,6 +34,7 @@ create table if not exists public.moments (
   id uuid primary key default gen_random_uuid(),
   author_id uuid not null references public.profiles(id) on delete cascade,
   storage_path text unique not null,
+  media_kind text not null default 'photo' check (media_kind in ('photo','video')),
   caption text not null default '' check (char_length(caption) <= 1000),
   created_at timestamptz not null default now(),
   check(storage_path like (author_id::text || '/%'))
@@ -54,6 +55,8 @@ create table if not exists public.reactions (
   primary key(moment_id, sender_id)
 );
 
+-- Idempotent migration when the schema predates Gold-like media support.
+alter table public.moments add column if not exists media_kind text not null default 'photo';
 create index if not exists idx_moments_author on public.moments(author_id, created_at desc);
 create index if not exists idx_recipients_user on public.moment_recipients(recipient_id);
 
@@ -224,15 +227,19 @@ create or replace function public.publish_moment(
   p_id uuid,
   p_path text,
   p_caption text,
-  p_recipients uuid[]
+  p_recipients uuid[],
+  p_media_kind text
 )
 returns void language plpgsql security definer set search_path = ''
 as $
 begin
   if auth.uid() is null then raise exception 'Authentication required'; end if;
   if p_path not like (auth.uid()::text || '/%') then raise exception 'Invalid upload path'; end if;
-  if length(coalesce(p_caption, '')) > 1000 then raise exception 'Caption too long'; end if;
-  if array_length(p_recipients, 1) > 20 then raise exception 'Too many recipients'; end if;
+  if length(coalesce(p_caption, '')) > 2000 then raise exception 'Caption too long'; end if;
+  if p_media_kind not in ('photo','video') then raise exception 'Invalid media'; end if;
+  if (p_media_kind = 'photo' and p_path not like '%.jpg')
+     or (p_media_kind = 'video' and p_path not like '%.mov')
+     then raise exception 'Invalid media extension'; end if;
   if exists (
     select 1 from unnest(coalesce(p_recipients, array[]::uuid[])) as recipient
     where recipient = auth.uid()
@@ -242,8 +249,8 @@ begin
        )
   ) then raise exception 'Recipient is not your friend'; end if;
 
-  insert into public.moments(id, author_id, storage_path, caption)
-    values (p_id, auth.uid(), p_path, coalesce(p_caption, ''));
+  insert into public.moments(id, author_id, storage_path, caption, media_kind)
+    values (p_id, auth.uid(), p_path, coalesce(p_caption, ''), p_media_kind);
 
   insert into public.moment_recipients(moment_id, recipient_id)
     select p_id, distinct_recipient
@@ -252,12 +259,13 @@ begin
     ) x;
 end;
 $;
-revoke all on function public.publish_moment(uuid,text,text,uuid[]) from public;
-grant execute on function public.publish_moment(uuid,text,text,uuid[]) to authenticated;
+drop function if exists public.publish_moment(uuid,text,text,uuid[]);
+revoke all on function public.publish_moment(uuid,text,text,uuid[],text) from public;
+grant execute on function public.publish_moment(uuid,text,text,uuid[],text) to authenticated;
 
 -- Private image bucket, never a public read bucket.
 insert into storage.buckets(id, name, public, file_size_limit, allowed_mime_types)
-values ('moments', 'moments', false, 10485760, array['image/jpeg'])
+values ('moments', 'moments', false, 104857600, array['image/jpeg','video/quicktime'])
 on conflict (id) do update set
   public = false,
   file_size_limit = excluded.file_size_limit,
@@ -291,6 +299,42 @@ create policy "storage_delete_own_folder" on storage.objects
     bucket_id = 'moments'
     and (storage.foldername(name))[1] = (select auth.uid())::text
   );
+
+
+-- View receipts: only an actual recipient can register a view.
+create table if not exists public.moment_views (
+  moment_id uuid not null references public.moments(id) on delete cascade,
+  viewer_id uuid not null references public.profiles(id) on delete cascade,
+  viewed_at timestamptz not null default now(),
+  primary key(moment_id, viewer_id)
+);
+alter table public.moment_views enable row level security;
+
+create policy "view_receipt_select_author_or_viewer" on public.moment_views
+  for select to authenticated using (
+    viewer_id = (select auth.uid()) or
+    exists (
+      select 1 from public.moments m
+      where m.id = moment_id and m.author_id = (select auth.uid())
+    )
+  );
+
+create or replace function public.record_moment_view(p_moment uuid)
+returns void language plpgsql security definer set search_path = ''
+as $
+begin
+  if auth.uid() is null then raise exception 'Authentication required'; end if;
+  if not exists(
+    select 1 from public.moments m
+    join public.moment_recipients r on r.moment_id = m.id
+    where m.id = p_moment and r.recipient_id = auth.uid()
+  ) then raise exception 'Moment not shared with this account'; end if;
+  insert into public.moment_views(moment_id, viewer_id) values(p_moment, auth.uid())
+  on conflict (moment_id, viewer_id) do nothing;
+end;
+$;
+revoke all on function public.record_moment_view(uuid) from public;
+grant execute on function public.record_moment_view(uuid) to authenticated;
 
 -- Hardening reminder:
 -- 1. Configure email OTP template with {{ .Token }}.
