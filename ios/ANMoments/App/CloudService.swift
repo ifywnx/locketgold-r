@@ -80,6 +80,8 @@ final class CloudService: ObservableObject {
             authorNames = [:]
             authorBadges = [:]
             viewerNames = [:]
+            WidgetBridge.saveLatest(data: nil)
+            WidgetBridge.chooseFriend(nil)
         } catch {
             errorMessage = error.localizedDescription
         }
