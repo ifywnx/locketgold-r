@@ -24,8 +24,32 @@ create policy "push_token_update_own" on public.device_push_tokens
 create policy "push_token_delete_own" on public.device_push_tokens
   for delete to authenticated using(user_id=(select auth.uid()));
 
-grant select,insert,delete on public.device_push_tokens to authenticated;
-grant update(user_id,platform,updated_at) on public.device_push_tokens to authenticated;
+-- Rebind device tokens safely across sign-outs through a checked RPC.
+create or replace function public.register_push_token(p_token text)
+returns void language plpgsql security definer set search_path=''
+as $
+begin
+  if auth.uid() is null then raise exception 'Authentication required'; end if;
+  if p_token !~ '^[0-9a-f]{64,256}
+
+commit;
+
+-- No pg_net trigger is installed automatically. Connect activity_events INSERT
+-- to the deployable notify-event Edge Function using an authenticated
+-- Database Webhook with secret header, after human review in Dashboard.
+-- No APNs private key should ever appear in SQL or the iOS source.
+ then
+    raise exception 'Invalid APNs token'; end if;
+  insert into public.device_push_tokens(token,user_id)
+  values(p_token,auth.uid())
+  on conflict(token) do update set
+    user_id=excluded.user_id,updated_at=now();
+end;
+$;
+revoke all on function public.register_push_token(text) from public;
+grant execute on function public.register_push_token(text) to authenticated;
+
+grant select,delete on public.device_push_tokens to authenticated;
 
 commit;
 
