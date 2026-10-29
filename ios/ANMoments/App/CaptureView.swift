@@ -1,13 +1,18 @@
 import SwiftUI
 import PhotosUI
 import UIKit
+import AVKit
+import UniformTypeIdentifiers
 
 struct CaptureView: View {
     @EnvironmentObject private var album: LocalAlbum
     @EnvironmentObject private var cloud: CloudService
+    @EnvironmentObject private var appearance: AppearanceSettings
     @State private var cameraOpen = false
+    @State private var videoCameraOpen = false
     @State private var pickerItem: PhotosPickerItem?
     @State private var image: UIImage?
+    @State private var videoURL: URL?
     @State private var caption = ""
     @State private var selectedFriends: Set<UUID> = []
     @State private var alertText: String?
@@ -16,27 +21,44 @@ struct CaptureView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 22) {
-                    Text("Gửi một khoảnh khắc")
-                        .font(.system(size: 27, weight: .bold, design: .rounded))
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                VStack(spacing: 20) {
+                    HStack {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("Gửi một khoảnh khắc")
+                                .font(.system(size: 27, weight: .bold, design: .rounded))
+                            Text("Ảnh hoặc video tối đa 60 giây")
+                                .font(.subheadline)
+                                .foregroundStyle(Theme.muted)
+                        }
+                        Spacer()
+                        Image(systemName: "sparkles.rectangle.stack.fill")
+                            .font(.title2).foregroundStyle(appearance.cameraTheme.accent)
+                    }
                     ZStack {
                         RoundedRectangle(cornerRadius: 30)
                             .fill(Color.white)
-                            .shadow(color: .black.opacity(0.05), radius: 14, y: 6)
-                        if let image {
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 350)
-                                .clipped()
+                            .shadow(color: appearance.cameraTheme.accent.opacity(0.15), radius: 15, y: 5)
+                        if let videoURL {
+                            VideoPlayer(player: AVPlayer(url: videoURL))
+                                .frame(height: 340)
                                 .clipShape(RoundedRectangle(cornerRadius: 30))
+                                .overlay(alignment: .topTrailing) {
+                                    Label("VIDEO", systemImage: "play.rectangle.fill")
+                                        .font(.caption.bold())
+                                        .padding(8)
+                                        .background(appearance.cameraTheme.accent, in: Capsule())
+                                        .padding(12)
+                                }
+                        } else if let image {
+                            Image(uiImage: image)
+                                .resizable().scaledToFill()
+                                .frame(maxWidth: .infinity).frame(height: 340)
+                                .clipped().clipShape(RoundedRectangle(cornerRadius: 30))
                         } else {
                             VStack(spacing: 14) {
                                 Image(systemName: "camera.fill")
                                     .font(.system(size: 64))
-                                    .foregroundStyle(Theme.gold)
+                                    .foregroundStyle(appearance.cameraTheme.accent)
                                 Text("Một ngày bình thường cũng đáng nhớ")
                                     .font(.headline)
                                     .foregroundStyle(Theme.muted)
@@ -44,48 +66,75 @@ struct CaptureView: View {
                             }
                         }
                     }
-                    .frame(height: 350)
+                    .frame(height: 340)
 
-                    HStack(spacing: 12) {
+                    HStack(spacing: 10) {
                         Button {
                             if UIImagePickerController.isSourceTypeAvailable(.camera) {
                                 cameraOpen = true
-                            } else {
-                                alertText = "Camera không khả dụng trên thiết bị này."
-                            }
+                            } else { alertText = "Không tìm thấy camera." }
                         } label: {
-                            Label("Chụp ảnh", systemImage: "camera.fill")
+                            Label("Ảnh", systemImage: "camera.fill")
                                 .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(ActionButtonStyle(background: Theme.gold))
-
-                        PhotosPicker(selection: $pickerItem, matching: .images) {
-                            Label("Chọn ảnh", systemImage: "photo.on.rectangle")
+                        .buttonStyle(ActionButtonStyle(background: appearance.cameraTheme.accent))
+                        Button {
+                            if UIImagePickerController.isSourceTypeAvailable(.camera) &&
+                               UIImagePickerController.availableMediaTypes(for: .camera)?
+                                  .contains(UTType.movie.identifier) == true {
+                                videoCameraOpen = true
+                            } else { alertText = "Camera không hỗ trợ quay video." }
+                        } label: {
+                            Label("Video", systemImage: "video.fill")
                                 .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(ActionButtonStyle(background: .white))
+                        .buttonStyle(ActionButtonStyle(background: appearance.cameraTheme.accent.opacity(0.5)))
                     }
+                    PhotosPicker(selection: $pickerItem, matching: .any(of: [.images, .videos])) {
+                        Label("Chọn ảnh hoặc video từ thư viện", systemImage: "photo.on.rectangle")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(ActionButtonStyle(background: .white))
 
-                    TextField("Viết một dòng về khoảnh khắc...", text: $caption, axis: .vertical)
-                        .lineLimit(2...4)
+                    TextField("Viết lời nhắn...", text: $caption, axis: .vertical)
+                        .lineLimit(2...6)
+                        .onChange(of: caption) { _, newValue in
+                            if newValue.count > 2000 { caption = String(newValue.prefix(2000)) }
+                        }
                         .padding(16)
                         .background(.white, in: RoundedRectangle(cornerRadius: 18))
+                    Text("\(caption.count) / 2000 ký tự")
+                        .font(.caption).foregroundStyle(Theme.muted)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
 
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Chọn người nhận")
-                            .font(.headline)
+                        HStack {
+                            Text("Chọn người nhận").font(.headline)
+                            Spacer()
+                            let count = cloud.enabled ? cloud.friends.count : album.friends.count
+                            Text("\(count) bạn").font(.caption).foregroundStyle(Theme.muted)
+                        }
+                        Button(selectedFriends.count == (cloud.enabled ? cloud.friends.count : album.friends.count)
+                               ? "Bỏ chọn tất cả" : "Chọn tất cả") {
+                            let all = cloud.enabled
+                                ? cloud.friends.map(\.id) : album.friends.map(\.id)
+                            if selectedFriends.count == all.count {
+                                selectedFriends.removeAll()
+                            } else { selectedFriends = Set(all) }
+                        }
+                        .font(.subheadline.bold())
+                        .disabled((cloud.enabled ? cloud.friends.isEmpty : album.friends.isEmpty))
                         if cloud.enabled {
                             if cloud.friends.isEmpty {
-                                Text("Chưa có bạn bè. Vào tab Bạn bè để mời họ.")
+                                Text("Mời bạn bè ở tab Bạn bè để chia sẻ. Không chọn ai = lưu riêng.")
                                     .foregroundStyle(Theme.muted)
                             }
                             ForEach(cloud.friends) { friend in
                                 friendToggle(friend.display_name, id: friend.id)
                             }
                         } else {
-                            Text("Chế độ thử: chọn tên chỉ để gắn nhãn, không gửi qua mạng.")
-                                .font(.caption)
-                                .foregroundStyle(Theme.muted)
+                            Text("Bản thử trên máy: chọn tên chỉ gắn nhãn, không gửi qua mạng.")
+                                .font(.caption).foregroundStyle(Theme.muted)
                             ForEach(album.friends) { friend in
                                 friendToggle(friend.name, id: friend.id)
                             }
@@ -101,34 +150,59 @@ struct CaptureView: View {
                         HStack {
                             Spacer()
                             if sending { ProgressView() }
-                            Text(cloud.enabled ? "Lưu / Chia sẻ" : "Lưu vào máy")
+                            Text(cloud.enabled ? "Lưu / Chia sẻ" : "Lưu vào iPhone")
                             Image(systemName: "arrow.up.heart.fill")
                             Spacer()
                         }
                         .font(.headline)
                         .padding(18)
-                        .background(Theme.gold, in: RoundedRectangle(cornerRadius: 18))
+                        .background(appearance.cameraTheme.accent, in: RoundedRectangle(cornerRadius: 18))
                     }
-                    .disabled(image == nil || sending)
+                    .disabled((image == nil && videoURL == nil) || sending)
                 }
                 .padding(20)
             }
-            .background(Theme.cream.ignoresSafeArea())
+            .background(appearance.cameraTheme.background.ignoresSafeArea())
             .sheet(isPresented: $cameraOpen) {
-                CameraPicker { captured in
-                    image = captured
+                CameraPicker { selected in
+                    image = selected
+                    videoURL = nil
+                }
+                .ignoresSafeArea()
+            }
+            .sheet(isPresented: $videoCameraOpen) {
+                VideoCameraPicker { selected in
+                    Task {
+                        do {
+                            try await VideoMedia.validate(selected)
+                            videoURL = selected
+                            image = nil
+                        } catch { alertText = error.localizedDescription }
+                    }
                 }
                 .ignoresSafeArea()
             }
             .onChange(of: pickerItem) { _, item in
                 guard let item else { return }
                 Task {
-                    guard let data = try? await item.loadTransferable(type: Data.self),
-                          let loaded = UIImage(data: data) else {
-                        alertText = "Không đọc được ảnh được chọn."
-                        return
+                    if item.supportedContentTypes.contains(where: { $0.conforms(to: .movie) }) {
+                        if let imported = try? await item.loadTransferable(type: ImportedMovie.self) {
+                            do {
+                                try await VideoMedia.validate(imported.url)
+                                videoURL = imported.url
+                                image = nil
+                            } catch { alertText = error.localizedDescription }
+                        } else {
+                            alertText = "Không thể đọc video từ thư viện."
+                        }
+                    } else if let data = try? await item.loadTransferable(type: Data.self),
+                              let loaded = UIImage(data: data) {
+                        image = loaded
+                        videoURL = nil
+                    } else {
+                        alertText = "Không thể đọc ảnh từ thư viện."
                     }
-                    image = loaded
+                    pickerItem = nil
                 }
             }
             .alert("AN Moments", isPresented: Binding(
@@ -136,9 +210,7 @@ struct CaptureView: View {
                 set: { if !$0 { alertText = nil; cloud.errorMessage = nil } }
             )) {
                 Button("OK") { alertText = nil; cloud.errorMessage = nil }
-            } message: {
-                Text(alertText ?? cloud.errorMessage ?? "")
-            }
+            } message: { Text(alertText ?? cloud.errorMessage ?? "") }
         }
     }
 
@@ -149,7 +221,7 @@ struct CaptureView: View {
         } label: {
             HStack {
                 Image(systemName: "person.crop.circle.fill")
-                    .foregroundStyle(Theme.gold)
+                    .foregroundStyle(appearance.cameraTheme.accent)
                 Text(name)
                 Spacer()
                 Image(systemName: selectedFriends.contains(id) ? "checkmark.circle.fill" : "circle")
@@ -160,14 +232,20 @@ struct CaptureView: View {
     }
 
     private func publish() async {
-        guard let image else { return }
+        guard image != nil || videoURL != nil else { return }
         sending = true
         defer { sending = false }
         if cloud.enabled {
-            let ok = await cloud.publish(
-                image: image, caption: caption, recipients: Array(selectedFriends))
+            let recipients = Array(selectedFriends)
+            let ok: Bool
+            if let videoURL {
+                ok = await cloud.publishVideo(url: videoURL, caption: caption, recipients: recipients)
+            } else if let image {
+                ok = await cloud.publish(image: image, caption: caption, recipients: recipients)
+            } else { return }
             if ok {
-                self.image = nil
+                image = nil
+                videoURL = nil
                 caption = ""
                 selectedFriends.removeAll()
                 alertText = "Đã lưu khoảnh khắc."
@@ -175,21 +253,23 @@ struct CaptureView: View {
         } else {
             do {
                 let names = album.friends.filter { selectedFriends.contains($0.id) }.map(\.name)
-                try album.add(image: image, caption: caption, recipients: names)
-                self.image = nil
+                if let videoURL {
+                    try await album.addVideo(fileURL: videoURL, caption: caption, recipients: names)
+                } else if let image {
+                    try album.add(image: image, caption: caption, recipients: names)
+                }
+                image = nil
+                videoURL = nil
                 caption = ""
                 selectedFriends.removeAll()
-                alertText = "Đã lưu ảnh trên iPhone. Chưa gửi sang thiết bị khác."
-            } catch {
-                alertText = error.localizedDescription
-            }
+                alertText = "Đã lưu trên iPhone. Chưa gửi tới thiết bị khác."
+            } catch { alertText = error.localizedDescription }
         }
     }
 }
 
 struct ActionButtonStyle: ButtonStyle {
     let background: Color
-
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.subheadline.bold())
