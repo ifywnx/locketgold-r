@@ -89,6 +89,15 @@ struct MemoriesView: View {
                 .padding(20)
             }
             .background(Theme.cream.ignoresSafeArea())
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        RecapView()
+                    } label: {
+                        Label("Tạo video", systemImage: "film.stack")
+                    }
+                }
+            }
             .sheet(item: $previewRemote) { moment in
                 NavigationStack {
                     VStack {
