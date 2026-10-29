@@ -3,6 +3,7 @@ import SwiftUI
 struct PrivacySafetyView: View {
     @EnvironmentObject private var cloud: CloudService
     @EnvironmentObject private var social: SocialService
+    @EnvironmentObject private var remotePush: RemotePushService
     @StateObject private var reminder = LocalReminders()
 
     @State private var handle = ""
@@ -27,7 +28,22 @@ struct PrivacySafetyView: View {
                         }
                     }
                 ))
-                Text("Đây là thông báo cục bộ trên iPhone. Tin nhắn và ảnh mới chưa có APNs push.")
+                Text("Thông báo cục bộ trên iPhone không cần APNs.")
+                    .font(.caption).foregroundStyle(.secondary)
+                if cloud.enabled {
+                    Toggle("Nhận thông báo đẩy APNs", isOn: Binding(
+                        get: { remotePush.enabled },
+                        set: { isOn in
+                            Task {
+                                if isOn { await remotePush.enable(cloud: cloud) }
+                                else { await remotePush.disable(cloud: cloud) }
+                            }
+                        }
+                    ))
+                    Text("Cần Apple Push Notifications capability, token server và Edge Function notify-event đã triển khai. Bật công tắc không bảo đảm push hoạt động nếu thiếu cấu hình.")
+                        .font(.caption).foregroundStyle(.secondary)
+                }
+                Text("Thông báo từ máy chủ hiện chỉ có khi toàn bộ cấu hình APNs hoàn tất.")
                     .font(.caption).foregroundStyle(.secondary)
             }
 
@@ -136,20 +152,22 @@ struct PrivacySafetyView: View {
             Text("Tài khoản chưa bị xóa ngay. Việc xóa cần quy trình quản trị an toàn phía server.")
         }
         .alert("AN Moments", isPresented: Binding(
-            get: { social.errorMessage != nil || social.notice != nil || feedback != nil },
+            get: { social.errorMessage != nil || social.notice != nil || feedback != nil || remotePush.feedback != nil },
             set: { if !$0 {
                 social.errorMessage = nil
                 social.notice = nil
                 feedback = nil
+                remotePush.feedback = nil
             }}
         )) {
             Button("OK") {
                 social.errorMessage = nil
                 social.notice = nil
                 feedback = nil
+                remotePush.feedback = nil
             }
         } message: {
-            Text(social.errorMessage ?? social.notice ?? feedback ?? "")
+            Text(social.errorMessage ?? social.notice ?? feedback ?? remotePush.feedback ?? "")
         }
     }
 }
