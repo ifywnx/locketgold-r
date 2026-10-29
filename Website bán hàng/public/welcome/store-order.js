@@ -16,7 +16,7 @@
   if(demoPreview){
     $('order-id').textContent='XEM THỬ'; $('order-mode').textContent='Dùng thử · Không thu tiền'; $('order-date').textContent=new Date().toLocaleString('vi-VN'); $('order-total').textContent='0đ'; $('order-state').textContent='Đã mở bộ cài thử'; report('Các file mẫu đã sẵn sàng.','done');
     const area=$('an-order-downloads'),container=$('an-download-products'); area.hidden=false; container.replaceChildren();
-    demoItems.forEach(sku=>{const section=document.createElement('div');section.className='an-download-product';const h=document.createElement('h3');h.textContent=sku;const links=document.createElement('div');links.className='an-download-links';[['sgmodule','Cài module'],['conf','Tải .conf'],['js','Xem .js'],['json','Tải .json']].forEach(([kind,label])=>{const a=document.createElement('a');a.href='/api/store/demo/'+encodeURIComponent(sku)+'/'+kind;a.textContent=label;a.rel='noreferrer';if(kind!=='js')a.download='';links.append(a)});section.append(h,links);container.append(section)});
+    demoItems.forEach(sku=>{const section=document.createElement('div');section.className='an-download-product';const h=document.createElement('h3');h.textContent=sku;const links=document.createElement('div');links.className='an-download-links';[['sgmodule','Cài module'],['conf','Tải .conf']].forEach(([kind,label])=>{const a=document.createElement('a');a.href='/api/store/demo/'+encodeURIComponent(sku)+'/'+kind;a.textContent=label;a.rel='noreferrer';if(kind!=='js')a.download='';links.append(a)});section.append(h,links);container.append(section)});
     return;
   }
   if(!valid){
