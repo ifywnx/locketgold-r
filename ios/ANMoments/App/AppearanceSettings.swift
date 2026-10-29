@@ -62,7 +62,10 @@ final class AppearanceSettings: ObservableObject {
     }
 
     @Published var cameraTheme: CameraTheme {
-        didSet { UserDefaults.standard.set(cameraTheme.rawValue, forKey: "anmoments.theme") }
+        didSet {
+            UserDefaults.standard.set(cameraTheme.rawValue, forKey: "anmoments.theme")
+            WidgetBridge.saveTheme(cameraTheme.rawValue)
+        }
     }
     @Published var badgeStyle: BadgeStyle {
         didSet { UserDefaults.standard.set(badgeStyle.rawValue, forKey: "anmoments.badge") }
