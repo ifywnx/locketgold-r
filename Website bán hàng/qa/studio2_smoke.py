@@ -50,12 +50,12 @@ with sync_playwright() as p:
             "name":"legacy-v1.json","mimeType":"application/json",
             "buffer":json.dumps({"version":1,"custom":[],"selected":[]}).encode()
         })
-        assert page.locator("#favorite-total").inner_text()=="0"
+        page.wait_for_function("() => document.getElementById('favorite-total').textContent==='0'",timeout=5000)
         page.locator("#restore").set_input_files({
             "name":"studio-v2.json","mimeType":"application/json",
             "buffer":json.dumps(payload).encode()
         })
-        assert page.locator("#favorite-total").inner_text()=="1"
+        page.wait_for_function("() => document.getElementById('favorite-total').textContent==='1'",timeout=5000)
         # Delete a custom caption and its favorite/selected IDs consistently.
         page.locator("#caption").fill("Lời nhắn mới")
         page.locator("#create button").click()
