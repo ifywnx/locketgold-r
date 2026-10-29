@@ -89,7 +89,7 @@ final class SocialService: ObservableObject {
                 .eq("conversation_id", value: room.uuidString)
                 .order("created_at", ascending: false)
                 .limit(150).execute().value
-            messages[room] = fetched.reversed()
+            messages[room] = Array(fetched.reversed())
         } catch { errorMessage = error.localizedDescription }
     }
 
@@ -220,9 +220,8 @@ final class SocialService: ObservableObject {
     func requestAccountDeletion(_ cloud: CloudService) async {
         guard let client = client(cloud), let me = cloud.userID else { return }
         do {
-            try await client.from("account_deletion_requests").upsert(
-                DeletionPayload(user_id: me, status: "pending"),
-                onConflict: "user_id"
+            try await client.from("account_deletion_requests").insert(
+                DeletionPayload(user_id: me, status: "pending")
             ).execute()
             notice = "Đã tạo yêu cầu. Tài khoản chưa được xóa; quản trị viên cần xử lý."
         } catch { errorMessage = error.localizedDescription }
