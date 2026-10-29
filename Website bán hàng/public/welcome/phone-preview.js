@@ -12,7 +12,7 @@
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
   const buttons={v1:$('preview-v1'),v2:$('preview-v2'),v3:$('preview-v3')};
   const panes={camera:$('phone-camera-scene'),send:$('phone-send-scene')};
-  const sources={v1:'v1-caption-data.json',v2:'v2-caption-data.json',v3:'caption-data.json'};
+  const sources=Object.fromEntries((window.AN_STORE_VERSION_CATALOG?.versions||[]).map(v=>[v.id,v.captionFile]));
   const cache=new Map();
   let version='v3',scene='send',items=[],index=0,sequence=0;
 
