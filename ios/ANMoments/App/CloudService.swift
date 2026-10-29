@@ -173,7 +173,7 @@ final class CloudService: ObservableObject {
 
     func publish(image: UIImage, caption: String, recipients: [UUID]) async -> Bool {
         guard let client, let userID else { return false }
-        guard let bytes = image.jpegData(compressionQuality: 0.78) else {
+        guard let bytes = ImageProcessor.jpeg(image) else {
             errorMessage = "Không thể mã hóa ảnh."
             return false
         }
