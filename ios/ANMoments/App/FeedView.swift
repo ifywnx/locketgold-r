@@ -1,14 +1,17 @@
 import SwiftUI
+import AVKit
 
 struct FeedView: View {
     @EnvironmentObject private var album: LocalAlbum
     @EnvironmentObject private var cloud: CloudService
-    @State private var selectedEmoji = "❤️"
+    @EnvironmentObject private var appearance: AppearanceSettings
+    @State private var showingViewers = false
+    @State private var viewerList: [String] = []
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
+                LazyVStack(alignment: .leading, spacing: 20) {
                     HStack {
                         VStack(alignment: .leading, spacing: 5) {
                             Text("AN Moments").font(.system(size: 31, weight: .bold, design: .rounded))
@@ -18,11 +21,11 @@ struct FeedView: View {
                         Spacer()
                         Image(systemName: "heart.square.fill")
                             .font(.system(size: 40))
-                            .foregroundStyle(Theme.gold)
+                            .foregroundStyle(appearance.cameraTheme.accent)
                     }
 
                     if !cloud.enabled {
-                        status("CHẾ ĐỘ THỬ TRÊN MÁY", message: "Ảnh được lưu trên iPhone, chưa gửi đến máy bạn bè.")
+                        status("CHẾ ĐỘ THỬ TRÊN MÁY", message: "Ảnh và video được lưu trên iPhone, chưa gửi đến máy bạn bè.")
                     }
 
                     if cloud.enabled {
@@ -37,19 +40,29 @@ struct FeedView: View {
                                         : (cloud.authorNames[moment.author_id] ?? "Bạn bè"),
                                     date: moment.date
                                 )
-                                AsyncImage(url: moment.signedURL) { phase in
-                                    switch phase {
-                                    case .success(let image):
-                                        image.resizable().scaledToFill()
-                                            .frame(maxWidth: .infinity)
-                                            .frame(height: 360).clipped()
-                                    case .failure:
+                                if moment.isVideo {
+                                    if let url = moment.signedURL {
+                                        MomentVideoPlayer(url: url)
+                                            .frame(height: 340)
+                                            .clipShape(RoundedRectangle(cornerRadius: 24))
+                                    } else {
                                         missingImage
-                                    default:
-                                        ProgressView().frame(maxWidth: .infinity).frame(height: 260)
                                     }
+                                } else {
+                                    AsyncImage(url: moment.signedURL) { phase in
+                                        switch phase {
+                                        case .success(let image):
+                                            image.resizable().scaledToFill()
+                                                .frame(maxWidth: .infinity)
+                                                .frame(height: 360).clipped()
+                                        case .failure:
+                                            missingImage
+                                        default:
+                                            ProgressView().frame(maxWidth: .infinity).frame(height: 260)
+                                        }
+                                    }
+                                    .clipShape(RoundedRectangle(cornerRadius: 24))
                                 }
-                                .clipShape(RoundedRectangle(cornerRadius: 24))
                                 if let caption = moment.caption, !caption.isEmpty {
                                     Text(caption).font(.body)
                                 }
@@ -67,6 +80,16 @@ struct FeedView: View {
                                     }
                                 }
                                 if moment.author_id == cloud.userID {
+                                    Button {
+                                        Task {
+                                            await cloud.loadViewers(moment)
+                                            viewerList = cloud.viewerNames[moment.id] ?? []
+                                            showingViewers = true
+                                        }
+                                    } label: {
+                                        Label("Ai đã xem", systemImage: "eye.fill")
+                                            .font(.subheadline.bold())
+                                    }
                                     Button("Xóa khoảnh khắc", role: .destructive) {
                                         Task { await cloud.delete(moment) }
                                     }
@@ -75,13 +98,20 @@ struct FeedView: View {
                             }
                             .padding(16)
                             .background(.white, in: RoundedRectangle(cornerRadius: 28))
+                            .onAppear {
+                                Task { await cloud.recordView(moment) }
+                            }
                         }
                     } else {
                         if album.moments.isEmpty { emptyState }
                         ForEach(album.moments) { moment in
                             VStack(alignment: .leading, spacing: 12) {
                                 header("Khoảnh khắc của bạn", date: moment.createdAt)
-                                if let image = album.image(for: moment) {
+                                if moment.isVideo, let url = album.videoURL(for: moment) {
+                                    MomentVideoPlayer(url: url)
+                                        .frame(height: 340)
+                                        .clipShape(RoundedRectangle(cornerRadius: 24))
+                                } else if let image = album.image(for: moment) {
                                     Image(uiImage: image).resizable().scaledToFill()
                                         .frame(maxWidth: .infinity).frame(height: 360)
                                         .clipped()
@@ -132,6 +162,25 @@ struct FeedView: View {
                     }
                 }
             }
+            .sheet(isPresented: $showingViewers) {
+                NavigationStack {
+                    List {
+                        if viewerList.isEmpty {
+                            ContentUnavailableView("Chưa có lượt xem", systemImage: "eye.slash")
+                        } else {
+                            ForEach(viewerList, id: \.self) { name in
+                                Label(name, systemImage: "eye.fill")
+                            }
+                        }
+                    }
+                    .navigationTitle("Đã xem")
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Đóng") { showingViewers = false }
+                        }
+                    }
+                }
+            }
             .alert("Thông báo", isPresented: Binding(
                 get: { cloud.errorMessage != nil },
                 set: { if !$0 { cloud.errorMessage = nil } }
@@ -144,7 +193,7 @@ struct FeedView: View {
     private func header(_ label: String, date: Date) -> some View {
         HStack {
             Image(systemName: "person.crop.circle.fill")
-                .font(.title2).foregroundStyle(Theme.gold)
+                .font(.title2).foregroundStyle(appearance.cameraTheme.accent)
             VStack(alignment: .leading) {
                 Text(label).fontWeight(.semibold)
                 Text(MomentFormat.date(date))
@@ -167,7 +216,7 @@ struct FeedView: View {
         VStack(spacing: 16) {
             Image(systemName: "camera.macro")
                 .font(.system(size: 56))
-                .foregroundStyle(Theme.gold)
+                .foregroundStyle(appearance.cameraTheme.accent)
             Text("Chưa có khoảnh khắc")
                 .font(.title2.bold())
             Text("Mở tab Chụp ảnh để lưu khoảnh khắc đầu tiên.")
@@ -186,6 +235,27 @@ struct FeedView: View {
         .foregroundStyle(Theme.ink)
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(14)
-        .background(Theme.gold.opacity(0.23), in: RoundedRectangle(cornerRadius: 14))
+        .background(appearance.cameraTheme.accent.opacity(0.23), in: RoundedRectangle(cornerRadius: 14))
+    }
+}
+
+
+struct MomentVideoPlayer: View {
+    let url: URL
+    @State private var player: AVPlayer?
+
+    var body: some View {
+        Group {
+            if let player {
+                VideoPlayer(player: player)
+            } else {
+                ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+        }
+        .task(id: url) {
+            player?.pause()
+            player = AVPlayer(url: url)
+        }
+        .onDisappear { player?.pause() }
     }
 }
