@@ -13,8 +13,17 @@ struct FriendsView: View {
                         .font(.system(size: 29, weight: .bold, design: .rounded))
 
                     if cloud.enabled {
-                        Text("Tên của bạn: @\(cloud.myProfile?.handle ?? "đang tải")")
-                            .font(.subheadline)
+                        HStack {
+                            Text("Tên của bạn: @\(cloud.myProfile?.handle ?? "đang tải")")
+                                .font(.subheadline)
+                            Spacer()
+                            if let handle = cloud.myProfile?.handle {
+                                ShareLink(item: "@" + handle) {
+                                    Image(systemName: "square.and.arrow.up")
+                                }
+                                .accessibilityLabel("Chia sẻ username")
+                            }
+                        }
                         Text("Thêm bạn bằng tên người dùng. Họ phải đồng ý trước khi hai người chia sẻ ảnh.")
                             .foregroundStyle(Theme.muted)
                     } else {
