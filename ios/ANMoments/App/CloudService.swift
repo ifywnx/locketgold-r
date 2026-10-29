@@ -117,6 +117,10 @@ final class CloudService: ObservableObject {
                     .createSignedURL(path: loadedMoments[index].storage_path, expiresIn: 3600)
             }
             moments = loadedMoments
+            if let latestURL = loadedMoments.first?.signedURL,
+               let (data, _) = try? await URLSession.shared.data(from: latestURL) {
+                WidgetBridge.saveLatest(data: data)
+            }
         } catch {
             errorMessage = error.localizedDescription
         }
