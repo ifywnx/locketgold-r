@@ -2,6 +2,8 @@ import SwiftUI
 
 @main
 struct ANMomentsApp: App {
+    @UIApplicationDelegateAdaptor(ANMomentsPushDelegate.self) private var pushDelegate
+    @StateObject private var remotePush = RemotePushService()
     @StateObject private var album = LocalAlbum()
     @StateObject private var cloud = CloudService()
     @StateObject private var appearance = AppearanceSettings()
@@ -14,6 +16,7 @@ struct ANMomentsApp: App {
                 .environmentObject(cloud)
                 .environmentObject(appearance)
                 .environmentObject(social)
+                .environmentObject(remotePush)
                 .tint(Theme.ink)
         }
     }
@@ -28,6 +31,7 @@ enum Theme {
 
 struct RootView: View {
     @EnvironmentObject private var social: SocialService
+    @EnvironmentObject private var remotePush: RemotePushService
     @EnvironmentObject private var cloud: CloudService
 
     var body: some View {
@@ -41,9 +45,15 @@ struct RootView: View {
         .task {
             await cloud.restoreSession()
         }
-        .onChange(of: cloud.userID) { _, _ in
+        .onChange(of: cloud.userID) { _, newID in
             // Never display the previous account's chat/inbox on a shared iPhone.
             social.clearSensitiveCache()
+            if newID != nil {
+                Task { await remotePush.uploadCachedToken(cloud: cloud) }
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .anMomentsAPNsToken)) { _ in
+            Task { await remotePush.uploadCachedToken(cloud: cloud) }
         }
     }
 }
