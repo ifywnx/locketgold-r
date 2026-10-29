@@ -1,7 +1,7 @@
 name: Repo structure and legacy route QA
 on:
   push:
-    branches: [main, feat/demo-checkout-delivery-20261029]
+    branches: [main, 'feat/**']
   workflow_dispatch:
 permissions:
   contents: read

@@ -64,3 +64,10 @@ Luồng demo mới tại `/welcome/index.html#demo-checkout`:
 Bản demo **không truy cập SQLite**, không tạo order, không gọi payOS, không cấp licence/mã kích hoạt, không cấp Gold hoặc script trả phí. Biên nhận demo không tương đương chứng từ thanh toán. Không đưa các token demo vào `/api/access`, `/download`, `/api/store/files` hay `/api/payments`. Những API lịch sử không thay đổi.
 
 Kiểm thử: `python3 qa/demo_checkout_smoke.py` khi Next.js đã chạy với `STORE_DEMO_SECRET`. Workflow sử dụng khóa **chỉ dành cho CI**, khác Production. Bản public phải luôn hiển thị rõ trạng thái cửa hàng chưa mở thanh toán thật.
+
+## Phase 3 — tiếp tục đơn DEMO sau reload (29/10/2026)
+
+- Phiếu chờ được giữ trong sessionStorage cùng tab, không tạo đơn DB; khi reload gọi POST /api/demo/inspect để **máy chủ** xác minh HMAC, gói và hạn 15 phút.
+- Biên nhận hoàn tất được kiểm tra lại ở POST /api/demo/restore (60 phút). Đồng hồ hạn sử dụng hiển thị trên trang và gỡ link khi hết hạn.
+- Phiếu giả, sai giai đoạn, hết hạn hoặc đổi phiên bản đều không thể cấp file trả phí. Storage bị khóa thì demo vẫn chạy trong tab cho tới khi reload.
+- Không có dashboard doanh thu V1–V3 ở phase này: DEMO là stateless, không phải giao dịch thật. Muốn mở bán cần database bền vững, quyền phân phối sản phẩm và quy trình giao hàng riêng.
