@@ -21,6 +21,7 @@
    $('demo-create').disabled=locked;
    $('demo-restore').disabled=locked;
  };
+ select.addEventListener('change',update);
  const report=(text,error=false)=>{message.textContent=text;message.dataset.error=String(error)};
  const freeze=b=>{locked=b;select.disabled=b||!!quote;update()};
  const api=async(path,payload)=>{
