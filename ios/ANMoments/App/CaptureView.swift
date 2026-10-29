@@ -7,6 +7,7 @@ import UniformTypeIdentifiers
 struct CaptureView: View {
     @EnvironmentObject private var album: LocalAlbum
     @EnvironmentObject private var cloud: CloudService
+    @EnvironmentObject private var social: SocialService
     @EnvironmentObject private var appearance: AppearanceSettings
     @State private var cameraOpen = false
     @State private var editingPhoto = false
@@ -16,6 +17,7 @@ struct CaptureView: View {
     @State private var videoURL: URL?
     @State private var caption = ""
     @State private var selectedFriends: Set<UUID> = []
+    @State private var selectedGroup: UUID?
     @State private var alertText: String?
     @State private var sending = false
 
@@ -126,6 +128,17 @@ struct CaptureView: View {
                             let count = cloud.enabled ? cloud.friends.count : album.friends.count
                             Text("\(count) bạn").font(.caption).foregroundStyle(Theme.muted)
                         }
+                        if cloud.enabled && !social.rooms.filter(\.isGroup).isEmpty {
+                            Picker("Gửi vào nhóm", selection: $selectedGroup) {
+                                Text("Không chọn nhóm").tag(Optional<UUID>.none)
+                                ForEach(social.rooms.filter(\.isGroup)) { room in
+                                    Text(room.title).tag(Optional(room.id))
+                                }
+                            }
+                            .onChange(of: selectedGroup) { _, selected in
+                                if selected != nil { selectedFriends.removeAll() }
+                            }
+                        }
                         Button(selectedFriends.count == (cloud.enabled ? cloud.friends.count : album.friends.count)
                                ? "Bỏ chọn tất cả" : "Chọn tất cả") {
                             let all = cloud.enabled
@@ -135,7 +148,7 @@ struct CaptureView: View {
                             } else { selectedFriends = Set(all) }
                         }
                         .font(.subheadline.bold())
-                        .disabled((cloud.enabled ? cloud.friends.isEmpty : album.friends.isEmpty))
+                        .disabled(selectedGroup != nil || (cloud.enabled ? cloud.friends.isEmpty : album.friends.isEmpty))
                         if cloud.enabled {
                             if cloud.friends.isEmpty {
                                 Text("Mời bạn bè ở tab Bạn bè để chia sẻ. Không chọn ai = lưu riêng.")
@@ -143,6 +156,7 @@ struct CaptureView: View {
                             }
                             ForEach(cloud.friends) { friend in
                                 friendToggle(friend.display_name, id: friend.id)
+                                    .disabled(selectedGroup != nil)
                             }
                         } else {
                             Text("Bản thử trên máy: chọn tên chỉ gắn nhãn, không gửi qua mạng.")
@@ -175,6 +189,7 @@ struct CaptureView: View {
                 .padding(20)
             }
             .background(appearance.cameraTheme.background.ignoresSafeArea())
+            .task { if cloud.enabled { await social.loadRooms(cloud) } }
             .sheet(isPresented: $editingPhoto) {
                 if let image {
                     PhotoEditorView(source: image) { edited in
@@ -257,7 +272,10 @@ struct CaptureView: View {
         if cloud.enabled {
             let recipients = Array(selectedFriends)
             let ok: Bool
-            if let videoURL {
+            if let groupID = selectedGroup {
+                ok = await cloud.publishToGroup(image: image, videoURL: videoURL,
+                                                caption: caption, groupID: groupID)
+            } else if let videoURL {
                 ok = await cloud.publishVideo(url: videoURL, caption: caption, recipients: recipients)
             } else if let image {
                 ok = await cloud.publish(image: image, caption: caption, recipients: recipients)
@@ -267,6 +285,7 @@ struct CaptureView: View {
                 videoURL = nil
                 caption = ""
                 selectedFriends.removeAll()
+                selectedGroup = nil
                 alertText = "Đã lưu khoảnh khắc."
             }
         } else {
