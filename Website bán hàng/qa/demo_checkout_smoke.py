@@ -156,7 +156,7 @@ with sync_playwright() as p:
         page.locator("#demo-restore").click()
         page.locator("#demo-files").wait_for(state="visible",timeout=8000)
         assert "129.000" in page.locator("#demo-order-price").inner_text()
-        assert "Không phải" in page.locator("#demo-files").inner_text()
+        assert "không phải bộ cài trả phí" in page.locator("#demo-files").inner_text().lower()
         # A receipt is valid for one version only; switching clears old download links.
         page.locator("#demo-version").select_option("v1")
         assert page.locator("#demo-files").is_hidden()
