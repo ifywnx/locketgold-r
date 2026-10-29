@@ -4,6 +4,7 @@ struct MemoriesView: View {
     @EnvironmentObject private var album: LocalAlbum
     @EnvironmentObject private var cloud: CloudService
     @State private var previewLocal: LocalMoment?
+    @State private var previewRemote: RemoteMoment?
     private let columns = [GridItem(.flexible(), spacing: 9), GridItem(.flexible(), spacing: 9)]
 
     var body: some View {
@@ -17,10 +18,39 @@ struct MemoriesView: View {
                     LazyVGrid(columns: columns, spacing: 9) {
                         if cloud.enabled {
                             ForEach(cloud.moments) { moment in
-                                AsyncImage(url: moment.signedURL) { phase in
-                                    if let image = phase.image {
-                                        image.resizable().scaledToFill()
-                                    } else {
+                                Button {
+                                    previewRemote = moment
+                                } label: {
+                                    ZStack {
+                                        if moment.isVideo {
+                                            Rectangle()
+                                                .fill(Theme.gold.opacity(0.17))
+                                                .overlay {
+                                                    VStack(spacing: 6) {
+                                                        Image(systemName: "play.rectangle.fill")
+                                                            .font(.largeTitle)
+                                                        Text("Video")
+                                                            .font(.caption.bold())
+                                                    }
+                                                    .foregroundStyle(Theme.ink)
+                                                }
+                                        } else {
+                                            AsyncImage(url: moment.signedURL) { phase in
+                                                if let image = phase.image {
+                                                    image.resizable().scaledToFill()
+                                                } else {
+                                                    Rectangle().fill(Theme.gold.opacity(0.2))
+                                                        .overlay(Image(systemName: "photo").foregroundStyle(Theme.muted))
+                                                }
+                                            }
+                                        }
+                                    }
+                                    .frame(height: 190).clipped()
+                                    .clipShape(RoundedRectangle(cornerRadius: 18))
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        } else {
                                         Rectangle().fill(Theme.gold.opacity(0.2))
                                             .overlay(Image(systemName: "photo").foregroundStyle(Theme.muted))
                                     }
@@ -53,10 +83,34 @@ struct MemoriesView: View {
                 .padding(20)
             }
             .background(Theme.cream.ignoresSafeArea())
+            .sheet(item: $previewRemote) { moment in
+                NavigationStack {
+                    VStack {
+                        if moment.isVideo, let url = moment.signedURL {
+                            MomentVideoPlayer(url: url).frame(height: 500)
+                        } else if let url = moment.signedURL {
+                            AsyncImage(url: url) { image in
+                                image.resizable().scaledToFit()
+                            } placeholder: {
+                                ProgressView()
+                            }
+                        }
+                        if let caption = moment.caption { Text(caption) }
+                    }
+                    .padding()
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Đóng") { previewRemote = nil }
+                        }
+                    }
+                }
+            }
             .sheet(item: $previewLocal) { moment in
                 NavigationStack {
                     VStack(spacing: 12) {
-                        if let image = album.image(for: moment) {
+                        if moment.isVideo, let url = album.videoURL(for: moment) {
+                            MomentVideoPlayer(url: url).frame(height: 480)
+                        } else if let image = album.image(for: moment) {
                             Image(uiImage: image).resizable().scaledToFit()
                                 .frame(maxHeight: 530)
                         }
