@@ -61,3 +61,26 @@ a{color:#7a58c0}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card,.preview,button{transition:none!important;animation:none!important}.card:hover,#live:hover{transform:none}}
 
 .third-color-label{display:flex;align-items:center;gap:8px;white-space:nowrap}.third-color-label input{width:auto;height:auto;margin:0;accent-color:#9b7ddc}.colors label[hidden]{display:none!important}
+
+
+/* Caption Studio 2 — subtle, touch-friendly controls; never alter selected/export semantics. */
+.studio-top-nav{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:4px}
+.studio-top-nav a{display:inline-flex;padding:9px 14px;border-radius:99px;border:1px solid #e5d9ea;background:#ffffffad;color:#635373;text-decoration:none;font-size:12px;font-weight:800}
+.studio-top-nav a:hover{background:#f4ecfb;border-color:#d1bfdf}
+.studio-stats span span{border:0;background:none;box-shadow:none;padding:0;font-size:inherit;color:inherit}
+.studio-filter-row{display:flex;align-items:center;gap:10px 24px;flex-wrap:wrap;margin:10px 0}
+.studio-filter-row label{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.studio-filter-row input{width:17px;height:17px;accent-color:#8866d4}
+.studio-privacy-note{font-size:11px;line-height:1.75;color:#8c7895;max-width:660px;margin:8px 0 14px}
+.caption-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:5px 0 0}
+.caption-actions button{padding:9px 10px!important;margin:0!important;min-height:40px;border-radius:10px;font-size:11px;box-shadow:none;flex:1 1 auto}
+.caption-actions .favorite-action[aria-pressed="true"]{background:#f8eaf3;color:#943c76;border:1px solid #e5b7d0}
+.caption-actions .copy-caption{background:#f2f4fb;color:#53627d}
+.card:focus-within{border-color:#b9a2d8;box-shadow:0 0 0 2px #b19ad52b}
+@media(max-width:700px){
+ .studio-top-nav a{font-size:11px;padding:9px 11px}
+ .caption-actions{gap:6px}
+ .caption-actions button{font-size:10px;padding:9px 7px!important}
+ .studio-filter-row{gap:8px 18px}
+}
+@media(prefers-reduced-motion:reduce){.studio-top-nav a,.caption-actions button{transition:none}}
