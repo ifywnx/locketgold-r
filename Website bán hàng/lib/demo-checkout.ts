@@ -66,8 +66,17 @@ export const demoResponse=(body:unknown,status=200)=>Response.json(body,{status,
   'Cache-Control':'no-store, private','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff'
 }});
 export function demoSameOrigin(r:Request){
-  const origin=r.headers.get('origin');
-  return !!origin&&origin===new URL(r.url).origin;
+  const raw=r.headers.get('origin');
+  if(!raw)return false;
+  try{
+    const origin=new URL(raw),url=new URL(r.url);
+    if(origin.origin===url.origin)return true;
+    // Next.js may internally canonicalize 127.0.0.1 to localhost in local CI.
+    // Compare with the actual request Host while still requiring the same scheme.
+    const requestHost=r.headers.get('host');
+    const protocol=r.headers.get('x-forwarded-proto')||url.protocol.slice(0,-1);
+    return !!requestHost && origin.host===requestHost && origin.protocol===protocol+':';
+  }catch{return false}
 }
 export function demoOrder(ticket:Ticket){
   const v=demoProduct(ticket.version)!;
