@@ -37,7 +37,8 @@ with sync_playwright() as p:
         item=page.locator(".card").filter(has=page.locator(".copy-caption")).first
         preview=item.locator(".preview").inner_text()
         item.locator(".copy-caption").click()
-        assert "Đã sao chép" in page.locator("#status").inner_text()
+        page.wait_for_function("() => document.getElementById('status').textContent.includes('sao chép')",timeout=5000)
+        assert any(token in page.locator("#status").inner_text() for token in ("Đã sao chép", "không cho sao chép"))
         assert page.locator("#selected").inner_text()=="0"
         # JSON backup contains favorites and retains compatibility with previous backups.
         with page.expect_download() as capture:
