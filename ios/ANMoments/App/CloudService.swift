@@ -13,6 +13,8 @@ final class CloudService: ObservableObject {
     @Published var moments: [RemoteMoment] = []
     @Published var friends: [RemoteProfile] = []
     @Published var requests: [FriendRequest] = []
+    @Published var reactions: [UUID: String] = [:]
+    @Published var requesterNames: [UUID: String] = [:]
     @Published var busy = false
     @Published var errorMessage: String?
     @Published var infoMessage: String?
@@ -69,6 +71,8 @@ final class CloudService: ObservableObject {
             moments = []
             friends = []
             requests = []
+            reactions = [:]
+            requesterNames = [:]
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -106,6 +110,23 @@ final class CloudService: ObservableObject {
                 .eq("to_user", value: userID.uuidString)
                 .eq("status", value: "pending")
                 .execute().value
+
+            var names: [UUID: String] = [:]
+            for request in requests {
+                if let profile: RemoteProfile = try? await client.from("profiles")
+                    .select("id,handle,display_name")
+                    .eq("id", value: request.from_user.uuidString)
+                    .single().execute().value {
+                    names[request.from_user] = profile.display_name + " (@" + profile.handle + ")"
+                }
+            }
+            requesterNames = names
+
+            let mine: [RemoteReaction] = try await client.from("reactions")
+                .select("moment_id,sender_id,emoji")
+                .eq("sender_id", value: userID.uuidString)
+                .execute().value
+            reactions = Dictionary(uniqueKeysWithValues: mine.map { ($0.moment_id, $0.emoji) })
 
             var loadedMoments: [RemoteMoment] = try await client.from("moments")
                 .select("id,author_id,storage_path,caption,created_at")
@@ -183,6 +204,30 @@ final class CloudService: ObservableObject {
         } catch {
             errorMessage = error.localizedDescription
             return false
+        }
+    }
+
+    func react(to momentID: UUID, emoji: String) async {
+        guard let client, let userID else { return }
+        do {
+            try await client.from("reactions")
+                .upsert(
+                    ReactionPayload(moment_id: momentID, sender_id: userID, emoji: emoji),
+                    onConflict: "moment_id,sender_id"
+                ).execute()
+            reactions[momentID] = emoji
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func removeFriend(_ id: UUID) async {
+        guard let client else { return }
+        do {
+            try await client.rpc("remove_friend", params: ["other_user": id.uuidString]).execute()
+            await refresh()
+        } catch {
+            errorMessage = error.localizedDescription
         }
     }
 
