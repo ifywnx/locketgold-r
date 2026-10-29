@@ -1,4 +1,5 @@
 import {PLANS,parsePlan,planForAmount} from '../../../lib/plans';
+import catalog from '../../../lib/version-catalog.json';
 import {and,eq,gt,lt,count} from 'drizzle-orm';
 import {getDb} from '../../../db';
 import {orders} from '../../../db/schema';
@@ -8,6 +9,8 @@ import {ACCOUNT,BIN,payos,secrets,settle} from '../../../lib/payos';
 function owner(r:Request){const v=r.headers.get('authorization')?.replace(/^Bearer /,'')||'';return /^[a-f0-9]{64}$/.test(v)?v:null}
 export async function POST(r:Request){
  if(!sameOrigin(r))return json({error:'Yêu cầu không hợp lệ.'},403);
+ // A displayed price is not an open sale; disable all new checkouts server-side.
+ if(catalog.paymentStatus!=='enabled')return json({error:'An Store chưa mở thanh toán. Bạn vẫn có thể xem bộ cài thử.',salesEnabled:false},410);
  let plan;try{const b=await r.json() as {plan?:unknown};plan=parsePlan(b.plan)}catch{return json({error:'Chọn gói hợp lệ.'},400)}
  if(!plan)return json({error:'Chọn gói hợp lệ.'},400);
  // Retired bundle: preserve existing paid orders and access, reject *new* Plus orders.
