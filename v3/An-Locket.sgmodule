@@ -1,0 +1,30 @@
+#!name=An · Locket V3
+#!desc=Full Icon / Semantic Studio · 716 mục overlay (705 caption tĩnh + 11 kiểu động) · Video 30s / 0.9 Mbps · Cần kiểm thử trên thiết bị
+#!category=Rewrite
+#!system=iOS
+
+[General]
+bypass-system = true
+skip-proxy = *.local, *.crashlytics.com
+tun-excluded-routes = 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12
+
+[Script]
+# 1. Xóa header cache RevenueCat (an toàn)
+deleteHeader = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts|subscribers), script-path=__ASSET_BASE__/deleteHeader.js, timeout=60
+
+# 2. Fake receipt Gold vĩnh viễn
+revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts$|subscribers\/[^/]+$), script-path=__ASSET_BASE__/Locket_An.js, requires-body=true, max-size=-1, timeout=60
+
+# 3. Remote Config: 30s video + captions + widget
+locket_rc = type=http-response, pattern=^https:\/\/firebaseremoteconfig\.googleapis\.com\/v1\/projects\/locket-4252a\/.+, script-path=__ASSET_BASE__/Locket_Unlocked.js, requires-body=true, max-size=-1, timeout=60
+
+[Rule]
+# Anti-Telemetry
+DOMAIN-SUFFIX, mixpanel.com, REJECT
+DOMAIN-SUFFIX, amplitude.com, REJECT
+DOMAIN-SUFFIX, instabug.com, REJECT
+DOMAIN-SUFFIX, crashlytics.com, REJECT
+DOMAIN-SUFFIX, app-measurement.com, REJECT
+
+[MITM]
+hostname = %APPEND% api.revenuecat.com, *.revenuecat.com, firebaseremoteconfig.googleapis.com
