@@ -80,6 +80,14 @@ struct SettingsView: View {
                     }
                 }
 
+                Section("Widget bạn thân") {
+                    NavigationLink {
+                        WidgetPreferenceView()
+                    } label: {
+                        Label("Chọn người hiện trên widget", systemImage: "heart.text.square")
+                    }
+                }
+
                 Section("Đổi biểu tượng iPhone") {
                     Text("Tạo bởi AN Moments, không phải biểu tượng Gold chính thức của Locket.")
                         .font(.caption).foregroundStyle(.secondary)
