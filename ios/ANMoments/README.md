@@ -10,7 +10,7 @@ Independent SwiftUI photo-moment app. **Not** an extracted Locket binary, Gold b
 - Email OTP via Supabase when configured
 - Real friendship invitations and acceptance through SQL RPC
 - Private Supabase Storage image upload, database-backed moments, recipient visibility enforced with RLS
-- Manual refresh of shared moments, delete your own cloud moments
+- Manual refresh of shared moments, cloud emoji reactions, unfriend, delete your own cloud moments
 - Optional WidgetKit/App Groups reference code
 
 ## Important limitations (do not mistake these for implemented features)
