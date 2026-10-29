@@ -70,5 +70,16 @@ struct MainTabs: View {
                 .tag(4)
         }
         .background(Theme.cream)
+        .onOpenURL { url in
+            guard url.scheme?.lowercased() == "anmoments",
+                  url.host?.lowercased() == "invite",
+                  let raw = url.pathComponents.dropFirst().first else { return }
+            let handle = raw.lowercased()
+            guard handle.range(of: "^[a-z0-9_]{3,24}$", options: .regularExpression) != nil else {
+                return
+            }
+            UserDefaults.standard.set(handle, forKey: "anmoments.pendingInvite")
+            tab = 2
+        }
     }
 }
