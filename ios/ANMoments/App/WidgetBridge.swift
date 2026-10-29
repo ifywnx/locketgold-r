@@ -6,6 +6,13 @@ import WidgetKit
 enum WidgetBridge {
     static let group = "group.com.ifywnx.anmoments"
     static let imageName = "latest.jpg"
+    static let borderKey = "widget.theme"
+
+    static func saveTheme(_ theme: String) {
+        guard let defaults = UserDefaults(suiteName: group) else { return }
+        defaults.set(theme, forKey: borderKey)
+        WidgetCenter.shared.reloadTimelines(ofKind: "ANMomentsLatest")
+    }
 
     static func saveLatest(data: Data?) {
         guard let container = FileManager.default.containerURL(
