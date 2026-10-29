@@ -1,4 +1,6 @@
 import SwiftUI
+import PhotosUI
+import UniformTypeIdentifiers
 
 struct SocialHubView: View {
     @EnvironmentObject private var cloud: CloudService
@@ -185,6 +187,8 @@ struct ChatThreadView: View {
     @EnvironmentObject private var cloud: CloudService
     @EnvironmentObject private var social: SocialService
     @State private var message = ""
+    @State private var attachment: PhotosPickerItem?
+    @State private var mediaUploading = false
     let room: ChatRoom
 
     var body: some View {
@@ -196,7 +200,22 @@ struct ChatThreadView: View {
                             let mine = item.sender_id == cloud.userID
                             HStack {
                                 if mine { Spacer(minLength: 48) }
-                                Text(item.body)
+                                VStack(alignment: .leading, spacing: 6) {
+                                    if let path = item.media_path,
+                                       let url = social.mediaURLs[path] {
+                                        if item.media_kind == "video" {
+                                            MomentVideoPlayer(url: url)
+                                                .frame(width: 228, height: 230)
+                                                .clipShape(RoundedRectangle(cornerRadius: 14))
+                                        } else {
+                                            AsyncImage(url: url) { image in
+                                                image.resizable().scaledToFit()
+                                                    .frame(maxWidth: 230, maxHeight: 300)
+                                            } placeholder: { ProgressView() }
+                                        }
+                                    }
+                                    Text(item.body)
+                                }
                                     .padding(.vertical, 11)
                                     .padding(.horizontal, 14)
                                     .background(
@@ -220,6 +239,13 @@ struct ChatThreadView: View {
             }
             Divider()
             HStack(spacing: 12) {
+                PhotosPicker(selection: $attachment, matching: .any(of: [.images, .videos])) {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 29))
+                        .foregroundStyle(Theme.ink)
+                }
+                .disabled(mediaUploading)
+                .accessibilityLabel("Chọn ảnh hoặc video gửi vào cuộc trò chuyện")
                 TextField("Nhắn một điều dễ thương...", text: $message, axis: .vertical)
                     .lineLimit(1...4)
                     .padding(12)
@@ -247,10 +273,37 @@ struct ChatThreadView: View {
         .navigationTitle(room.displayName)
         .navigationBarTitleDisplayMode(.inline)
         .task(id: room.id) {
-            // Foreground-only short polling; not APNs or guaranteed Realtime.
+            // Fallback polling remains active if Realtime events are unavailable.
             while !Task.isCancelled {
                 await social.loadMessages(room.id, cloud: cloud)
-                try? await Task.sleep(nanoseconds: 6_000_000_000)
+                try? await Task.sleep(nanoseconds: 20_000_000_000)
+            }
+        }
+        .task(id: room.id) {
+            await social.observeChat(room.id, cloud: cloud)
+        }
+        .onChange(of: attachment) { _, picked in
+            guard let picked else { return }
+            Task {
+                mediaUploading = true
+                defer {
+                    mediaUploading = false
+                    attachment = nil
+                }
+                if picked.supportedContentTypes.contains(where: { $0.conforms(to: .movie) }) {
+                    guard let movie = try? await picked.loadTransferable(type: ImportedMovie.self) else {
+                        social.errorMessage = "Không thể đọc video."
+                        return
+                    }
+                    _ = await social.sendVideo(movie.url, to: room.id, cloud: cloud)
+                } else {
+                    guard let bytes = try? await picked.loadTransferable(type: Data.self),
+                          let image = UIImage(data: bytes) else {
+                        social.errorMessage = "Không thể đọc ảnh."
+                        return
+                    }
+                    _ = await social.sendPhoto(image, to: room.id, cloud: cloud)
+                }
             }
         }
         .alert("Tin nhắn", isPresented: Binding(
