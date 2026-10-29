@@ -26,7 +26,7 @@ insert into public.streak_wallets(user_id)
 
 -- Existing photos count as real posts (UTC day).
 insert into public.streak_days(user_id,day,source)
-  select author_id,(created_at at time zone 'UTC')::date,'post'
+  select distinct author_id,(created_at at time zone 'UTC')::date,'post'
   from public.moments
   on conflict (user_id,day) do update set
     source='post' where public.streak_days.source='restored';
