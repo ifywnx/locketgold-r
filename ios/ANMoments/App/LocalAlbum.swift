@@ -51,7 +51,7 @@ final class LocalAlbum: ObservableObject {
     }
 
     func add(image: UIImage, caption: String, recipients: [String]) throws {
-        guard let compressed = image.jpegData(compressionQuality: 0.83) else {
+        guard let compressed = ImageProcessor.jpeg(image) else {
             throw CocoaError(.fileWriteInapplicableStringEncoding)
         }
         let name = UUID().uuidString + ".jpg"
