@@ -3,50 +3,19 @@
   const dialog=document.getElementById('plan-dialog');
   if(!dialog)return;
   const byId=id=>document.getElementById(id);
-  const facts={
-    standard:{
-      eyebrow:'AN · GÓI V1 · DÀNH CHO NGƯỜI ĐÃ CÓ SHADOWROCKET',
-      name:'An · Locket V1',
-      price:'49.000đ',
-      summary:'Bộ cấu hình cơ bản V1 trong kho dữ liệu của An. Phù hợp nếu bạn đã có ứng dụng Shadowrocket và muốn bắt đầu từ bản đơn giản.',
-      features:[
-        'Bản cấu hình Locket V1, sử dụng cách thiết lập riêng của V1.',
-        'Tệp cài đặt và mã xử lý của V1; cấu hình DNS cũ và hướng dẫn từng bước.',
-        'Có thư viện caption V1; không bao gồm toàn bộ các mẫu ở V2.',
-        'Không kèm tài khoản tải Shadowrocket — bạn cần có ứng dụng sẵn.'
-      ],
-      note:'Lưu ý: Bộ V1 và V2 dùng nguồn cấu hình khác nhau; giao diện web không chứng minh mọi tính năng đều hoạt động trên mọi phiên bản Locket.',
-      hasSamples:true
-    },
-    v2:{
-      eyebrow:'GÓI V2 · 300 CAPTION ĐƯỢC CHỌN LỌC',
-      name:'Locket V2',
-      price:'89.000đ',
-      summary:'Bộ trung gian có 300 caption tĩnh, được chọn lọc từ đủ 21 nhóm chủ đề của V3. Tệp xem trước giữ nguyên màu và biểu tượng gốc.',
-      features:[
-        'Bộ cấu hình V2, tệp cài đặt và hướng dẫn sử dụng.',
-        '300 caption tĩnh thuộc 21 nhóm, cùng 11 kiểu caption động.',
-        'Các thiết lập khác kế thừa từ bộ nguồn; khả năng hoạt động cần kiểm chứng trên thiết bị.',
-        'Không kèm tài khoản tải Shadowrocket — bạn cần có ứng dụng sẵn.'
-      ],
-      note:'Các caption bên dưới là ví dụ minh hoạ từ dữ liệu trang web. Cách hiện và tính tương thích trong Locket phụ thuộc ứng dụng và thiết bị.',
-      hasSamples:true
-    },
-    v3:{
-      eyebrow:'GÓI V3 · BỘ ĐẦY ĐỦ 705 CAPTION',
-      name:'Locket V3',
-      price:'129.000đ',
-      summary:'Bản V2 đầy đủ trước đây được chuyển thành V3, giữ nguyên 705 caption tĩnh thuộc 21 nhóm chủ đề.',
-      features:[
-        '705 caption tĩnh và 11 kiểu caption động từ bản V2 cũ.',
-        'Giữ nguyên icon, gradient và cấu hình nguồn đã có.',
-        'Có bản xem trước và tệp thử, chưa mở thanh toán.',
-        'Khả năng hoạt động trên Locket thật chưa được xác minh.'
-      ],
-      note:'V3 là bộ V2 đầy đủ trước đây được đổi tên, không phải cam kết kích hoạt thành công chức năng trả phí của Locket.',
-      hasSamples:true
-    },
-    plus:{
+  const catalog=window.AN_STORE_VERSION_CATALOG;
+  if(!catalog?.versions)return;
+  const facts=Object.fromEntries(catalog.versions.map(v=>[v.planId,{
+    eyebrow:'GÓI '+v.shortName+' · '+v.tier.toLocaleUpperCase('vi'),
+    name:v.name,
+    price:new Intl.NumberFormat('vi-VN').format(v.priceVnd)+'đ',
+    summary:v.summary,
+    features:v.features,
+    note:v.notice,
+    hasSamples:true
+  }]));
+  // Legacy: keep historic Plus order details, never confuse them with V3.
+  facts.plus={
       eyebrow:'GÓI V2 + TÀI KHOẢN TẢI SHADOWROCKET',
       name:'Locket V2 + Shadowrocket',
       price:'129.000đ',
@@ -59,18 +28,19 @@
       ],
       note:'Tài khoản tải ứng dụng là phần hỗ trợ thêm, không phải phiên bản Shadowrocket khác hay một gói Locket nâng cấp riêng. Khả năng cấp tài khoản phụ thuộc cấu hình dịch vụ.',
       hasSamples:true
-    }
-  };
+    };
   let active='standard', lastTrigger=null;
   let libraryRows=[], visibleLimit=36, libraryLoading=0;
   const cached = new Map();
   const safeText=(node,value)=>{node.textContent=value;return node};
   const $=id=>byId(id);
 
-  function datasetFor(version){return version==='standard'?'v1':version==='v3'?'v3':'v2'}
+  function versionFor(plan){return catalog.versions.find(v=>v.planId===plan)||catalog.versions.find(v=>v.id==='v2')}
+  function datasetFor(version){return versionFor(version).id}
   function dataFor(which){
     if(!cached.has(which)){
-      const url=which==='v1'?'v1-caption-data.json':which==='v2'?'v2-caption-data.json':'caption-data.json';
+      const url=catalog.versions.find(v=>v.id===which)?.captionFile;
+      if(!url)throw Error('Không tìm thấy dữ liệu phiên bản');
       cached.set(which,fetch(url,{cache:'no-cache'})
         .then(response=>{if(!response.ok)throw Error('Không tải được dữ liệu');return response.json()})
         .then(data=>{
@@ -170,11 +140,10 @@
     $('plan-caption-grid').replaceChildren();
     $('plan-caption-count').textContent='Đang tải thư viện caption…';
     $('plan-caption-more').hidden=true;
-    $('plan-caption-title').textContent=version==='standard'?'Thư viện caption V1':version==='v2'?'Thư viện caption V2 · 300 mẫu':'Thư viện caption V3 · 705 mẫu';
-    $('plan-caption-description').textContent=version==='standard'
-      ?'107 caption tĩnh từ V1 với màu, icon gốc. Ngoài ra V1 còn 11 kiểu caption động không có nội dung cố định để xem trước.'
-       :version==='v2'?'300 caption tĩnh chọn lọc từ 21 chủ đề của V3, giữ nguyên biểu tượng và gradient.':'705 caption tĩnh từ bộ V2 cũ, nay là V3; đủ 21 chủ đề, giữ nguyên nội dung và màu gốc.';
-    $('plan-caption-total').textContent=version==='standard'?'V1 · 107 caption':version==='v2'?'V2 · 300 caption':'V3 · 705 caption';
+    const selected=versionFor(version);
+    $('plan-caption-title').textContent='Thư viện caption '+selected.shortName;
+    $('plan-caption-description').textContent=selected.summary+' '+selected.dynamicOverlayCount+' kiểu động chỉ là khai báo trong mã, chưa chứng thực trong ứng dụng.';
+    $('plan-caption-total').textContent=selected.shortName+' · '+selected.captionCount+' caption';
     try{
       const data=await dataFor(dataset);
       if(request!==libraryLoading || active!==version)return;
@@ -182,8 +151,7 @@
       const uniqueGroups=[...new Set(data.map(item=>item.group))];
       const select=$('plan-caption-category');
       for(const group of uniqueGroups)select.add(new Option(groupLabel(group),group));
-      $('plan-caption-total').textContent=version==='standard'
-        ?'V1 · '+data.length+' caption tĩnh':(version==='v2'?'V2':'V3')+' · '+data.length+' caption';
+      $('plan-caption-total').textContent=selected.shortName+' · '+data.length+' caption tĩnh';
       drawLibrary();
     }catch{
       if(request!==libraryLoading || active!==version)return;

@@ -330,3 +330,45 @@ body.an-home-page,body.an-store-page{background-color:#fcf9fc;color:var(--an-ink
  .an-home-page .an-v5-version{flex-shrink:1}
  .an-home-page .an-v5-version button{padding:7px 8px;font-size:9px}
 }
+
+
+/* Phase 1: verified-data comparison, grounded in one catalog. */
+.an-home-page .an-version-comparison{margin:70px 0 84px;scroll-margin-top:95px}
+.an-home-page .an-compare-sectionhead{display:flex;gap:24px;justify-content:space-between;align-items:flex-end;margin-bottom:20px}
+.an-home-page .an-compare-sectionhead h2{font-size:clamp(31px,4.5vw,49px);line-height:1.15;letter-spacing:-.05em}
+.an-home-page .an-compare-sectionhead>p{max-width:395px;font-size:12px;line-height:1.9;color:#806f86}
+.an-home-page .an-compare-controls{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:16px 0}
+.an-home-page .an-compare-hint{font-size:12px;color:#897892;margin:0}
+.an-home-page .an-compare-filter{appearance:none;border:1px solid #dcd1e4;background:#fffafd;border-radius:999px;color:#6a5475;padding:11px 17px;font-size:12px;font-weight:800;cursor:pointer;transition:background .25s,border-color .25s}
+.an-home-page .an-compare-filter:hover,.an-home-page .an-compare-filter.is-on{border-color:#ad91c4;background:#f3eaf9}
+.an-home-page .an-compare-filter:focus-visible,.an-home-page .an-compare-pick:focus-visible{outline:3px solid #9d76be;outline-offset:3px}
+.an-home-page .an-compare-scroll{overflow-x:auto;overscroll-behavior-inline:contain;border:1px solid #e8dfe9;border-radius:24px;background:#fffdff;box-shadow:0 18px 44px #4b295d12;-webkit-overflow-scrolling:touch}
+.an-home-page .an-compare-table{width:100%;min-width:650px;border-collapse:separate;border-spacing:0;color:#4a3c50;table-layout:fixed}
+.an-home-page .an-compare-caption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.an-home-page .an-compare-table thead{background:#faf5fc}
+.an-home-page .an-compare-table th,.an-home-page .an-compare-table td{padding:16px 16px;text-align:left;border-bottom:1px solid #efe9f1;vertical-align:middle;font-size:12px;line-height:1.65;overflow-wrap:break-word}
+.an-home-page .an-compare-table tr:last-child th,.an-home-page .an-compare-table tr:last-child td{border-bottom:0}
+.an-home-page .an-compare-table thead th{padding:15px 12px}
+.an-home-page .an-compare-table thead th:first-child{width:31%;padding-left:22px}
+.an-home-page .an-compare-table thead th:not(:first-child){width:23%}
+.an-home-page .an-compare-table thead .is-selected{background:#f1e7f8}
+.an-home-page .an-compare-table td.is-selected{background:#faf5fc;font-weight:750;color:#50345d}
+.an-home-page .an-compare-row-title{padding-left:22px!important;font-weight:800;color:#503d58}
+.an-home-page .an-compare-row-title span{display:block}
+.an-home-page .an-compare-row-title small{display:block;color:#a190a7;font-weight:600;font-size:10px;margin-top:3px}
+.an-home-page .an-compare-pick{appearance:none;display:flex;align-items:flex-start;flex-direction:column;gap:5px;width:100%;padding:9px 11px;border:1px solid transparent;border-radius:13px;background:transparent;color:#604969;font-size:17px;font-weight:850;cursor:pointer;text-align:left}
+.an-home-page .an-compare-pick[aria-pressed="true"]{border-color:#d4bce1;background:#fff}
+.an-home-page .an-compare-price{font-size:12px;font-weight:700;color:#876e93}
+.an-home-page .an-compare-note{font-size:11px;color:#8c7593;line-height:1.8;margin:12px 4px 0}
+.an-home-page .an-versions-loading{grid-column:1/-1;color:#85708d;padding:38px;text-align:center}
+@media(max-width:700px){
+  .an-home-page .an-version-comparison{margin:54px 0 60px}
+  .an-home-page .an-compare-sectionhead{display:block}
+  .an-home-page .an-compare-sectionhead>p{margin-top:10px}
+  .an-home-page .an-compare-controls{align-items:flex-start}
+  .an-home-page .an-compare-table th,.an-home-page .an-compare-table td{padding:12px 11px}
+  .an-home-page .an-compare-scroll{border-radius:18px}
+}
+@media(prefers-reduced-motion:reduce){
+  .an-home-page .an-compare-filter{transition:none}
+}

@@ -19,6 +19,13 @@ for path1,path2 in [
     assert left[0]==right[0]==200,(path1,path2,left[0],right[0])
     assert left[1]==right[1],(path1,path2,'Content mismatch')
     print(f'PASS canonical URL -> legacy URL byte-identical: {path1}')
+with urlopen(base+'/api/versions',timeout=12) as response:
+    metadata=json.load(response)
+assert metadata['paymentStatus']=='disabled'
+assert [v['priceVnd'] for v in metadata['versions']]==[49000,89000,129000]
+assert [v['captionCount'] for v in metadata['versions']]==[107,300,705]
+assert all(v['verification']['device']=='not-tested' for v in metadata['versions'])
+print('PASS catalog API matches canonical pricing and evidence')
 for version in ('v1','v2','v3'):
     code,content,_=read(f'/api/install-test/{version}/Locket_Unlocked.js')
     assert code==200 and b'$done' in content
@@ -31,6 +38,15 @@ try:
     with urlopen(request) as r:raise AssertionError('Unexpected new caption order')
 except HTTPError as exc:assert exc.code==410,exc.code
 print('PASS retired caption checkout still disabled')
+request=Request(base+'/api/payments',method='POST',data=b'{"plan":"standard"}',
+        headers={'Content-Type':'application/json','Origin':base})
+try:
+    with urlopen(request) as r:raise AssertionError('Unexpected new bundle checkout')
+except HTTPError as exc:
+    assert exc.code==410,exc.code
+    body=json.load(exc)
+    assert body['salesEnabled'] is False
+print('PASS all new bundle payments disabled server-side; existing GET untouched')
 
 with sync_playwright() as p:
     browser=p.chromium.launch(headless=True)

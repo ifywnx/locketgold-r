@@ -4,3 +4,5 @@ data/
 .env*
 # Generated from /v1, /v2, /v3 by scripts/build-install-assets.mjs
 lib/install-test-assets.json
+# Version manifest is the source; browser bootstrap generated on build.
+public/welcome/version-data.js

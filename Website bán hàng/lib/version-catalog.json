@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "currency": "VND",
+  "lastAudited": "2026-10-29",
+  "sourceNote": "Số lượng và cấu hình được kiểm tra trong repository; không phải chứng nhận hoạt động trên Locket hoặc iOS thật.",
+  "paymentStatus": "disabled",
+  "versions": [
+    {
+      "id": "v1",
+      "planId": "standard",
+      "shortName": "V1",
+      "name": "An · Locket V1",
+      "tier": "Cơ bản",
+      "priceVnd": 49000,
+      "captionCount": 107,
+      "groupCount": 12,
+      "dynamicOverlayCount": 11,
+      "captionFile": "v1-caption-data.json",
+      "featured": false,
+      "tagline": "Bắt đầu từ thư viện gọn, dễ khám phá.",
+      "summary": "Bản cơ bản gồm 107 caption tĩnh thuộc 12 nhóm. Bộ cấu hình V1 được lưu riêng và có thể xem trước.",
+      "features": [
+        "107 caption tĩnh · 12 nhóm",
+        "11 kiểu overlay động khai báo trong mã",
+        "Bản xem trước và tệp cấu hình riêng"
+      ],
+      "notice": "Số lượng đã đối chiếu với tệp nguồn; tính tương thích iOS/Locket chưa kiểm chứng thực tế.",
+      "badges": [
+        "Đã đối chiếu dữ liệu",
+        "Chưa kiểm thử thiết bị"
+      ],
+      "verification": {
+        "caption": "repository",
+        "configuration": "source-present",
+        "device": "not-tested"
+      },
+      "compareDetail": "Nguồn V1 độc lập"
+    },
+    {
+      "id": "v2",
+      "planId": "v2",
+      "shortName": "V2",
+      "name": "Locket V2",
+      "tier": "Cân bằng",
+      "priceVnd": 89000,
+      "captionCount": 300,
+      "groupCount": 21,
+      "dynamicOverlayCount": 11,
+      "captionFile": "v2-caption-data.json",
+      "featured": false,
+      "tagline": "300 mẫu chọn lọc, đủ 21 chủ đề.",
+      "summary": "Bộ trung gian giữ 300 caption tĩnh chọn lọc từ V3, giữ nguyên nội dung, icon và màu gốc.",
+      "features": [
+        "300 caption tĩnh · đủ 21 nhóm",
+        "11 kiểu overlay động khai báo trong mã",
+        "Mẫu caption thuộc bộ V3, không bổ sung mẫu giả"
+      ],
+      "notice": "300 mẫu là tập con của V3, đã kiểm tra trong repo. Chưa xác minh tính năng bên thứ ba trên thiết bị.",
+      "badges": [
+        "Đã đối chiếu dữ liệu",
+        "Chưa kiểm thử thiết bị"
+      ],
+      "verification": {
+        "caption": "repository",
+        "configuration": "source-present",
+        "device": "not-tested"
+      },
+      "compareDetail": "300 mẫu là tập con V3"
+    },
+    {
+      "id": "v3",
+      "planId": "v3",
+      "shortName": "V3",
+      "name": "Locket V3",
+      "tier": "Đầy đủ",
+      "priceVnd": 129000,
+      "captionCount": 705,
+      "groupCount": 21,
+      "dynamicOverlayCount": 11,
+      "captionFile": "caption-data.json",
+      "featured": true,
+      "tagline": "Trọn thư viện 705 mẫu của bộ V2 đầy đủ cũ.",
+      "summary": "Bộ V2 đầy đủ cũ được lưu thành V3; vẫn giữ 705 caption tĩnh thuộc 21 nhóm và các tệp cấu hình liên quan.",
+      "features": [
+        "705 caption tĩnh · 21 nhóm",
+        "11 kiểu overlay động khai báo trong mã",
+        "Giữ bộ cấu hình nguồn V2 đầy đủ trước đây"
+      ],
+      "notice": "Chỉ xác nhận có mã nguồn và dữ liệu. Không cam kết quyền Gold hoặc các cờ cấu hình sẽ hoạt động thực tế.",
+      "badges": [
+        "Đã đối chiếu dữ liệu",
+        "Chưa kiểm thử thiết bị"
+      ],
+      "verification": {
+        "caption": "repository",
+        "configuration": "source-present",
+        "device": "not-tested"
+      },
+      "compareDetail": "Bộ đầy đủ từ V2 cũ"
+    }
+  ]
+}
