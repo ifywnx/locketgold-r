@@ -49,7 +49,7 @@ struct FriendsView: View {
                             Text("Lời mời đang chờ").font(.headline)
                             ForEach(cloud.requests) { request in
                                 HStack {
-                                    Text("Tài khoản " + String(request.from_user.uuidString.prefix(8)))
+                                    Text(cloud.requesterNames[request.from_user] ?? "Tài khoản " + String(request.from_user.uuidString.prefix(8)))
                                         .font(.subheadline)
                                     Spacer()
                                     Button("Chấp nhận") {
@@ -68,7 +68,16 @@ struct FriendsView: View {
                             .font(.headline)
                         if cloud.enabled {
                             ForEach(cloud.friends) { friend in
-                                personRow(name: friend.display_name, subtitle: "@"+friend.handle)
+                                HStack {
+                                    personRow(name: friend.display_name, subtitle: "@"+friend.handle)
+                                    Spacer()
+                                    Button(role: .destructive) {
+                                        Task { await cloud.removeFriend(friend.id) }
+                                    } label: {
+                                        Image(systemName: "person.crop.circle.badge.minus")
+                                    }
+                                    .accessibilityLabel("Hủy kết bạn với " + friend.display_name)
+                                }
                             }
                         } else {
                             ForEach(album.friends) { friend in
