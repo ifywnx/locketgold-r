@@ -25,7 +25,16 @@ with sync_playwright() as p:
         assert resp and resp.status==200,resp
         assert page.locator("#packages .plan-shell").count()==3
         assert "129.000" in page.locator('#packages [data-plan="v3"]').inner_text()
-        assert page.get_by_text("Giá V3: 129.000đ").count()==1
+        assert page.locator("#compare .an-compare-table tbody tr").count()==9
+        assert "129.000đ" in page.locator('#compare thead th').nth(3).inner_text()
+        page.locator('#version-compare-controls button').click()
+        assert page.locator("#compare .an-compare-table tbody tr").count()<9
+        page.locator('#version-compare-controls button').click()
+        assert page.locator("#compare .an-compare-table tbody tr").count()==9
+        page.get_by_role("button",name="Chọn Locket V2").click()
+        assert "Locket V2 · 89.000đ" in page.locator("#selection").inner_text()
+        page.get_by_role("button",name="Chọn Locket V3").click()
+        assert "Locket V3 · 129.000đ" in page.locator("#selection").inner_text()
         assert page.locator("#an-v5-device").count()==1
         assert page.evaluate("window.IFYWNX_CONFIG.paymentsEnabled===false"),"Payment was switched on"
         page.locator("#preview-v1").click()
