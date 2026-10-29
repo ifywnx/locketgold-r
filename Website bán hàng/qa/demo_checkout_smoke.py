@@ -142,7 +142,7 @@ with sync_playwright() as p:
         assert page.evaluate("sessionStorage.getItem('an-store-demo-pending-v1')") is None
         assert page.evaluate("!!sessionStorage.getItem('an-store-demo-receipt-v1')")
         with page.expect_download() as result:
-            page.locator("#demo-delivery a").first.click()
+            page.locator('#demo-delivery a[href*="sample.json"]').click()
         downloaded=json.loads(open(result.value.path(),encoding="utf8").read())
         assert downloaded["version"]=="v3" and len(downloaded["samples"])==12
         page.locator("#demo-copy-receipt").click()
