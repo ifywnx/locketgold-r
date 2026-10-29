@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
     return [
       // Old single-caption shop bookmarks now point to the version roadmap.
       // Preserve /store/checkout.html for historical order downloads.
+      {source: '/welcome/captions/index.html', destination: '/captions/index.html', permanent: false},
       {source: '/store/index.html', destination: '/welcome/index.html#versions', permanent: false},
     ];
   },
