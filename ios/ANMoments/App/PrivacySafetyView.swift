@@ -10,6 +10,8 @@ struct PrivacySafetyView: View {
     @State private var category = "spam"
     @State private var askBlock = false
     @State private var askDelete = false
+    @State private var askPermanentDelete = false
+    @State private var exportFile: URL?
     @State private var feedback: String?
 
     var body: some View {
@@ -76,6 +78,24 @@ struct PrivacySafetyView: View {
                 }
 
                 Section("Tài khoản và dữ liệu") {
+                    Button {
+                        Task { exportFile = await social.exportCloudMetadata(cloud) }
+                    } label: {
+                        Label("Xuất dữ liệu JSON", systemImage: "square.and.arrow.up")
+                    }
+                    .disabled(social.loading)
+                    if let exportFile {
+                        ShareLink(item: exportFile) {
+                            Label("Chia sẻ tệp dữ liệu đã xuất", systemImage: "doc.zipper")
+                        }
+                    }
+                    Text("Tệp JSON chứa siêu dữ liệu được tài khoản của bạn phép đọc; chưa bao gồm ảnh/video.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    Button("Xóa tài khoản và dữ liệu trên máy chủ", role: .destructive) {
+                        askPermanentDelete = true
+                    }
+                    .disabled(social.loading)
                     Button("Gửi yêu cầu xóa tài khoản", role: .destructive) {
                         askDelete = true
                     }
@@ -99,6 +119,14 @@ struct PrivacySafetyView: View {
             }
         } message: {
             Text("Xóa quan hệ bạn bè và từ chối tin nhắn mới giữa hai tài khoản. Nội dung cũ có thể vẫn còn.")
+        }
+        .confirmationDialog("Xóa vĩnh viễn tài khoản AN Moments?",
+                            isPresented: $askPermanentDelete) {
+            Button("Xóa tài khoản vĩnh viễn", role: .destructive) {
+                Task { _ = await social.permanentlyDeleteAccount(cloud) }
+            }
+        } message: {
+            Text("Xóa ảnh/video bạn đã tải lên và hồ sơ. Không thể khôi phục. Tính năng chỉ hoạt động khi Edge Function delete-account đã được triển khai và kiểm thử.")
         }
         .confirmationDialog("Yêu cầu xóa tài khoản?", isPresented: $askDelete) {
             Button("Tạo yêu cầu", role: .destructive) {
