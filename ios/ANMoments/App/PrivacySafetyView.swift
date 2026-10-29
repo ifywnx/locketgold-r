@@ -140,7 +140,11 @@ struct PrivacySafetyView: View {
         .confirmationDialog("Xóa vĩnh viễn tài khoản AN Moments?",
                             isPresented: $askPermanentDelete) {
             Button("Xóa tài khoản vĩnh viễn", role: .destructive) {
-                Task { _ = await social.permanentlyDeleteAccount(cloud) }
+                Task {
+                    if await social.permanentlyDeleteAccount(cloud) {
+                        album.clearAll()
+                    }
+                }
             }
         } message: {
             Text("Xóa ảnh/video bạn đã tải lên và hồ sơ. Không thể khôi phục. Tính năng chỉ hoạt động khi Edge Function delete-account đã được triển khai và kiểm thử.")
