@@ -4,12 +4,14 @@ import SwiftUI
 struct ANMomentsApp: App {
     @StateObject private var album = LocalAlbum()
     @StateObject private var cloud = CloudService()
+    @StateObject private var appearance = AppearanceSettings()
 
     var body: some Scene {
         WindowGroup {
             RootView()
                 .environmentObject(album)
                 .environmentObject(cloud)
+                .environmentObject(appearance)
                 .tint(Theme.ink)
         }
     }
