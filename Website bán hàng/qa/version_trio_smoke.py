@@ -24,6 +24,8 @@ with sync_playwright() as p:
         resp=page.goto(base+"/welcome/index.html",wait_until="domcontentloaded",timeout=25000)
         assert resp and resp.status==200,resp
         assert page.locator("#packages .plan-shell").count()==3
+        assert "129.000" in page.locator('#packages [data-plan="v3"]').inner_text()
+        assert page.get_by_text("Giá V3: 129.000đ").count()==1
         assert page.locator("#an-v5-device").count()==1
         assert page.evaluate("window.IFYWNX_CONFIG.paymentsEnabled===false"),"Payment was switched on"
         page.locator("#preview-v1").click()
@@ -42,7 +44,12 @@ with sync_playwright() as p:
             page.locator("#plan-dialog").wait_for(state="visible",timeout=8000)
             page.wait_for_function("n=>document.getElementById('plan-caption-total').textContent.includes(n)",arg=str(total),timeout=10000)
             assert page.locator("#plan-caption-total").inner_text().find(str(total))>=0
+            if v=="v3":
+                assert page.locator("#plan-dialog-price").inner_text()=="129.000đ / gói"
             page.locator("#plan-dialog-close").click()
+        page.locator('#packages [data-plan="v3"]').click()
+        assert "Locket V3 · 129.000đ" in page.locator("#selection").inner_text()
+        assert page.evaluate("window.IFYWNX_CONFIG.paymentsEnabled===false")
         page.locator("#versions").scroll_into_view_if_needed()
         assert page.locator("#versions .an-version-card").count()==3
         over=page.evaluate("document.documentElement.scrollWidth-document.documentElement.clientWidth")
