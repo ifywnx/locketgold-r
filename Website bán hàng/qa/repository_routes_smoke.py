@@ -38,6 +38,15 @@ try:
     with urlopen(request) as r:raise AssertionError('Unexpected new caption order')
 except HTTPError as exc:assert exc.code==410,exc.code
 print('PASS retired caption checkout still disabled')
+request=Request(base+'/api/payments',method='POST',data=b'{"plan":"standard"}',
+        headers={'Content-Type':'application/json','Origin':base})
+try:
+    with urlopen(request) as r:raise AssertionError('Unexpected new bundle checkout')
+except HTTPError as exc:
+    assert exc.code==410,exc.code
+    body=json.load(exc)
+    assert body['salesEnabled'] is False
+print('PASS all new bundle payments disabled server-side; existing GET untouched')
 
 with sync_playwright() as p:
     browser=p.chromium.launch(headless=True)
