@@ -76,3 +76,15 @@ struct PublishParams: Encodable {
     let p_caption: String
     let p_recipients: [UUID]
 }
+
+struct RemoteReaction: Decodable {
+    let moment_id: UUID
+    let sender_id: UUID
+    let emoji: String
+}
+
+struct ReactionPayload: Encodable {
+    let moment_id: UUID
+    let sender_id: UUID
+    let emoji: String
+}
