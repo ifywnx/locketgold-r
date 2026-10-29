@@ -27,6 +27,7 @@ enum Theme {
 }
 
 struct RootView: View {
+    @EnvironmentObject private var social: SocialService
     @EnvironmentObject private var cloud: CloudService
 
     var body: some View {
@@ -39,6 +40,10 @@ struct RootView: View {
         }
         .task {
             await cloud.restoreSession()
+        }
+        .onChange(of: cloud.userID) { _, _ in
+            // Never display the previous account's chat/inbox on a shared iPhone.
+            social.clearSensitiveCache()
         }
     }
 }
