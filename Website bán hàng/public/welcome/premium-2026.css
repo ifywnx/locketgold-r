@@ -454,3 +454,16 @@ body.an-home-page,body.an-store-page{background-color:#fcf9fc;color:var(--an-ink
 .an-home-page .store-qa-tools>summary:focus-visible{outline:3px solid #957ab7;outline-offset:3px;border-radius:9px}
 .an-home-page .store-qa-tools-intro{font-size:12px;line-height:1.8;margin:12px 5px 0}
 .an-home-page .store-qa-tools .an-demo-checkout{margin:24px 0 12px}
+
+/* Owner test UI is never shown without explicit ?owner_test=1; authorization is server-side. */
+.owner-install-test{max-width:760px;margin:38px auto 64px;padding:24px;border:1px solid #e3d9ea;border-radius:20px;background:#fdfafe;color:#292337}
+.owner-install-test[hidden]{display:none!important}
+.owner-install-test h2{margin:6px 0 10px;font-size:clamp(22px,3vw,32px)}
+.owner-install-test>p{line-height:1.7}
+.owner-install-test form{display:flex;gap:12px;flex-wrap:wrap;align-items:end;margin:20px 0}
+.owner-install-test form strong{flex-basis:100%}
+.owner-install-test form label{display:flex;flex-direction:column;gap:6px;min-width:180px}
+.owner-install-test form input{min-width:180px;border:1px solid #c9c0d0;border-radius:10px;padding:13px 12px}
+.owner-install-test form button{cursor:pointer}
+.owner-install-test>a{display:inline-flex;margin-right:10px;margin-top:12px}
+.owner-install-test>a[hidden]{display:none!important}

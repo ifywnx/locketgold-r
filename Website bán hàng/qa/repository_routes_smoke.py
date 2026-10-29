@@ -27,11 +27,15 @@ assert [v['captionCount'] for v in metadata['versions']]==[107,300,705]
 assert all(v['verification']['device']=='not-tested' for v in metadata['versions'])
 print('PASS catalog API matches canonical pricing and evidence')
 for version in ('v1','v2','v3'):
-    code,content,_=read(f'/api/install-test/{version}/Locket_Unlocked.js')
-    assert code==200 and b'$done' in content
-    code,module,_=read(f'/api/install-test/{version}/An-Locket.sgmodule')
-    assert code==200 and b'__ASSET_BASE__' not in module
-    print('PASS package API',version)
+    code,module,_=read(f'/api/install-test/{version}/An-Preview.sgmodule')
+    assert code==200 and b'an-store-preview.invalid' in module
+    assert b'[MITM]' not in module and b'[Script]' not in module
+    for filename in ('Locket_Unlocked.js','Locket_An.js','An-Locket.sgmodule','An-Locket-DNS.mobileconfig'):
+        try:
+            read(f'/api/install-test/{version}/{filename}')
+            raise AssertionError('Public paid asset unexpectedly accessible')
+        except HTTPError as exc:assert exc.code==410,(version,filename,exc.code)
+    print('PASS preview-only public route',version)
 request=Request(base+'/api/store/checkout',method='POST',data=b'{"items":["trend"]}',
         headers={'Content-Type':'application/json','Origin':base})
 try:

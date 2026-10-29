@@ -77,3 +77,17 @@ Kiểm thử: `python3 qa/demo_checkout_smoke.py` khi Next.js đã chạy với 
 - Trang `/welcome/index.html` chỉ ưu tiên giới thiệu ba gói, bảng giá, so sánh, mẫu, quy trình mua và hỗ trợ. Luồng giao dịch thật tiếp tục bị khóa cho tới khi hoàn thiện điều kiện kinh doanh.
 - DEMO kỹ thuật không còn chen giữa bảng giá và bảng so sánh; nằm trong mục thu gọn gần cuối trang. Khi kiểm thử mở `/welcome/index.html?demo=1` hoặc `#demo-checkout` để hiện công cụ kỹ thuật.
 - Bảo toàn API và trạng thái khôi phục DEMO cho QA, giữ những đơn lịch sử; không nhập DEMO vào số liệu bán hàng hoặc bật payOS.
+
+## Quy trình kiểm thử Shadowrocket và cấp quyền trước khi mở bán
+
+- Repository GitHub là **Private**, nhưng đường dẫn Vercel vẫn truy cập được từ internet. Do đó `/api/install-test/[version]/An-Preview.sgmodule` chỉ trả module trơ dùng để thử **nhập** vào Shadowrocket. Mọi file gói đầy đủ qua API xem trước trả **410**.
+- Để chủ cửa hàng thử **toàn bộ module V1/V2/V3**, mở `/welcome/index.html?owner_test=1`, chọn gói, nhập mật khẩu `ADMIN_PASSWORD` (tối thiểu 24 ký tự, cấu hình riêng trên server). Máy chủ cấp đường dẫn tải `/api/version-test/files/[version]/[file]?token=...` có chữ ký HMAC, gắn phiên bản và hết hạn 12 giờ. Không có mật khẩu trong HTML, Git, localStorage. Không chia sẻ liên kết thử.
+- Bản thử public dùng `shadowrocket://install?module=<URL đã encode>`, **không** dùng `shadowrocket://config/add` cho file `.sgmodule`. Có link HTTPS tải tay.
+- Các API đơn cũ và quyền truy cập cũ giữ nguyên. Khi mở bán thực tế phải xác minh đơn hàng V1/V2/V3 theo **mã SKU + trạng thái thanh toán + người sở hữu** trước khi cấp module, không dựa chỉ vào số tiền 129.000đ (trùng giá Plus lịch sử). `paymentStatus` tiếp tục `disabled`; không tự kích hoạt giao dịch thật.
+- Mục đích kiểm thử là đo xem Shadowrocket nhập bộ file được không, không xác nhận quyền Gold chính thức hoặc độ tương thích Locket/iOS.
+
+## Kiểm soát quyền V1/V2/V3 (schema sẵn sàng, checkout vẫn đóng)
+
+- Tạo bảng `version_orders` với `version_id` bắt buộc là `v1`, `v2` hoặc `v3`, `owner_hash`, trạng thái `PAID` và thời gian thanh toán. Không chạm vào bảng đơn lịch sử `orders`/`store_orders`.
+- `GET /api/version-access/[version]?order=<id>` kiểm tra token owner, mã đơn, SKU, tình trạng đã thanh toán, thời điểm thanh toán và giá trong catalog. Kết quả chỉ là trạng thái quyền, chưa có URL tải trả phí khi `paymentStatus=disabled`.
+- Không dùng đơn Plus lịch sử có giá 129.000đ để tạo quyền V3. Muốn mở bán phải tích hợp thanh toán và giao hàng trên ledger mới rồi kiểm thử giao dịch thực trước khi bật.

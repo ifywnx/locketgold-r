@@ -21,15 +21,23 @@ function render(session,packageId,demo=false){
  prepareInstallation();accountRequest++;
  $('apple-email').value='Đang tải…';$('apple-password').value='';$('apple-password').type='password';$('copy-status').textContent='';$('copy-password').disabled=$('reveal').disabled=true;
  if(packageId==='plus'&&!demo)loadAccount(session);
- $('downloads').hidden=false;$('demo-note').hidden=!demo;if(demo)$('demo-note').textContent=plans[packageId].name+' · Bộ cài thử, không thu tiền.';$('apple').hidden=packageId!=='plus';$('cards').replaceChildren();
- const options=[
+ $('downloads').hidden=false;$('downloads').querySelector('details.guide').hidden=demo;$('preview-guide').hidden=!demo;$('demo-note').hidden=!demo;if(demo)$('demo-note').textContent=plans[packageId].name+' · Module thử nhập Shadowrocket. Không sửa dữ liệu Locket, không có Gold hay bộ cài trả phí.';$('apple').hidden=packageId!=='plus';$('cards').replaceChildren();
+ const options=demo?[['An-Preview.sgmodule','Thử nhập module · '+plans[packageId].version.toUpperCase(),'Chỉ kiểm tra khả năng nhập tệp; không thay đổi kết nối hoặc ứng dụng bên thứ ba.','Nhập thử vào Shadowrocket →']]:[
  ['ifywnx-Locket-Captions.sgmodule','1 · Cài module Locket','Nhập module vào Shadowrocket.','Cài module →'],
  ['ifywnx-Locket-Config.conf','2 · Cài cấu hình','Nhập rồi chọn cấu hình. Cấu hình này đã có quy tắc Locket: tắt module trùng trước khi bật kết nối.','Cài cấu hình →'],
  ['ifywnx-DNS-Cu.mobileconfig','DNS cũ','Chỉ dùng thay DNS riêng khi cần. Gỡ hồ sơ DNS đang dùng trước khi cài.','Cài DNS cũ →']
  ];
  for(const [file,title,description,label] of options){
  const card=document.createElement('article'),h=document.createElement('h3'),p=document.createElement('p');h.textContent=title;p.textContent=description;
- const action=installLink(session,file,label);if(demo){const version=plans[packageId]?.version||'v1';const name=file.endsWith('.mobileconfig')?'An-Locket-DNS.mobileconfig':file.endsWith('.conf')?'An-Locket.conf':'An-Locket.sgmodule';const url=location.origin+'/api/install-test/'+version+'/'+name;action.href=name.endsWith('.mobileconfig')?url:'shadowrocket://config/add/'+url;}card.append(h,p,action);$('cards').append(card);
+ const action=installLink(session,file,label);
+ if(demo){
+   const version=plans[packageId]?.version||'v1';
+   const url=location.origin+'/api/install-test/'+version+'/An-Preview.sgmodule';
+   action.href='shadowrocket://install?module='+encodeURIComponent(url);
+   const fallback=document.createElement('a');fallback.href=url;fallback.className='sales-action';fallback.textContent='Tải module thử (.sgmodule)';
+   card.append(h,p,action,fallback);
+ } else {card.append(h,p,action);}
+ $('cards').append(card);
  }
  $('downloads').scrollIntoView({behavior:'smooth'});
 }
@@ -58,3 +66,40 @@ select(plan,true);
 async function loadAccount(session){const request=accountRequest;try{const d=await api('/api/download-account',{headers:{Authorization:'Bearer '+session}});if(request!==accountRequest)return;$('apple-email').value=d.email;$('apple-password').value=d.password;$('copy-password').disabled=$('reveal').disabled=false}catch(e){if(request===accountRequest)$('copy-status').textContent=e.message}}
 
 if(cfg.testMode){render('installation-test','standard',true);$('buy').disabled=true;$('payment-status').textContent='Đang thử bộ cài · Thanh toán tạm tắt.';$('unlock').hidden=true;document.querySelector('.preview').hidden=true;}
+
+// Owner-only install test: password is sent once over HTTPS, never kept in storage.
+// Query flag only reveals the UI; it does NOT grant server access.
+(function initOwnerInstall(){
+  const panel=$('owner-install-test'),form=$('owner-install-form');
+  if(!panel||!form||new URLSearchParams(location.search).get('owner_test')!=='1')return;
+  panel.hidden=false;
+  const report=$('owner-install-message'),link=$('owner-install-link'),fallback=$('owner-install-fallback');
+  const summary=$('owner-install-version');
+  const chosen=()=>plans[plan]?.version||'v1';
+  const refresh=()=>{summary.textContent='Đang chọn '+chosen().toUpperCase();link.hidden=true;fallback.hidden=true;};
+  refresh();
+  window.addEventListener('an-store-plan-change',refresh);
+  form.addEventListener('submit',async(event)=>{
+    event.preventDefault();
+    const password=$('owner-install-password').value;
+    $('owner-install-password').value='';
+    link.hidden=true;fallback.hidden=true;
+    const button=form.querySelector('button');button.disabled=true;
+    report.textContent='Đang xác minh quyền thử cài…';
+    try{
+      const response=await fetch('/api/version-test/session',{
+        method:'POST',cache:'no-store',
+        headers:{'Content-Type':'application/json','Authorization':'Basic '+btoa('admin:'+password)},
+        body:JSON.stringify({version:chosen()})
+      });
+      const data=await response.json();
+      if(!response.ok)throw Error(data.error||'Không cấp được liên kết thử.');
+      const moduleUrl=new URL(data.moduleUrl,location.origin).href;
+      link.href='shadowrocket://install?module='+encodeURIComponent(moduleUrl);
+      fallback.href=moduleUrl;
+      link.hidden=false;fallback.hidden=false;
+      report.textContent='Liên kết thử '+data.version.toUpperCase()+' đã được cấp riêng cho chủ cửa hàng. Hết hạn sau 12 giờ. Không chia sẻ liên kết này.';
+    }catch(error){report.textContent=error.message||'Không thể xác minh.';}
+    finally{button.disabled=false;}
+  });
+})();
