@@ -31,6 +31,10 @@ targets:
       path: App/Info.plist
       properties:
         CFBundleDisplayName: "AN Moments"
+        CFBundleURLTypes:
+          - CFBundleURLName: "com.ifywnx.anmoments"
+            CFBundleURLSchemes:
+              - "anmoments"
         CFBundleShortVersionString: "1.1"
         CFBundleVersion: "11"
         NSMicrophoneUsageDescription: "Cho phép thu âm khi quay video khoảnh khắc."
