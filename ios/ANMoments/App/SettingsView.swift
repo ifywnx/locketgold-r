@@ -5,6 +5,7 @@ struct SettingsView: View {
     @EnvironmentObject private var cloud: CloudService
     @EnvironmentObject private var appearance: AppearanceSettings
     @State private var editingName = ""
+    @State private var editingHandle = ""
     @State private var showClear = false
     @State private var iconMessage: String?
 
@@ -95,6 +96,13 @@ struct SettingsView: View {
 
                 if cloud.enabled {
                     Section("Hồ sơ") {
+                        TextField("Username mới (a-z, 0-9, _)", text: $editingHandle)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                        Button("Đổi username") {
+                            Task { await cloud.updateHandle(editingHandle) }
+                        }
+                        .disabled(editingHandle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                         TextField("Tên hiển thị mới", text: $editingName)
                         Button("Lưu tên hiển thị") {
                             Task { await cloud.updateProfile(displayName: editingName) }
