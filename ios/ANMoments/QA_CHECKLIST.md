@@ -1,10 +1,13 @@
-# QA checklist: AN Moments 1.0
+# QA checklist: AN Moments 1.1
 
 Status: Source created. No completed Mac/Xcode build, iPhone run, Supabase migration, or two-device E2E test has been reported.
 
 ## 1. Build
 - [ ] Run OPEN_XCODE.command from macOS and resolve package dependencies
 - [ ] Run TEST_ON_MAC.command; check full compiler diagnostics, not only generation
+- [ ] Validate photo text/sticker editor and exported composite JPEG
+- [ ] Export 15-photo offline recap and verify actual video codec/playback
+- [ ] Calendar by-date filter shows only matching local/cloud images
 - [ ] Choose Personal Team; build directly on iPhone with Command+R
 - [ ] Test iPhone permissions for Camera and Photos picker
 - [ ] Test OS 26 system appearance and dynamic text sizes
@@ -27,7 +30,7 @@ Status: Source created. No completed Mac/Xcode build, iPhone run, Supabase migra
 - [ ] Verify that airplane mode still permits local save/history
 
 ## 3. Cloud setup
-- [ ] Use a NEW Supabase project and run Backend/schema.sql once
+- [ ] Use a NEW Supabase project and run Backend/schema.sql then Backend/social_extensions.sql
 - [ ] Verify private bucket "moments"; it must NOT be public
 - [ ] Confirm OTP email contains a numeric code, not only magic link
 - [ ] Create two distinct accounts, A and B
@@ -39,6 +42,10 @@ Status: Source created. No completed Mac/Xcode build, iPhone run, Supabase migra
 - [ ] B opens A moment, A sees B in its viewer list
 - [ ] Confirm cloud badge is visible to friends
 - [ ] Remove friendship; verify new posts cannot be sent to removed friend
+- [ ] A starts direct chat with B; both can exchange messages after foreground refresh
+- [ ] Create group with A/B/C; ensure outsider D cannot read or send to group
+- [ ] New messages generate in-app activity events for other members
+- [ ] Daily reminder at 20:00 can be opted in/out and does not request permission at app launch
 
 ## 4. Mandatory security negative tests
 - [ ] Nonfriend C cannot select/download A's image, even knowing the storage path
@@ -49,6 +56,12 @@ Status: Source created. No completed Mac/Xcode build, iPhone run, Supabase migra
 - [ ] Confirm only publishable/anon key is in iOS source, never service_role
 - [ ] Verify account deletion/privacy export before any public beta
 - [ ] Verify server-side user reporting, blocking and abuse controls before release
+- [ ] C cannot enumerate all profiles by querying the profiles table
+- [ ] A cannot create or read a conversation without a membership edge
+- [ ] A cannot add B to a group without friendship consent
+- [ ] A cannot send a chat message after either participant blocks the other
+- [ ] User cannot write report.status=reviewed or deletion_request.status=completed
+- [ ] Account deletion is only queued; verify a separately secured cleanup worker before production
 
 ## 5. Optional widget
 - [ ] Enable App Groups on BOTH app/widget signing profiles
@@ -60,7 +73,8 @@ Status: Source created. No completed Mac/Xcode build, iPhone run, Supabase migra
 - [ ] Change camera theme and verify widget border changes
 
 ## Not part of this build
-- Push notifications, background live delivery, multi-person chat
-- Video capture and video recap
-- Complete parity with Locket or Locket Gold
+- APNs push and background live delivery; current chat polls only while open
+- Real account erasure, server moderation and production abuse controls
+- Cloud music catalog / social discovery / E2EE chat
+- Full parity with Locket or Locket Gold
 - Runtime bypass of any Telegram/modded IPA login
