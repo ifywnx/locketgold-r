@@ -290,7 +290,7 @@ $$;
 -- remains restricted by RLS.
 create or replace function public.block_handle(p_handle text)
 returns void language plpgsql security definer set search_path = ''
-as $
+as $$
 declare v_target uuid;
 begin
   if auth.uid() is null then raise exception 'Authentication required'; end if;
@@ -299,12 +299,12 @@ begin
   if v_target is null then raise exception 'Account not found'; end if;
   perform public.block_account(v_target);
 end;
-$;
+$$;
 
 create or replace function public.report_handle(
   p_handle text, p_category text, p_details text
 ) returns uuid language plpgsql security definer set search_path = ''
-as $
+as $$
 declare v_target uuid; v_id uuid;
 begin
   if auth.uid() is null then raise exception 'Authentication required'; end if;
@@ -320,7 +320,7 @@ begin
     returning id into v_id;
   return v_id;
 end;
-$;
+$$;
 
 revoke all on function public.block_handle(text) from public;
 revoke all on function public.report_handle(text,text,text) from public;
