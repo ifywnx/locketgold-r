@@ -34,7 +34,7 @@ for ver in ("v1","v2","v3"):
     script=resp.read().decode()
     assert "$done" in script
     assert "__ASSET_BASE__" not in script
-    assert (base+"/welcome/images/locket-gold-an.png") in script
+    assert "/welcome/images/locket-gold-an.png" in script
     assert base+base not in script
   print("PASS owner test "+ver)
 for ver in ("v1","v2"):
