@@ -8,6 +8,12 @@ Status: Source created. No completed Mac/Xcode build, iPhone run, Supabase migra
 - [ ] Choose Personal Team; build directly on iPhone with Command+R
 - [ ] Test iPhone permissions for Camera and Photos picker
 - [ ] Test OS 26 system appearance and dynamic text sizes
+- [ ] Verify 3 app icons generated and switch without errors
+- [ ] Test six camera themes, badge selection and app re-launch
+- [ ] Record 1–60 second movie with microphone and replay
+- [ ] Import .mov/.mp4 with correct permission, reject >60 seconds and >100 MB
+- [ ] Verify 2,000-character caption boundaries (local and cloud)
+- [ ] Test local streak, previous-day boundary and single restoration credit
 
 ## 2. Local-only mode (no Supabase configuration)
 - [ ] Launch without email or Telegram prompt
@@ -29,6 +35,9 @@ Status: Source created. No completed Mac/Xcode build, iPhone run, Supabase migra
 - [ ] A sends friend request; B sees it; B accepts
 - [ ] A posts to B; B can see after refresh and A can delete
 - [ ] B reacts; verify reaction is saved and remains after refresh
+- [ ] A shares video to B, B plays it and confirms audio
+- [ ] B opens A moment, A sees B in its viewer list
+- [ ] Confirm cloud badge is visible to friends
 - [ ] Remove friendship; verify new posts cannot be sent to removed friend
 
 ## 4. Mandatory security negative tests
@@ -48,6 +57,7 @@ Status: Source created. No completed Mac/Xcode build, iPhone run, Supabase migra
 - [ ] Add home screen widget and save new moment in app
 - [ ] Confirm image refreshes on Home Screen
 - [ ] Confirm App Groups entitlement works with actual Apple Developer team
+- [ ] Change camera theme and verify widget border changes
 
 ## Not part of this build
 - Push notifications, background live delivery, multi-person chat
