@@ -21,7 +21,18 @@
    $('demo-create').disabled=locked;
    $('demo-restore').disabled=locked;
  };
- select.addEventListener('change',update);
+ select.addEventListener('change',()=>{
+   // A receipt authorizes one version only. Switching versions resets the
+   // displayed demo delivery rather than presenting stale links as another SKU.
+   if(quote||receipt){
+     quote=null;receipt=null;
+     sessionStorage.removeItem('an-store-demo-receipt-v1');
+     $('demo-order').hidden=true;$('demo-files').hidden=true;
+     $('demo-delivery').replaceChildren();
+     report('Đã đổi phiên bản. Hãy tạo một đơn DEMO mới cho gói vừa chọn.');
+   }
+   update();
+ });
  const report=(text,error=false)=>{message.textContent=text;message.dataset.error=String(error)};
  const freeze=b=>{locked=b;select.disabled=b||!!quote;update()};
  const api=async(path,payload)=>{
