@@ -160,15 +160,16 @@ final class CloudService: ObservableObject {
         do {
             try await client.storage.from("moments").upload(path: path, file: bytes)
             do {
-                try await client.from("moments")
-                    .insert(PostPayload(id: momentID, author_id: userID, storage_path: path, caption: caption))
-                    .execute()
-                if !recipients.isEmpty {
-                    let payloads = recipients.map { RecipientPayload(moment_id: momentID, recipient_id: $0) }
-                    try await client.from("moment_recipients").insert(payloads).execute()
-                }
+                // One database transaction saves the moment AND recipient list.
+                // Avoids partially shared posts if permission checks fail.
+                try await client.rpc("publish_moment", params: PublishParams(
+                    p_id: momentID,
+                    p_path: path,
+                    p_caption: caption,
+                    p_recipients: recipients
+                )).execute()
             } catch {
-                // Reclaim uploaded image if DB transaction fails.
+                // Reclaim the upload if the database transaction failed.
                 _ = try? await client.storage.from("moments").remove(paths: [path])
                 throw error
             }
