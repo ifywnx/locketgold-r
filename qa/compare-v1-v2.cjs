@@ -77,7 +77,7 @@ for(const version of ['v1','v2']){
 const responseCases={};
 for(const [name,url,agent] of [
  ['valid_url_and_locket_agent',remoteUrl,'Locket/1.0'],
- ['unrelated_url_and_agent',unrelatedUrl,'NotLocket/1.0'],
+ ['unrelated_url_and_agent',unrelatedUrl,'OtherApp/1.0'],
  ['valid_url_other_agent',remoteUrl,'OtherApp/1.0'],
  ['unrelated_url_locket_agent',unrelatedUrl,'Locket/1.0']
 ]){
@@ -95,7 +95,7 @@ function dataStats(arr){
   return {
     count:arr.length,
     groups:new Set(arr.map(x=>x.group)).size,
-    uniqueIds:new Set(arr.map(x=>x.id)).size,
+    uniqueIds:new Set(arr.map(x=>x.id||x.group+'|'+x.text)).size,
     icons:arr.filter(x=>x.icon).length,
     gradients:arr.filter(x=>Array.isArray(x.colors)&&x.colors.length>=2).length
   }
@@ -172,10 +172,20 @@ console.log('V1-V2_OFFLINE_REPORT '+JSON.stringify({
 }));
 assert.equal(preview.v1.count,107);
 assert.equal(preview.v2.count,705);
+assert.equal(preview.v1.uniqueIds,107);
+assert.equal(preview.v2.uniqueIds,705);
+assert.equal(variants.v1.overlay.total,118);
+assert.equal(variants.v2.overlay.total,717);
+assert.equal(variants.v1.overlay.foundServerFixture,false);
+assert.equal(variants.v2.overlay.foundServerFixture,true);
+assert.equal(variants.v1.serverKeysPreserved,true);
+assert.equal(variants.v2.serverKeysPreserved,true);
 assert.equal(sameDns,true);
 assert.equal(sameLogo,true);
 assert.equal(responseCases.unrelated_url_and_agent.v1.changed,false);
 assert.equal(responseCases.unrelated_url_and_agent.v2.changed,false);
 assert.equal(responseCases.valid_url_and_locket_agent.v1.changed,true);
 assert.equal(responseCases.valid_url_and_locket_agent.v2.changed,true);
+assert.equal(responseCases.valid_url_other_agent.v1.changed,false);
+assert.equal(responseCases.valid_url_other_agent.v2.changed,true);
 console.log('PASS: fixture execution, V1/V2 caption statistics, DNS/logo equality, request scope checks');
