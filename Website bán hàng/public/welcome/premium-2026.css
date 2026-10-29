@@ -447,3 +447,10 @@ body.an-home-page,body.an-store-page{background-color:#fcf9fc;color:var(--an-ink
 /* Phase 3: DEMO quote / receipt live expiry. */
 .an-home-page .demo-expiry{margin:14px 0 8px;padding:11px 14px;border:1px solid #ddcfeb;border-radius:13px;background:#faf5ff;color:#5c4075;font-size:12px;font-weight:750;line-height:1.7}
 .an-home-page .demo-expiry[hidden]{display:none}
+
+/* Keep demo QA discoverable without competing with package sales content. */
+.an-home-page .store-qa-tools{margin:32px 0 45px;padding:12px 17px;border:1px solid #e7dfe8;border-radius:16px;background:#fcf9fc;color:#685b70}
+.an-home-page .store-qa-tools>summary{font-size:12px;font-weight:750;cursor:pointer;line-height:1.7;padding:8px 6px}
+.an-home-page .store-qa-tools>summary:focus-visible{outline:3px solid #957ab7;outline-offset:3px;border-radius:9px}
+.an-home-page .store-qa-tools-intro{font-size:12px;line-height:1.8;margin:12px 5px 0}
+.an-home-page .store-qa-tools .an-demo-checkout{margin:24px 0 12px}
