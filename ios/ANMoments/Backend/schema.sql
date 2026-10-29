@@ -177,6 +177,44 @@ revoke all on function public.accept_friend(uuid) from public;
 grant execute on function public.request_friend(text) to authenticated;
 grant execute on function public.accept_friend(uuid) to authenticated;
 
+
+-- Publish an entire moment in one transaction. SECURITY DEFINER is explicitly
+-- restricted to authenticated users and validates author, path and friendships.
+create or replace function public.publish_moment(
+  p_id uuid,
+  p_path text,
+  p_caption text,
+  p_recipients uuid[]
+)
+returns void language plpgsql security definer set search_path = ''
+as $
+begin
+  if auth.uid() is null then raise exception 'Authentication required'; end if;
+  if p_path not like (auth.uid()::text || '/%') then raise exception 'Invalid upload path'; end if;
+  if length(coalesce(p_caption, '')) > 1000 then raise exception 'Caption too long'; end if;
+  if array_length(p_recipients, 1) > 20 then raise exception 'Too many recipients'; end if;
+  if exists (
+    select 1 from unnest(coalesce(p_recipients, array[]::uuid[])) as recipient
+    where recipient = auth.uid()
+       or not exists (
+         select 1 from public.friendships f
+         where f.user_id = auth.uid() and f.friend_id = recipient
+       )
+  ) then raise exception 'Recipient is not your friend'; end if;
+
+  insert into public.moments(id, author_id, storage_path, caption)
+    values (p_id, auth.uid(), p_path, coalesce(p_caption, ''));
+
+  insert into public.moment_recipients(moment_id, recipient_id)
+    select p_id, distinct_recipient
+    from (
+      select distinct unnest(coalesce(p_recipients, array[]::uuid[])) as distinct_recipient
+    ) x;
+end;
+$;
+revoke all on function public.publish_moment(uuid,text,text,uuid[]) from public;
+grant execute on function public.publish_moment(uuid,text,text,uuid[]) to authenticated;
+
 -- Private image bucket, never a public read bucket.
 insert into storage.buckets(id, name, public, file_size_limit, allowed_mime_types)
 values ('moments', 'moments', false, 10485760, array['image/jpeg'])
