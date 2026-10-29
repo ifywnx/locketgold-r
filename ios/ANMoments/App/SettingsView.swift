@@ -74,7 +74,11 @@ struct SettingsView: View {
                         }
                     }
                     NavigationLink {
-                        StreakView()
+                        if cloud.enabled {
+                            CloudStreakView()
+                        } else {
+                            StreakView()
+                        }
                     } label: {
                         Label("Chuỗi ngày & khôi phục", systemImage: "flame.fill")
                     }
