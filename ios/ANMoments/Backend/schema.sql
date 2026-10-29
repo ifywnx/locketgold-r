@@ -74,7 +74,7 @@ begin
   values (
     new.id,
     'u_' || left(replace(new.id::text, '-', ''), 16),
-    coalesce(nullif(split_part(new.email, '@', 1), ''), 'Người bạn')
+    'Người bạn'
   )
   on conflict (id) do nothing;
   return new;
@@ -89,7 +89,7 @@ create trigger an_moments_on_user_created
 -- Backfill existing test users for the first installation.
 insert into public.profiles(id, handle, display_name)
 select u.id, 'u_' || left(replace(u.id::text, '-', ''), 16),
-       coalesce(nullif(split_part(u.email, '@', 1), ''), 'Người bạn')
+       'Người bạn'
 from auth.users u
 on conflict (id) do nothing;
 
@@ -118,8 +118,20 @@ create policy "reaction_update_self" on public.reactions
   with check (sender_id = (select auth.uid()));
 
 -- Profile handles are discoverable; email is never exposed in this table.
+-- Only the user, friends, and people who sent this user an invite
+-- can retrieve a profile. Search/invite by exact handle runs via server RPC.
 create policy "profiles_read_authenticated" on public.profiles
-  for select to authenticated using (true);
+  for select to authenticated using (
+    id = (select auth.uid())
+    or exists (
+      select 1 from public.friendships f
+      where f.user_id = (select auth.uid()) and f.friend_id = profiles.id
+    )
+    or exists (
+      select 1 from public.friend_requests r
+      where r.to_user = (select auth.uid()) and r.from_user = profiles.id
+    )
+  );
 create policy "profiles_edit_self" on public.profiles
   for update to authenticated using (id = (select auth.uid()))
   with check (id = (select auth.uid()));
