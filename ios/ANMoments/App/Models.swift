@@ -93,3 +93,16 @@ struct ReactionPayload: Encodable {
     let sender_id: UUID
     let emoji: String
 }
+
+
+struct PublishMediaParams: Encodable {
+    let p_id: UUID
+    let p_path: String
+    let p_caption: String
+    let p_recipients: [UUID]
+    let p_media_kind: String
+}
+
+struct MomentViewer: Decodable {
+    let viewer_id: UUID
+}
