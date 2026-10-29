@@ -8,6 +8,7 @@ if ! command -v xcodegen >/dev/null 2>&1; then
   fi
   brew install xcodegen
 fi
+swift scripts/generate_icons.swift
 xcodegen generate --spec project.yml
 open ANMoments.xcodeproj
 echo "Chọn Apple Personal Team và iPhone trong Xcode, sau đó Command+R."
