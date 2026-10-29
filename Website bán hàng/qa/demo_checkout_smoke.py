@@ -116,6 +116,11 @@ with sync_playwright() as p:
         page.locator("#demo-files").wait_for(state="visible",timeout=8000)
         assert "129.000" in page.locator("#demo-order-price").inner_text()
         assert "Không phải" in page.locator("#demo-files").inner_text()
+        # A receipt is valid for one version only; switching clears old download links.
+        page.locator("#demo-version").select_option("v1")
+        assert page.locator("#demo-files").is_hidden()
+        assert page.locator("#demo-order").is_hidden()
+        assert "49.000đ" in page.locator("#demo-summary").inner_text()
         overflow=page.evaluate("document.documentElement.scrollWidth-document.documentElement.clientWidth")
         assert overflow<=7,(width,overflow)
         assert not errors,errors[:3]
