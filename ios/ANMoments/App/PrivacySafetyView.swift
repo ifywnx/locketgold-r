@@ -2,6 +2,7 @@ import SwiftUI
 
 struct PrivacySafetyView: View {
     @EnvironmentObject private var cloud: CloudService
+    @EnvironmentObject private var album: LocalAlbum
     @EnvironmentObject private var social: SocialService
     @EnvironmentObject private var remotePush: RemotePushService
     @StateObject private var reminder = LocalReminders()
