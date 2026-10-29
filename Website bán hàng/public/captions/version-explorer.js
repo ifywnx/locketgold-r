@@ -127,6 +127,5 @@
     }
   }
   window.addEventListener('an-studio-ready',init,{once:true});
-  // If library Studio initialized before this module loaded, allow same behavior.
-  if(window.AnStudioFavorites)init();
+  if(window.AnStudioReady)init();
 })();
