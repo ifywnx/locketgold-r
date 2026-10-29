@@ -7,7 +7,7 @@ Nguồn giao diện, API, admin và dữ liệu phiên bản nằm **ở thư m�
 - `app/`: trang Next.js, API, quyền tải, dashboard và tra cứu đơn.
 - `public/welcome/`: trang chủ, mô phỏng iPhone 3D, CSS, caption mẫu V1/V2/V3 và JS giao diện.
 - `public/captions/`: Caption Studio gốc, chỉ một bộ tệp `catalog.json`, `studio.js`, `studio-effects.*`.
-- `public/welcome/captions/index.html`: giữ trang cũ, các tài nguyên được Next.js rewrite sang `/captions/`.
+- `/welcome/captions/index.html`: URL cũ chuyển hướng tới một trang chuẩn `/captions/index.html` để không còn HTML trùng lặp.
 - `lib/`: mã giao dịch, thư viện caption lịch sử, bảo mật và `private-assets.ts` (giữ cho đơn cũ).
 - `scripts/build-install-assets.mjs`: tạo lại `lib/install-test-assets.json` từ nguồn chuẩn `../v1`, `../v2`, `../v3`.
 - `qa/`: smoke test API và iPhone/desktop.
