@@ -9,6 +9,7 @@ struct CaptureView: View {
     @EnvironmentObject private var cloud: CloudService
     @EnvironmentObject private var appearance: AppearanceSettings
     @State private var cameraOpen = false
+    @State private var editingPhoto = false
     @State private var videoCameraOpen = false
     @State private var pickerItem: PhotosPickerItem?
     @State private var image: UIImage?
@@ -96,6 +97,17 @@ struct CaptureView: View {
                     }
                     .buttonStyle(ActionButtonStyle(background: .white))
 
+                    if image != nil {
+                        Button {
+                            editingPhoto = true
+                        } label: {
+                            Label("Chỉnh ảnh: thêm chữ & sticker", systemImage: "paintbrush.pointed.fill")
+                                .frame(maxWidth: .infinity)
+                                .padding(14)
+                                .background(.white, in: RoundedRectangle(cornerRadius: 14))
+                        }
+                    }
+
                     TextField("Viết lời nhắn...", text: $caption, axis: .vertical)
                         .lineLimit(2...6)
                         .onChange(of: caption) { _, newValue in
@@ -163,6 +175,13 @@ struct CaptureView: View {
                 .padding(20)
             }
             .background(appearance.cameraTheme.background.ignoresSafeArea())
+            .sheet(isPresented: $editingPhoto) {
+                if let image {
+                    PhotoEditorView(source: image) { edited in
+                        self.image = edited
+                    }
+                }
+            }
             .sheet(isPresented: $cameraOpen) {
                 CameraPicker { selected in
                     image = selected
