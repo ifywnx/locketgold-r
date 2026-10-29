@@ -28,12 +28,13 @@ struct FriendsView: View {
                             .padding(15)
                             .background(.white, in: RoundedRectangle(cornerRadius: 14))
                         Button {
-                            if cloud.enabled {
-                                Task { await cloud.requestFriend(handle: input) }
-                            } else {
-                                album.addFriend(input)
-                            }
+                            let submittedName = input
                             input = ""
+                            if cloud.enabled {
+                                Task { await cloud.requestFriend(handle: submittedName) }
+                            } else {
+                                album.addFriend(submittedName)
+                            }
                         } label: {
                             Image(systemName: "plus")
                                 .font(.headline.bold())
