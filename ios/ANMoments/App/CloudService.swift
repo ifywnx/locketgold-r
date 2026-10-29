@@ -310,6 +310,23 @@ final class CloudService: ObservableObject {
         }
     }
 
+    func updateHandle(_ proposed: String) async {
+        guard let client, let userID else { return }
+        let handle = proposed.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard handle.range(of: "^[a-z0-9_]{3,24}$", options: .regularExpression) != nil else {
+            errorMessage = "Username phải dài 3–24 ký tự, chỉ gồm a-z, 0-9 hoặc dấu gạch dưới."
+            return
+        }
+        do {
+            try await client.from("profiles")
+                .update(["handle": handle])
+                .eq("id", value: userID.uuidString)
+                .execute()
+            await refresh()
+            infoMessage = "Đã cập nhật @" + handle
+        } catch { errorMessage = error.localizedDescription }
+    }
+
     func updateBadge(_ style: String) async {
         guard let client, let userID else { return }
         do {
