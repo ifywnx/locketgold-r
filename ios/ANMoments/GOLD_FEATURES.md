@@ -23,7 +23,8 @@ https://help.locket.com/en/articles/11057185-what-is-locket-gold-and-what-featur
 ## Crucial differences / incomplete work
 
 - This does **NOT** alter or unlock the existing Locket application, account, or paid subscription.
-- Realtime background updates, WidgetKit push notifications, video recap, native chat/group chat, account deletion and moderation are not implemented.
+- Realtime background updates and APNs/WidgetKit push notifications are not implemented. Local photo-based video recap and direct/group text-chat source are available, but not yet device-tested.
+- Blocking/report submission exists, but no running moderation worker or actual account-deletion service. Deletion requests are queued only.
 - The widget prototype is intentionally optional because it requires signing with App Groups. The main app runs without it.
 - There is no independently verified Xcode build, iPhone camera test, video codec test, or two-account Supabase E2E test yet.
 - Recording on a device is limited to 60 seconds; imported movies longer than 60 seconds are rejected rather than silently trimmed.
@@ -46,7 +47,7 @@ The source package does not contain copyrighted Locket icons. Mac-generated icon
 1. Run \`zsh TEST_ON_MAC.command\` for an unsigned iOS target build. It may reveal compile problems; none have been independently verified here.
 2. Run app on an iPhone: photo, imported photo, 60-second video and audio recording, media playback, icon switching.
 3. Test camera themes, badge states, local streak summary and single restoration credit.
-4. Configure a NEW Supabase project with the supplied schema, test OTP, two-user invitations, image and video sharing, viewer receipts and storage RLS.
+4. Configure a NEW Supabase project, run schema.sql then social_extensions.sql, test OTP, two-user invitations, image/video sharing, chat/group chat, blocking and RLS.
 5. Enable optional WidgetKit extension only after confirming App Groups signing; test borders and photo refresh on a real device.
 6. Conduct independent security/privacy QA before inviting non-test users.
 
