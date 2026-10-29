@@ -40,7 +40,7 @@ with sync_playwright() as p:
         for v,total in [("standard",107),("v2",300),("v3",705)]:
             page.locator(f'[data-detail="{v}"]').click()
             page.locator("#plan-dialog").wait_for(state="visible",timeout=8000)
-            page.wait_for_function("n=>document.getElementById('plan-caption-total').textContent.includes(n)",str(total),timeout=10000)
+            page.wait_for_function("n=>document.getElementById('plan-caption-total').textContent.includes(n)",arg=str(total),timeout=10000)
             assert page.locator("#plan-caption-total").inner_text().find(str(total))>=0
             page.locator("#plan-dialog-close").click()
         page.locator("#versions").scroll_into_view_if_needed()
