@@ -1,0 +1,86 @@
+name: Repo structure and legacy route QA
+on:
+  push:
+    branches: [refactor/structure-canonical-assets-20261029]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  canonical-website:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    defaults:
+      run:
+        working-directory: Website bán hàng
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      DATABASE_URL: file:./data/repo-qa.db
+      DATA_DIR: ./data
+      STORE_PAYMENTS_MODE: demo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: Website bán hàng/package-lock.json
+      - name: Build from canonical v1, v2 and v3
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          node scripts/build-install-assets.mjs --check
+          test -f lib/install-test-assets.json
+      - name: Start isolated preview
+        run: |
+          npm start > /tmp/repo-smoke.log 2>&1 &
+          for i in $(seq 1 55); do
+            if curl -fsS http://127.0.0.1:3000/api/health >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          tail -60 /tmp/repo-smoke.log
+          exit 1
+      - name: Install Chromium browser testing
+        run: |
+          python3 -m pip install playwright==1.56.0
+          python3 -m playwright install --with-deps chromium
+      - name: Validate canonical and old URLs
+        run: |
+          python3 qa/repository_routes_smoke.py
+          python3 qa/version_trio_smoke.py
+      - name: Print logs on failure
+        if: failure()
+        run: tail -100 /tmp/repo-smoke.log || true
+
+  vercel-mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    defaults:
+      run:
+        working-directory: web-vercel
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      STORE_PAYMENTS_MODE: demo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: web-vercel/package-lock.json
+      - name: Build the same root Vercel uses in Production
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+          node scripts/build-install-assets.mjs --check
+      - name: Verify generated mirror matches canonical source
+        run: |
+          cmp lib/install-test-assets.json <(node --input-type=module -e "
+            import fs from 'node:fs';
+            let d={};
+            for(let v of ['v1','v2','v3']){
+              d[v]={};
+              for(let f of ['An-Locket-DNS.mobileconfig','deleteHeader.js','An-Locket.sgmodule','Locket_An.js','Locket_Unlocked.js'])
+                d[v][f]=fs.readFileSync('../'+v+'/'+f,'utf8');
+            }
+            process.stdout.write(JSON.stringify(d)+'\n');
+          ")
