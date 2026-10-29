@@ -46,6 +46,14 @@ create table if not exists public.moment_recipients (
   primary key(moment_id, recipient_id)
 );
 
+create table if not exists public.reactions (
+  moment_id uuid not null references public.moments(id) on delete cascade,
+  sender_id uuid not null references public.profiles(id) on delete cascade,
+  emoji text not null check (emoji in ('❤️','😂','🥰','🔥')),
+  updated_at timestamptz not null default now(),
+  primary key(moment_id, sender_id)
+);
+
 create index if not exists idx_moments_author on public.moments(author_id, created_at desc);
 create index if not exists idx_recipients_user on public.moment_recipients(recipient_id);
 
@@ -82,6 +90,24 @@ alter table public.friend_requests enable row level security;
 alter table public.friendships enable row level security;
 alter table public.moments enable row level security;
 alter table public.moment_recipients enable row level security;
+alter table public.reactions enable row level security;
+
+create policy "reaction_select_for_viewers" on public.reactions
+  for select to authenticated
+  using (
+    exists (
+      select 1 from public.moments m where m.id = moment_id
+    )
+  );
+create policy "reaction_insert_self_on_visible_moment" on public.reactions
+  for insert to authenticated
+  with check (
+    sender_id = (select auth.uid())
+    and exists (select 1 from public.moments m where m.id = moment_id)
+  );
+create policy "reaction_update_self" on public.reactions
+  for update to authenticated using (sender_id = (select auth.uid()))
+  with check (sender_id = (select auth.uid()));
 
 -- Profile handles are discoverable; email is never exposed in this table.
 create policy "profiles_read_authenticated" on public.profiles
@@ -177,6 +203,20 @@ revoke all on function public.accept_friend(uuid) from public;
 grant execute on function public.request_friend(text) to authenticated;
 grant execute on function public.accept_friend(uuid) to authenticated;
 
+
+-- Revoking friendships is symmetric. Any party can unlink their own connection.
+create or replace function public.remove_friend(other_user uuid)
+returns void language plpgsql security definer set search_path = ''
+as $
+begin
+  if auth.uid() is null then raise exception 'Authentication required'; end if;
+  delete from public.friendships f
+   where (f.user_id = auth.uid() and f.friend_id = other_user)
+      or (f.friend_id = auth.uid() and f.user_id = other_user);
+end;
+$;
+revoke all on function public.remove_friend(uuid) from public;
+grant execute on function public.remove_friend(uuid) to authenticated;
 
 -- Publish an entire moment in one transaction. SECURITY DEFINER is explicitly
 -- restricted to authenticated users and validates author, path and friendships.
