@@ -92,7 +92,7 @@
       button.append(number);
       button.onclick=()=>{
         selected=v.id;
-        document.querySelector('.plan[data-plan="'+v.planId+'"]')?.click();
+        window.AnStoreSelectPlan?.(v.planId);
         document.getElementById('preview-'+v.id)?.click();
         renderCompare();
       };
