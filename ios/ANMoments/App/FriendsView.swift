@@ -1,9 +1,14 @@
 import SwiftUI
+import MessageUI
 
 struct FriendsView: View {
     @EnvironmentObject private var album: LocalAlbum
     @EnvironmentObject private var cloud: CloudService
     @State private var input = ""
+    @State private var showContactPicker = false
+    @State private var smsRecipient: String?
+    @State private var pendingInvite: String?
+    @State private var inviteMessage: String?
 
     var body: some View {
         NavigationStack {
@@ -25,6 +30,24 @@ struct FriendsView: View {
                             }
                         }
                         Text("Thêm bạn bằng tên người dùng. Họ phải đồng ý trước khi hai người chia sẻ ảnh.")
+                        HStack {
+                            if let handle = cloud.myProfile?.handle {
+                                ShareLink(item: "Thêm mình trên AN Moments: @\(handle). anmoments://invite/\(handle)") {
+                                    Label("Chia sẻ lời mời", systemImage: "square.and.arrow.up")
+                                }
+                            }
+                            Spacer()
+                            Button {
+                                if MFMessageComposeViewController.canSendText() {
+                                    showContactPicker = true
+                                } else {
+                                    inviteMessage = "iPhone này chưa hỗ trợ gửi SMS. Hãy dùng mục Chia sẻ lời mời."
+                                }
+                            } label: {
+                                Label("Mời từ danh bạ", systemImage: "person.crop.circle.badge.plus")
+                            }
+                        }
+                        .font(.subheadline)
                             .foregroundStyle(Theme.muted)
                     } else {
                         Text("Danh sách trong bản thử chỉ nằm trên máy này. Chưa thể gửi ảnh sang iPhone khác.")
@@ -109,6 +132,37 @@ struct FriendsView: View {
                 .padding(20)
             }
             .background(Theme.cream.ignoresSafeArea())
+            .task { checkIncomingInvite() }
+            .onOpenURL { _ in checkIncomingInvite() }
+            .sheet(isPresented: $showContactPicker) {
+                ContactInvitePicker { phone in
+                    smsRecipient = phone
+                }
+            }
+            .sheet(item: Binding(
+                get: { smsRecipient.map { SMSRecipient(id: $0) } },
+                set: { smsRecipient = $0?.id }
+            )) { contact in
+                InviteSMS(recipient: contact.id, handle: cloud.myProfile?.handle ?? "")
+            }
+            .confirmationDialog("Gửi lời mời kết bạn tới @\(pendingInvite ?? "")?",
+                                isPresented: Binding(
+                                    get: { pendingInvite != nil },
+                                    set: { if !$0 { pendingInvite = nil } }
+                                )) {
+                Button("Gửi lời mời") {
+                    let handle = pendingInvite ?? ""
+                    pendingInvite = nil
+                    Task { await cloud.requestFriend(handle: handle) }
+                }
+                Button("Hủy", role: .cancel) { pendingInvite = nil }
+            }
+            .alert("Mời bạn bè", isPresented: Binding(
+                get: { inviteMessage != nil },
+                set: { if !$0 { inviteMessage = nil } }
+            )) {
+                Button("OK") { inviteMessage = nil }
+            } message: { Text(inviteMessage ?? "") }
             .refreshable { await cloud.refresh() }
             .alert("Thông báo", isPresented: Binding(
                 get: { cloud.errorMessage != nil || cloud.infoMessage != nil },
@@ -119,6 +173,14 @@ struct FriendsView: View {
                 Text(cloud.errorMessage ?? cloud.infoMessage ?? "")
             }
         }
+    }
+
+    private func checkIncomingInvite() {
+        guard cloud.enabled,
+              let handle = UserDefaults.standard.string(forKey: "anmoments.pendingInvite"),
+              !handle.isEmpty else { return }
+        UserDefaults.standard.removeObject(forKey: "anmoments.pendingInvite")
+        pendingInvite = handle
     }
 
     private func personRow(name: String, subtitle: String) -> some View {
@@ -132,4 +194,8 @@ struct FriendsView: View {
             }
         }
     }
+}
+
+private struct SMSRecipient: Identifiable {
+    let id: String
 }
