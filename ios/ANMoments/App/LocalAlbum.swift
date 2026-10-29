@@ -43,6 +43,11 @@ final class LocalAlbum: ObservableObject {
         if let data = try? encoder.encode(friends) {
             try? data.write(to: root.appendingPathComponent("friends.json"), options: .atomic)
         }
+        // No-op when App Groups is not available on the signing profile.
+        let lastImageData = moments.first.flatMap {
+            try? Data(contentsOf: root.appendingPathComponent($0.fileName))
+        }
+        WidgetBridge.saveLatest(data: lastImageData)
     }
 
     func add(image: UIImage, caption: String, recipients: [String]) throws {
