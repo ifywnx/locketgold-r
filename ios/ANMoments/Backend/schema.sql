@@ -7,8 +7,11 @@ create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
   handle text unique not null check (handle ~ '^[a-z0-9_]{3,24}$'),
   display_name text not null default 'Người bạn' check (char_length(display_name) between 1 and 80),
+  badge_style text not null default 'heart' check (badge_style in ('heart','star','crown','flower','none')),
   created_at timestamptz not null default now()
 );
+
+alter table public.profiles add column if not exists badge_style text not null default 'heart';
 
 create table if not exists public.friend_requests (
   id uuid primary key default gen_random_uuid(),
