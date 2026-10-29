@@ -47,6 +47,14 @@ with sync_playwright() as p:
         assert page.locator("a[href='#versions']").count()>=1
         overflow=page.evaluate("document.documentElement.scrollWidth-document.documentElement.clientWidth")
         assert overflow<=4,f"Overflow at {w}px: {overflow}"
+        # Scroll naturally through reveal sections; verify V1/V2 cards are actually visible.
+        page.locator("#packages .plans-two").scroll_into_view_if_needed()
+        page.wait_for_timeout(950)
+        assert page.locator("#packages .plans-two .plan-shell").count()==2
+        assert float(page.locator("#packages .plans-two").evaluate("(el)=>getComputedStyle(el).opacity"))>0.9
+        assert all(page.locator("#packages .plans-two .plan-shell").nth(i).is_visible() for i in [0,1])
+        page.locator("#versions").scroll_into_view_if_needed()
+        page.wait_for_timeout(200)
         if w==1440:
             page.locator("#preview-v1").click()
             assert page.locator("#preview-v1").get_attribute("aria-pressed")=="true"
