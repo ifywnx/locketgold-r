@@ -15,6 +15,7 @@ final class CloudService: ObservableObject {
     @Published var requests: [FriendRequest] = []
     @Published var reactions: [UUID: String] = [:]
     @Published var requesterNames: [UUID: String] = [:]
+    @Published var authorNames: [UUID: String] = [:]
     @Published var busy = false
     @Published var errorMessage: String?
     @Published var infoMessage: String?
@@ -73,6 +74,7 @@ final class CloudService: ObservableObject {
             requests = []
             reactions = [:]
             requesterNames = [:]
+            authorNames = [:]
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -138,6 +140,16 @@ final class CloudService: ObservableObject {
                     .createSignedURL(path: loadedMoments[index].storage_path, expiresIn: 3600)
             }
             moments = loadedMoments
+            var namesOfAuthors: [UUID: String] = [:]
+            for authorID in Set(loadedMoments.map(\.author_id)) {
+                if let profile: RemoteProfile = try? await client.from("profiles")
+                    .select("id,handle,display_name")
+                    .eq("id", value: authorID.uuidString)
+                    .single().execute().value {
+                    namesOfAuthors[authorID] = profile.display_name
+                }
+            }
+            authorNames = namesOfAuthors
             if let latestURL = loadedMoments.first?.signedURL,
                let (data, _) = try? await URLSession.shared.data(from: latestURL) {
                 WidgetBridge.saveLatest(data: data)
