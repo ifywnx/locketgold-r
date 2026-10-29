@@ -42,8 +42,8 @@ targets:
           - CFBundleURLName: "com.ifywnx.anmoments"
             CFBundleURLSchemes:
               - "anmoments"
-        CFBundleShortVersionString: "1.1"
-        CFBundleVersion: "11"
+        CFBundleShortVersionString: "1.2"
+        CFBundleVersion: "12"
         NSMicrophoneUsageDescription: "Cho phép thu âm khi quay video khoảnh khắc."
         NSCameraUsageDescription: "AN Moments cần camera để chụp khoảnh khắc bạn gửi cho bạn bè."
         NSPhotoLibraryUsageDescription: "Cho phép chọn ảnh để tạo khoảnh khắc."
