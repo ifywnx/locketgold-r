@@ -51,6 +51,7 @@ jobs:
           python3 qa/repository_routes_smoke.py
           python3 qa/version_trio_smoke.py
           python3 qa/version_test_access_smoke.py
+          python3 qa/version_access_smoke.py
           python3 qa/studio2_smoke.py
           python3 qa/studio3_smoke.py
           python3 qa/storefront_sales_smoke.py

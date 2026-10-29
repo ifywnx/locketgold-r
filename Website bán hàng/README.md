@@ -85,3 +85,9 @@ Kiểm thử: `python3 qa/demo_checkout_smoke.py` khi Next.js đã chạy với 
 - Bản thử public dùng `shadowrocket://install?module=<URL đã encode>`, **không** dùng `shadowrocket://config/add` cho file `.sgmodule`. Có link HTTPS tải tay.
 - Các API đơn cũ và quyền truy cập cũ giữ nguyên. Khi mở bán thực tế phải xác minh đơn hàng V1/V2/V3 theo **mã SKU + trạng thái thanh toán + người sở hữu** trước khi cấp module, không dựa chỉ vào số tiền 129.000đ (trùng giá Plus lịch sử). `paymentStatus` tiếp tục `disabled`; không tự kích hoạt giao dịch thật.
 - Mục đích kiểm thử là đo xem Shadowrocket nhập bộ file được không, không xác nhận quyền Gold chính thức hoặc độ tương thích Locket/iOS.
+
+## Kiểm soát quyền V1/V2/V3 (schema sẵn sàng, checkout vẫn đóng)
+
+- Tạo bảng `version_orders` với `version_id` bắt buộc là `v1`, `v2` hoặc `v3`, `owner_hash`, trạng thái `PAID` và thời gian thanh toán. Không chạm vào bảng đơn lịch sử `orders`/`store_orders`.
+- `GET /api/version-access/[version]?order=<id>` kiểm tra token owner, mã đơn, SKU, tình trạng đã thanh toán, thời điểm thanh toán và giá trong catalog. Kết quả chỉ là trạng thái quyền, chưa có URL tải trả phí khi `paymentStatus=disabled`.
+- Không dùng đơn Plus lịch sử có giá 129.000đ để tạo quyền V3. Muốn mở bán phải tích hợp thanh toán và giao hàng trên ledger mới rồi kiểm thử giao dịch thực trước khi bật.

@@ -31,7 +31,11 @@ for ver in ("v1","v2","v3"):
   token=parse_qs(urlparse(url).query)["token"][0]
   token_per_version[ver]=token
   with urlopen(base+"/api/version-test/files/"+ver+"/Locket_Unlocked.js?token="+token,timeout=30) as resp:
-    assert "$done" in resp.read().decode()
+    script=resp.read().decode()
+    assert "$done" in script
+    assert "__ASSET_BASE__" not in script
+    assert (base+"/welcome/images/locket-gold-an.png") in script
+    assert base+base not in script
   print("PASS owner test "+ver)
 for ver in ("v1","v2"):
   wrong="v2" if ver=="v1" else "v3"

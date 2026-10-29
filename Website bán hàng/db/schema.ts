@@ -30,3 +30,15 @@ export const storeOrders=sqliteTable('store_orders',{
  checked:integer('checked').notNull().default(0),
  paid:integer('paid')
 });
+
+// Explicit SKU ledger for future verified V1/V2/V3 orders.
+// Legacy Plus (129k) remains independent and never maps to V3.
+export const versionOrders=sqliteTable('version_orders',{
+ id:integer('id').primaryKey(),
+ ownerHash:text('owner_hash').notNull(),
+ versionId:text('version_id').notNull(),
+ amount:integer('amount').notNull(),
+ status:text('status').notNull(),
+ created:integer('created').notNull(),
+ paid:integer('paid'),
+});

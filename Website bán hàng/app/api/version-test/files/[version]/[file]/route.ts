@@ -18,7 +18,8 @@ export async function GET(request:Request,{params}:{params:Promise<{version:stri
   }
   content=content.replaceAll('__ASSET_BASE__/assets/locket-gold-an.png',origin+'/welcome/images/locket-gold-an.png')
     .replace(/__ASSET_BASE__\/([\w.-]+)/g,(_match,name:string)=>url(name))
-    .replaceAll('/welcome/images/locket-gold-an.png',origin+'/welcome/images/locket-gold-an.png');
+    // Only replace paths not already absolute; never duplicate a domain.
+    .replace(/(?<![:/])\/welcome\/images\/locket-gold-an\.png/g,origin+'/welcome/images/locket-gold-an.png');
   const type=file.endsWith('.js')?'application/javascript; charset=utf-8':file.endsWith('.mobileconfig')?'application/x-apple-aspen-config':'text/plain; charset=utf-8';
   return new Response(content,{headers:{...secureHeaders,'Content-Type':type,
     ...(file.endsWith('.mobileconfig')?{'Content-Disposition':'attachment; filename="An-Locket-DNS.mobileconfig"'}:{})}});
