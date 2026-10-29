@@ -5,7 +5,10 @@ struct MemoriesView: View {
     @EnvironmentObject private var cloud: CloudService
     @State private var previewLocal: LocalMoment?
     @State private var previewRemote: RemoteMoment?
-    private let columns = [GridItem(.flexible(), spacing: 9), GridItem(.flexible(), spacing: 9)]
+    private let columns = [
+        GridItem(.flexible(), spacing: 9),
+        GridItem(.flexible(), spacing: 9)
+    ]
 
     var body: some View {
         NavigationStack {
@@ -13,7 +16,7 @@ struct MemoriesView: View {
                 VStack(alignment: .leading, spacing: 18) {
                     Text("Kỷ niệm")
                         .font(.system(size: 32, weight: .bold, design: .rounded))
-                    Text("Những bức ảnh bạn muốn giữ mãi.")
+                    Text("Ảnh và video bạn muốn giữ mãi.")
                         .foregroundStyle(Theme.muted)
                     LazyVGrid(columns: columns, spacing: 9) {
                         if cloud.enabled {
@@ -39,24 +42,18 @@ struct MemoriesView: View {
                                                 if let image = phase.image {
                                                     image.resizable().scaledToFill()
                                                 } else {
-                                                    Rectangle().fill(Theme.gold.opacity(0.2))
-                                                        .overlay(Image(systemName: "photo").foregroundStyle(Theme.muted))
+                                                    Rectangle()
+                                                        .fill(Theme.gold.opacity(0.2))
+                                                        .overlay(Image(systemName: "photo"))
                                                 }
                                             }
                                         }
                                     }
-                                    .frame(height: 190).clipped()
+                                    .frame(height: 190)
+                                    .clipped()
                                     .clipShape(RoundedRectangle(cornerRadius: 18))
                                 }
                                 .buttonStyle(.plain)
-                            }
-                        } else {
-                                        Rectangle().fill(Theme.gold.opacity(0.2))
-                                            .overlay(Image(systemName: "photo").foregroundStyle(Theme.muted))
-                                    }
-                                }
-                                .frame(height: 190).clipped()
-                                .clipShape(RoundedRectangle(cornerRadius: 18))
                             }
                         } else {
                             ForEach(album.moments) { moment in
@@ -64,8 +61,17 @@ struct MemoriesView: View {
                                     Button {
                                         previewLocal = moment
                                     } label: {
-                                        Image(uiImage: image).resizable().scaledToFill()
-                                            .frame(height: 190).clipped()
+                                        Image(uiImage: image)
+                                            .resizable().scaledToFill()
+                                            .frame(height: 190)
+                                            .clipped()
+                                            .overlay(alignment: .bottomTrailing) {
+                                                if moment.isVideo {
+                                                    Image(systemName: "play.rectangle.fill")
+                                                        .foregroundStyle(.white)
+                                                        .padding(8)
+                                                }
+                                            }
                                             .clipShape(RoundedRectangle(cornerRadius: 18))
                                     }
                                 }
@@ -76,7 +82,7 @@ struct MemoriesView: View {
                         ContentUnavailableView(
                             "Chưa có kỷ niệm",
                             systemImage: "square.grid.2x2",
-                            description: Text("Ảnh được chụp hoặc chọn sẽ xuất hiện ở đây.")
+                            description: Text("Ảnh và video đã lưu sẽ xuất hiện ở đây.")
                         )
                     }
                 }
@@ -91,9 +97,7 @@ struct MemoriesView: View {
                         } else if let url = moment.signedURL {
                             AsyncImage(url: url) { image in
                                 image.resizable().scaledToFit()
-                            } placeholder: {
-                                ProgressView()
-                            }
+                            } placeholder: { ProgressView() }
                         }
                         if let caption = moment.caption { Text(caption) }
                     }
@@ -116,13 +120,15 @@ struct MemoriesView: View {
                         }
                         Text(moment.caption)
                         ShareLink(item: album.exportURL(for: moment)) {
-                            Label("Chia sẻ ảnh", systemImage: "square.and.arrow.up")
+                            Label("Chia sẻ", systemImage: "square.and.arrow.up")
                         }
                     }
                     .padding()
-                    .toolbar { ToolbarItem(placement: .topBarTrailing) {
-                        Button("Đóng") { previewLocal = nil }
-                    } }
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button("Đóng") { previewLocal = nil }
+                        }
+                    }
                 }
             }
         }
