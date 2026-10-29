@@ -7,6 +7,7 @@ import Supabase
 final class CloudService: ObservableObject {
     let enabled = BackendConfig.isConfigured
     private let client: SupabaseClient?
+    var sharedClient: SupabaseClient? { client }
 
     @Published var userID: UUID?
     @Published var myProfile: RemoteProfile?
