@@ -159,7 +159,11 @@ final class CloudService: ObservableObject {
                 ($0.id, $0.badge_style ?? "heart")
             })
             authorBadges[userID] = myProfile?.badge_style ?? "heart"
-            if let latestURL = loadedMoments.first(where: { !$0.isVideo })?.signedURL,
+            let target = WidgetBridge.preferredFriend()
+            let latest = loadedMoments.first(where: {
+                !$0.isVideo && (target == nil || $0.author_id == target)
+            })
+            if let latestURL = latest?.signedURL,
                let (data, _) = try? await URLSession.shared.data(from: latestURL) {
                 WidgetBridge.saveLatest(data: data)
             }
