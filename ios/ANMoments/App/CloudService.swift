@@ -69,6 +69,10 @@ final class CloudService: ObservableObject {
     func signOut() async {
         guard let client else { return }
         do {
+            if let token = UserDefaults.standard.string(forKey: "anmoments.apnsToken") {
+                _ = try? await client.from("device_push_tokens")
+                    .delete().eq("token", value: token).execute()
+            }
             try await client.auth.signOut()
             userID = nil
             myProfile = nil
