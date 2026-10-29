@@ -14,7 +14,7 @@ struct CloudStreakView: View {
     @State private var days: [CloudStreakDay] = []
     @State private var credits = 0
     @State private var loading = false
-    @State private var error: String?
+    @State private var errorMessage: String?
     @State private var loaded = false
 
     private var summary: StreakSummary {
@@ -75,11 +75,11 @@ struct CloudStreakView: View {
         .task { await reload() }
         .refreshable { await reload() }
         .alert("Thông báo", isPresented: Binding(
-            get: { error != nil },
-            set: { if !$0 { error = nil } }
+            get: { errorMessage != nil },
+            set: { if !$0 { errorMessage = nil } }
         )) {
             Button("OK") { error = nil }
-        } message: { Text(error ?? "") }
+        } message: { Text(errorMessage ?? "") }
     }
 
     private func reload() async {
@@ -98,7 +98,7 @@ struct CloudStreakView: View {
             credits = wallet.credits
             loaded = true
         } catch {
-            error = "Không tải được chuỗi. Kiểm tra streak_extensions.sql: \(error.localizedDescription)"
+            errorMessage = "Không tải được chuỗi. Kiểm tra streak_extensions.sql: \(error.localizedDescription)"
         }
     }
 
@@ -110,6 +110,6 @@ struct CloudStreakView: View {
             try await api.rpc("restore_streak",
                 params: ["p_day": StreakEngine.key(day)]).execute()
             await reload()
-        } catch { error = error.localizedDescription }
+        } catch { errorMessage = error.localizedDescription }
     }
 }
