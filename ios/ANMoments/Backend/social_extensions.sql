@@ -167,12 +167,12 @@ begin
   if v_me is null then raise exception 'Authentication required'; end if;
   if nullif(trim(p_title),'') is null or char_length(p_title)>80 then
     raise exception 'Group title required (maximum 80 characters)'; end if;
-  select count(distinct f) into v_count
-    from unnest(coalesce(p_friends,array[]::uuid[])) as f;
+  select count(distinct friend_id) into v_count
+    from unnest(coalesce(p_friends,array[]::uuid[])) as x(friend_id);
   if v_count < 1 or v_count > 19 then
     raise exception 'Group requires 1-19 friends'; end if;
   for v_friend in
-    select distinct f from unnest(p_friends) as f
+    select distinct friend_id from unnest(p_friends) as x(friend_id)
   loop
     if v_friend = v_me or v_friend is null
        or not exists(select 1 from public.friendships
@@ -187,8 +187,8 @@ begin
   insert into public.conversation_members(conversation_id,user_id)
     values(v_group,v_me);
   insert into public.conversation_members(conversation_id,user_id)
-    select v_group, f from
-      (select distinct unnest(p_friends) as f) as friends;
+    select v_group, friend_id from
+      (select distinct unnest(p_friends) as friend_id) as friends;
   return v_group;
 end;
 $$;
