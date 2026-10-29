@@ -5,8 +5,10 @@ struct LocalMoment: Codable, Identifiable, Equatable {
     var createdAt: Date = Date()
     var caption: String
     var fileName: String
+    var mediaKind: String? = nil
     var recipients: [String]
     var reaction: String? = nil
+    var isVideo: Bool { mediaKind == "video" }
 }
 
 struct LocalFriend: Codable, Identifiable, Equatable {
@@ -18,13 +20,16 @@ struct RemoteMoment: Decodable, Identifiable {
     let id: UUID
     let author_id: UUID
     let storage_path: String
+    let media_kind: String
     let caption: String?
     let created_at: String
     var signedURL: URL? = nil
 
     private enum CodingKeys: String, CodingKey {
-        case id, author_id, storage_path, caption, created_at
+        case id, author_id, storage_path, media_kind, caption, created_at
     }
+
+    var isVideo: Bool { media_kind == "video" }
 
     var date: Date {
         let withFraction = ISO8601DateFormatter()
