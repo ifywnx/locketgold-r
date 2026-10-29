@@ -234,7 +234,7 @@ begin
    where (f.user_id = auth.uid() and f.friend_id = other_user)
       or (f.friend_id = auth.uid() and f.user_id = other_user);
 end;
-$;
+$$;
 revoke all on function public.remove_friend(uuid) from public;
 grant execute on function public.remove_friend(uuid) to authenticated;
 
@@ -275,7 +275,7 @@ begin
       select distinct unnest(coalesce(p_recipients, array[]::uuid[])) as distinct_recipient
     ) x;
 end;
-$;
+$$;
 drop function if exists public.publish_moment(uuid,text,text,uuid[]);
 revoke all on function public.publish_moment(uuid,text,text,uuid[],text) from public;
 grant execute on function public.publish_moment(uuid,text,text,uuid[],text) to authenticated;
@@ -349,7 +349,7 @@ begin
   insert into public.moment_views(moment_id, viewer_id) values(p_moment, auth.uid())
   on conflict (moment_id, viewer_id) do nothing;
 end;
-$;
+$$;
 revoke all on function public.record_moment_view(uuid) from public;
 grant execute on function public.record_moment_view(uuid) to authenticated;
 
