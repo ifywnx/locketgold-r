@@ -5,6 +5,7 @@
  * Run from "Website bán hàng" or from the Vercel mirror "web-vercel".
  * Usage: node scripts/build-install-assets.mjs [--check]
  */
+import './build-version-data.mjs';
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
