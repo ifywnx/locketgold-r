@@ -31,6 +31,11 @@ struct CloudRecapView: View {
                         Label("Lưu hoặc chia sẻ video", systemImage: "square.and.arrow.up")
                     }
                     .font(.headline)
+                    NavigationLink {
+                        SoundtrackView(videoURL: movie)
+                    } label: {
+                        Label("Thêm nhạc từ Files", systemImage: "music.note")
+                    }
                 } else {
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
                         ForEach(pictures) { moment in
