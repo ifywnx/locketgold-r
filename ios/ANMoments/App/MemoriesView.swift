@@ -91,10 +91,19 @@ struct MemoriesView: View {
             .background(Theme.cream.ignoresSafeArea())
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        RecapView()
-                    } label: {
-                        Label("Tạo video", systemImage: "film.stack")
+                    HStack(spacing: 14) {
+                        NavigationLink {
+                            MomentsCalendarView()
+                        } label: {
+                            Image(systemName: "calendar")
+                                .accessibilityLabel("Lịch kỷ niệm")
+                        }
+                        NavigationLink {
+                            RecapView()
+                        } label: {
+                            Image(systemName: "film.stack")
+                                .accessibilityLabel("Tạo video kỷ niệm")
+                        }
                     }
                 }
             }
