@@ -52,3 +52,18 @@ python3 qa/repository_routes_smoke.py
 ```
 
 CI build thêm `web-vercel/` với `prepare.mjs` để chắc chắn các deploy Production tương lai không bị thiếu asset. Test đường dẫn legacy và preview dùng dữ liệu giả lập, không đụng DB production.
+
+
+## Giai đoạn 1 — thông tin sản phẩm một nguồn chuẩn
+
+`Website bán hàng/lib/version-catalog.json` lưu **giá niêm yết, tên, số caption, đường dẫn dữ liệu, trạng thái và căn cứ xác minh** của V1/V2/V3. Sửa thông tin phiên bản tại đây, không sửa từng thẻ sản phẩm.
+
+Khi build: `scripts/build-version-data.mjs` xác minh số caption và số nhóm đối chiếu với JSON thật, tạo `public/welcome/version-data.js` cho trình duyệt. Script này được chạy từ `scripts/build-install-assets.mjs` trong cả build Next.js gốc và Vercel mirror.
+
+- `public/welcome/version-ui.js` dựng thẻ gói và bảng so sánh tại `#compare` từ catalog.
+- `public/welcome/app.js` lấy giá và gói từ catalog; `plan-details.js` và `phone-preview.js` đọc cùng nguồn.
+- `lib/plans.ts` lấy giá V1/V2 từ catalog nhưng **giữ nguyên** phân loại các đơn Plus lịch sử 129k. V3 129k *chưa có checkout server*, tuyệt đối không ánh xạ đơn Plus cũ sang V3 dựa trên số tiền.
+- `/api/versions` là API công khai chỉ đọc cùng metadata, không chứa bí mật.
+- `qa/version-catalog.test.mjs` kiểm tra số lượng, tính nhất quán và nguồn xác minh.
+
+**Chỉ đối chiếu được dữ liệu/mã nguồn trong repo.** Không ghi “đã hỗ trợ Gold/AI/video/đã thử iPhone” nếu chưa có bài kiểm thử thực tế. `paymentStatus: disabled`; giao dịch thật vẫn chưa được bật.
