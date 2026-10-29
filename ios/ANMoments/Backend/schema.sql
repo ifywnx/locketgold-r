@@ -341,6 +341,21 @@ $;
 revoke all on function public.record_moment_view(uuid) from public;
 grant execute on function public.record_moment_view(uuid) to authenticated;
 
+
+-- Supabase Data API 2026: RLS alone is insufficient when API table exposure
+-- is opt-in. Explicitly grant table privileges to authenticated role.
+grant usage on schema public to authenticated;
+grant select on public.profiles, public.friend_requests, public.friendships,
+  public.moments, public.moment_recipients, public.reactions,
+  public.moment_views to authenticated;
+grant update (handle, display_name, badge_style) on public.profiles to authenticated;
+grant insert, delete on public.moments to authenticated;
+grant insert on public.moment_recipients to authenticated;
+grant insert, update (emoji) on public.reactions to authenticated;
+
+-- No grant on auth.users or storage.objects is given here.
+-- All client access remains bounded by RLS in addition to privileges.
+
 -- Hardening reminder:
 -- 1. Configure email OTP template with {{ .Token }}.
 -- 2. Apply rate limiting and abuse controls before public launch.
