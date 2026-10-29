@@ -1,0 +1,75 @@
+name: Three-version captions and preview QA
+on:
+  push:
+    branches: [feat/three-versions-107-300-705]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      DATABASE_URL: file:./data/version-three-qa.db
+      DATA_DIR: ./data
+      STORE_PAYMENTS_MODE: demo
+    defaults:
+      run:
+        working-directory: Website bán hàng
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: Website bán hàng/package-lock.json
+      - name: Validate version catalogs match module content
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const path='public/welcome/';
+          const v1=JSON.parse(fs.readFileSync(path+'v1-caption-data.json'));
+          const v2=JSON.parse(fs.readFileSync(path+'v2-caption-data.json'));
+          const v3=JSON.parse(fs.readFileSync(path+'caption-data.json'));
+          const signature=x=>[x.group,x.text,x.icon||'',JSON.stringify(x.colors||[])].join('|');
+          if(v1.length!==107||v2.length!==300||v3.length!==705)throw Error('Wrong counts');
+          const set3=new Set(v3.map(signature));
+          if(v2.some(x=>!set3.has(signature(x))))throw Error('V2 contains unknown caption');
+          for(const [ver,count] of [['v2',311],['v3',716]]){
+            const source=fs.readFileSync('../'+ver+'/Locket_Unlocked.js','utf8');
+            const mark='    var catalog = ',begin=source.indexOf(mark)+mark.length,end=source.indexOf(';\n\n    // Canonical caption order',begin);
+            if(begin<mark.length||end<begin)throw Error('Cannot parse '+ver);
+            const catalog=JSON.parse(source.slice(begin,end));
+            const overlays=catalog.flatMap(group=>group.items);
+            if(overlays.length!==count)throw Error(ver+' expected '+count+' overlays, got '+overlays.length);
+          }
+          const bundles=JSON.parse(fs.readFileSync('lib/install-test-assets.json'));
+          for(const v of ['v1','v2','v3'])if(!bundles[v]?.['Locket_Unlocked.js'])throw Error('Missing '+v+' bundle');
+          if(bundles.v3['Locket_Unlocked.js']!==fs.readFileSync('../v3/Locket_Unlocked.js','utf8'))throw Error('Full V3 not preserved');
+          if(bundles.v2['Locket_Unlocked.js']!==fs.readFileSync('../v2/Locket_Unlocked.js','utf8'))throw Error('V2 package desync');
+          console.log('PASS V1 107, V2 300/311 overlay, V3 705/716 overlay, exact V2 subset, bundle sync');
+          NODE
+      - name: Install dependencies and build
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+      - name: Start isolated preview
+        run: |
+          node scripts/init-db.mjs
+          npm start > /tmp/an-version-qa.log 2>&1 &
+          for i in $(seq 1 55); do
+            if curl -fsS http://127.0.0.1:3000/api/health >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          tail -70 /tmp/an-version-qa.log
+          exit 1
+      - name: Install Playwright
+        run: |
+          python3 -m pip install playwright==1.56.0
+          python3 -m playwright install --with-deps chromium
+      - name: Test three versions on desktop and iPhone widths
+        run: python3 qa/version_trio_smoke.py
+      - name: Server log on failure
+        if: failure()
+        run: tail -100 /tmp/an-version-qa.log || true
