@@ -216,7 +216,7 @@ final class CloudService: ObservableObject {
         busy = true
         defer { busy = false }
         let momentID = UUID()
-        let path = "\(userID.uuidString)/\(momentID.uuidString).\(fileExtension)"
+        let path = "\(userID.uuidString.lowercased())/\(momentID.uuidString.lowercased()).\(fileExtension)"
         do {
             try await client.storage.from("moments").upload(
                 path: path, file: bytes,
