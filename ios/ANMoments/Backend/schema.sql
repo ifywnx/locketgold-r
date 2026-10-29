@@ -215,7 +215,7 @@ grant execute on function public.accept_friend(uuid) to authenticated;
 -- Revoking friendships is symmetric. Any party can unlink their own connection.
 create or replace function public.remove_friend(other_user uuid)
 returns void language plpgsql security definer set search_path = ''
-as $
+as $$
 begin
   if auth.uid() is null then raise exception 'Authentication required'; end if;
   delete from public.friendships f
@@ -236,7 +236,7 @@ create or replace function public.publish_moment(
   p_media_kind text
 )
 returns void language plpgsql security definer set search_path = ''
-as $
+as $$
 begin
   if auth.uid() is null then raise exception 'Authentication required'; end if;
   if p_path not like (auth.uid()::text || '/%') then raise exception 'Invalid upload path'; end if;
@@ -326,7 +326,7 @@ create policy "view_receipt_select_author_or_viewer" on public.moment_views
 
 create or replace function public.record_moment_view(p_moment uuid)
 returns void language plpgsql security definer set search_path = ''
-as $
+as $$
 begin
   if auth.uid() is null then raise exception 'Authentication required'; end if;
   if not exists(
