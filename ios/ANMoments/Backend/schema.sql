@@ -38,7 +38,7 @@ create table if not exists public.moments (
   author_id uuid not null references public.profiles(id) on delete cascade,
   storage_path text unique not null,
   media_kind text not null default 'photo' check (media_kind in ('photo','video')),
-  caption text not null default '' check (char_length(caption) <= 1000),
+  caption text not null default '' check (char_length(caption) <= 2000),
   created_at timestamptz not null default now(),
   check(storage_path like (author_id::text || '/%'))
 );
@@ -60,6 +60,8 @@ create table if not exists public.reactions (
 
 -- Idempotent migration when the schema predates Gold-like media support.
 alter table public.moments add column if not exists media_kind text not null default 'photo';
+alter table public.moments drop constraint if exists moments_caption_check;
+alter table public.moments add constraint moments_caption_check check (char_length(caption) <= 2000);
 create index if not exists idx_moments_author on public.moments(author_id, created_at desc);
 create index if not exists idx_recipients_user on public.moment_recipients(recipient_id);
 
