@@ -1,7 +1,7 @@
 name: Repo structure and legacy route QA
 on:
   push:
-    branches: [main, feat/storefront-sales-first-20261029]
+    branches: [main, feat/demo-checkout-delivery-20261029]
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,6 +17,7 @@ jobs:
       DATABASE_URL: file:./data/repo-qa.db
       DATA_DIR: ./data
       STORE_PAYMENTS_MODE: demo
+      STORE_DEMO_SECRET: an-store-demo-ci-only-signing-secret-not-for-live
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -51,6 +52,7 @@ jobs:
           python3 qa/studio2_smoke.py
           python3 qa/studio3_smoke.py
           python3 qa/storefront_sales_smoke.py
+          python3 qa/demo_checkout_smoke.py
       - name: Print logs on failure
         if: failure()
         run: tail -100 /tmp/repo-smoke.log || true

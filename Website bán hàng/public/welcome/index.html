@@ -79,6 +79,38 @@
 <p class="sales-availability">Chưa nhận đơn hàng mới hoặc thu tiền. Kênh hỗ trợ công khai sẽ được bổ sung trước khi mở bán.</p>
 <p id="sales-share-status" class="sales-share-status" role="status" aria-live="polite"></p>
 <p id="payment-status" role="status">Bạn có thể xem mẫu và sao chép thông tin gói. Thanh toán thật hiện chưa bật.</p><a id="checkout" class="button dark" hidden target="_blank" rel="noopener">Mở thanh toán payOS <span class="an-ui-icon" data-an-icon="arrow" aria-hidden="true"></span></a></section>
+<section id="demo-checkout" class="an-demo-checkout" aria-labelledby="demo-heading">
+ <div class="sectionhead"><div><p class="eyebrow">MÔ PHỎNG KHÔNG THU TIỀN</p><h2 id="demo-heading">Thử đặt mua.<br><em>Thử nhận sản phẩm.</em></h2></div>
+ <p>Kiểm tra luồng đơn hàng từ đầu đến cuối. Đây là môi trường mô phỏng: không có thanh toán, không tạo đơn thật, không cấp tài khoản/Gold hoặc bộ cài trả phí.</p></div>
+ <div class="demo-shell">
+  <div class="demo-topline"><strong>Đơn mua thử · Không phải giao dịch</strong><span>DEMO ONLY</span></div>
+  <div class="demo-form-row">
+   <label for="demo-version">Chọn gói mô phỏng</label><select id="demo-version" aria-label="Phiên bản cho đơn demo"></select>
+   <p id="demo-summary">Chọn V1, V2 hoặc V3 để thử quy trình.</p>
+  </div>
+  <div class="demo-step-actions">
+   <button type="button" id="demo-create" class="button dark">1. Tạo đơn DEMO</button>
+   <button type="button" id="demo-confirm" class="button secondary" disabled>2. Xác nhận DEMO (không thu tiền)</button>
+  </div>
+  <div id="demo-order" class="demo-order" hidden>
+   <div><small>Mã đơn mô phỏng</small><strong id="demo-order-id"></strong></div>
+   <div><small>Trạng thái</small><strong id="demo-order-status"></strong></div>
+   <div><small>Giá niêm yết</small><strong id="demo-order-price"></strong></div>
+  </div>
+  <div id="demo-files" class="demo-files" hidden>
+   <h3>3. Nhận tệp mẫu</h3>
+   <p>Chỉ gồm tối đa 12 caption mẫu, hướng dẫn và biên nhận mô phỏng. <strong>Không phải</strong> toàn bộ bộ cài hay sản phẩm đã thanh toán.</p>
+   <div id="demo-delivery" class="demo-downloads"></div>
+   <button type="button" id="demo-copy-receipt" class="sales-action">Sao chép mã biên nhận DEMO</button>
+  </div>
+  <details class="demo-restore"><summary>Khôi phục lượt demo bằng mã biên nhận</summary>
+   <label for="demo-receipt-input">Mã biên nhận DEMO (có hạn 60 phút)</label>
+   <textarea id="demo-receipt-input" rows="2" spellcheck="false" autocomplete="off" placeholder="Dán mã demo đã sao chép, không nhập mã mua hàng thật"></textarea>
+   <button id="demo-restore" type="button" class="sales-action">Kiểm tra và mở lại bản mẫu</button>
+  </details>
+  <p id="demo-status" role="status" aria-live="polite">Chọn gói rồi tạo đơn DEMO. Không gửi dữ liệu cá nhân và không phát sinh thanh toán.</p>
+ </div>
+</section>
 <section id="compare" class="an-version-comparison" aria-labelledby="version-compare-title">
   <div class="sectionhead an-compare-sectionhead"><div><p class="eyebrow">ĐỐI CHIẾU THÔNG TIN THẬT</p><h2 id="version-compare-title">Khác nhau ở đâu?<br><em>Xem từng tiêu chí.</em></h2></div><p>Mọi con số trong bảng được đối chiếu từ dữ liệu GitHub. Tách rõ tính năng có khai báo trong mã và chức năng đã thử trên thiết bị thật.</p></div>
   <div id="version-compare-controls" class="an-compare-controls"></div>
@@ -147,4 +179,4 @@
 </main><aside class="an-mobile-package-bar" id="mobile-package-bar" aria-label="Gói đang xem" hidden>
   <div class="an-mobile-package-copy"><span>Gói đang chọn</span><strong id="mobile-package-label">An · Locket V1</strong><b id="mobile-package-price">49.000đ</b></div>
   <div class="an-mobile-package-actions"><button type="button" id="mobile-package-details" aria-label="Xem chi tiết gói đang chọn">Chi tiết</button><button type="button" id="mobile-package-select">Xem gói <span aria-hidden="true"><span class="an-ui-icon" data-an-icon="arrow" aria-hidden="true"></span></span></button></div>
-</aside><a class="back-to-top" id="back-to-top" href="#top" aria-label="Về đầu trang" title="Về đầu trang">↑</a><footer class="site-footer"><div><b>An · Các phiên bản Locket</b><p>Dự án độc lập · Giao diện xem trước, không trực thuộc Locket Labs hoặc nhà phát triển Shadowrocket.</p></div><div class="footer-links"><a href="#versions">Lộ trình V4–V6</a><a href="#packages">Gói dịch vụ</a><a href="#faq">Giải đáp</a><a href="#support">Hỗ trợ</a><a href="#policies">Điều khoản</a></div><span>Bảng giá minh bạch, xem trước trước khi mua.</span></footer><script src="ui-icons.js"></script><script src="config.js"></script><script src="version-data.js"></script><script src="version-ui.js"></script><script src="app.js"></script><script src="sales-flow.js" defer></script><script src="caption-gallery.js"></script><script src="plan-details.js" defer></script><script src="phone-preview.js" defer></script><script src="wave4.js" defer></script><script src="motion.js" defer></script></body></html>
+</aside><a class="back-to-top" id="back-to-top" href="#top" aria-label="Về đầu trang" title="Về đầu trang">↑</a><footer class="site-footer"><div><b>An · Các phiên bản Locket</b><p>Dự án độc lập · Giao diện xem trước, không trực thuộc Locket Labs hoặc nhà phát triển Shadowrocket.</p></div><div class="footer-links"><a href="#versions">Lộ trình V4–V6</a><a href="#packages">Gói dịch vụ</a><a href="#faq">Giải đáp</a><a href="#support">Hỗ trợ</a><a href="#policies">Điều khoản</a></div><span>Bảng giá minh bạch, xem trước trước khi mua.</span></footer><script src="ui-icons.js"></script><script src="config.js"></script><script src="version-data.js"></script><script src="version-ui.js"></script><script src="app.js"></script><script src="sales-flow.js" defer></script><script src="demo-checkout.js" defer></script><script src="caption-gallery.js"></script><script src="plan-details.js" defer></script><script src="phone-preview.js" defer></script><script src="wave4.js" defer></script><script src="motion.js" defer></script></body></html>

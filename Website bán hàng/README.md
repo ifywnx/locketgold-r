@@ -48,3 +48,19 @@ Không sửa file `public/welcome/version-data.js` vì `npm run build` tự tạ
 `/captions/index.html` dùng `public/captions/version-explorer.js` và `/welcome/version-data.js` (sinh từ `lib/version-catalog.json`) để xem V1 **107**, V2 **300**, V3 **705** caption; lọc theo chủ đề, từ khóa không dấu, và xem mẫu V3 khác V2 theo chữ/icon/màu.
 
 Yêu thích của Explorer dùng cùng state/backup localStorage với Studio 2.0 (v2 JSON; nhận backup v1). **Không biến các caption xem trước thành module cài đặt hoặc tự chèn vào script xuất**. `catalog.json` 118 overlay cũ vẫn chỉ phục vụ trình tạo script riêng. Chạy `qa/studio3_smoke.py` để xác nhận UI trên 1440/390/320px, sao lưu/khôi phục và URL cũ.
+
+
+## Mô phỏng mua và giao sản phẩm — không dùng đơn thật
+
+Luồng demo mới tại `/welcome/index.html#demo-checkout`:
+
+1. Chọn V1/V2/V3 và bấm **Tạo đơn DEMO** → `POST /api/demo/checkout` cấp phiếu chờ, có chữ ký HMAC và thời hạn 15 phút.
+2. Bấm **Xác nhận DEMO (không thu tiền)** → `POST /api/demo/complete` kiểm tra phiếu và cấp biên nhận mô phỏng có hạn 60 phút.
+3. Tải `sample.json`, `instructions.txt` hoặc `receipt.json` từ `/api/demo/files/[version]/[file]`; mỗi bản nhận **tối đa 12 caption công khai**, không phải gói đầy đủ. Tệp sai phiên bản, token giả, token chưa xác nhận và token hết hạn bị từ chối.
+4. `POST /api/demo/restore` mở lại các **tệp mẫu** khi người dùng còn biên nhận hợp lệ.
+
+`STORE_DEMO_SECRET` tối thiểu **32 ký tự ngẫu nhiên** là biến môi trường riêng, cấu hình trên máy chạy và Vercel Production; **không lưu Git** và không sử dụng khóa thanh toán/mã kích hoạt cũ. Thiếu khóa thì các API demo trả 503.
+
+Bản demo **không truy cập SQLite**, không tạo order, không gọi payOS, không cấp licence/mã kích hoạt, không cấp Gold hoặc script trả phí. Biên nhận demo không tương đương chứng từ thanh toán. Không đưa các token demo vào `/api/access`, `/download`, `/api/store/files` hay `/api/payments`. Những API lịch sử không thay đổi.
+
+Kiểm thử: `python3 qa/demo_checkout_smoke.py` khi Next.js đã chạy với `STORE_DEMO_SECRET`. Workflow sử dụng khóa **chỉ dành cho CI**, khác Production. Bản public phải luôn hiển thị rõ trạng thái cửa hàng chưa mở thanh toán thật.
