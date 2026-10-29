@@ -34,6 +34,11 @@ struct RecapView: View {
                             .frame(maxWidth: .infinity)
                             .background(Theme.gold, in: RoundedRectangle(cornerRadius: 16))
                     }
+                    NavigationLink {
+                        SoundtrackView(videoURL: exportURL)
+                    } label: {
+                        Label("Thêm nhạc từ Files", systemImage: "music.note")
+                    }
                 } else if localPhotos.isEmpty {
                     ContentUnavailableView("Chưa có ảnh trên máy", systemImage: "photo.stack")
                 } else {
