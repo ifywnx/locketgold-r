@@ -1,0 +1,71 @@
+import Foundation
+
+struct LocalMoment: Codable, Identifiable, Equatable {
+    var id: UUID = UUID()
+    var createdAt: Date = Date()
+    var caption: String
+    var fileName: String
+    var recipients: [String]
+    var reaction: String? = nil
+}
+
+struct LocalFriend: Codable, Identifiable, Equatable {
+    var id: UUID = UUID()
+    var name: String
+}
+
+struct RemoteMoment: Decodable, Identifiable {
+    let id: UUID
+    let author_id: UUID
+    let storage_path: String
+    let caption: String?
+    let created_at: String
+    var signedURL: URL? = nil
+
+    private enum CodingKeys: String, CodingKey {
+        case id, author_id, storage_path, caption, created_at
+    }
+
+    var date: Date {
+        let withFraction = ISO8601DateFormatter()
+        withFraction.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        return withFraction.date(from: created_at)
+          ?? ISO8601DateFormatter().date(from: created_at)
+          ?? Date()
+    }
+}
+
+struct RemoteProfile: Codable, Identifiable {
+    let id: UUID
+    var handle: String
+    var display_name: String
+}
+
+struct FriendEdge: Decodable {
+    let friend_id: UUID
+}
+
+struct FriendRequest: Decodable, Identifiable {
+    let id: UUID
+    let from_user: UUID
+    let to_user: UUID
+    let status: String
+}
+
+struct PostPayload: Encodable {
+    let id: UUID
+    let author_id: UUID
+    let storage_path: String
+    let caption: String
+}
+
+struct RecipientPayload: Encodable {
+    let moment_id: UUID
+    let recipient_id: UUID
+}
+
+enum MomentFormat {
+    static func date(_ value: Date) -> String {
+        value.formatted(.dateTime.day().month(.abbreviated).hour().minute())
+    }
+}
