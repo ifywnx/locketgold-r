@@ -80,6 +80,11 @@ struct MainTabs: View {
                 .tag(4)
         }
         .background(Theme.cream)
+        .onAppear {
+            if UserDefaults.standard.string(forKey: "anmoments.pendingInvite") != nil {
+                tab = 2
+            }
+        }
         .onOpenURL { url in
             guard url.scheme?.lowercased() == "anmoments",
                   url.host?.lowercased() == "invite",
