@@ -2,3 +2,5 @@ node_modules/
 .next/
 data/
 .env*
+# Generated from /v1, /v2, /v3 by scripts/build-install-assets.mjs
+lib/install-test-assets.json
