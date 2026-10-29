@@ -71,3 +71,9 @@ Kiểm thử: `python3 qa/demo_checkout_smoke.py` khi Next.js đã chạy với 
 - Biên nhận hoàn tất được kiểm tra lại ở POST /api/demo/restore (60 phút). Đồng hồ hạn sử dụng hiển thị trên trang và gỡ link khi hết hạn.
 - Phiếu giả, sai giai đoạn, hết hạn hoặc đổi phiên bản đều không thể cấp file trả phí. Storage bị khóa thì demo vẫn chạy trong tab cho tới khi reload.
 - Không có dashboard doanh thu V1–V3 ở phase này: DEMO là stateless, không phải giao dịch thật. Muốn mở bán cần database bền vững, quyền phân phối sản phẩm và quy trình giao hàng riêng.
+
+## An Store: trọng tâm bán V1/V2/V3
+
+- Trang `/welcome/index.html` chỉ ưu tiên giới thiệu ba gói, bảng giá, so sánh, mẫu, quy trình mua và hỗ trợ. Luồng giao dịch thật tiếp tục bị khóa cho tới khi hoàn thiện điều kiện kinh doanh.
+- DEMO kỹ thuật không còn chen giữa bảng giá và bảng so sánh; nằm trong mục thu gọn gần cuối trang. Khi kiểm thử mở `/welcome/index.html?demo=1` hoặc `#demo-checkout` để hiện công cụ kỹ thuật.
+- Bảo toàn API và trạng thái khôi phục DEMO cho QA, giữ những đơn lịch sử; không nhập DEMO vào số liệu bán hàng hoặc bật payOS.

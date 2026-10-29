@@ -98,7 +98,8 @@ with sync_playwright() as p:
             permissions=["clipboard-read","clipboard-write"],accept_downloads=True)
         page=context.new_page()
         errors=[];page.on("pageerror",lambda err:errors.append(str(err)))
-        page.goto(BASE+"/welcome/index.html",wait_until="networkidle",timeout=30000)
+        page.goto(BASE+"/welcome/index.html?demo=1",wait_until="networkidle",timeout=30000)
+        assert page.locator("#store-qa-tools").get_attribute("open") is not None
         page.locator("#demo-version").select_option("v3")
         assert "129.000đ" in page.locator("#demo-summary").inner_text()
         assert page.locator("#demo-confirm").is_disabled()
@@ -128,7 +129,7 @@ with sync_playwright() as p:
         receipt=page.evaluate("navigator.clipboard.readText()")
         assert receipt.count(".")==1
         # New session can restore the signed DEMO receipt.
-        page.goto(BASE+"/welcome/index.html",wait_until="networkidle")
+        page.goto(BASE+"/welcome/index.html?demo=1",wait_until="networkidle")
         page.locator(".demo-restore summary").click()
         page.locator("#demo-receipt-input").fill(receipt)
         page.locator("#demo-restore").click()

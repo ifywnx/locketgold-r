@@ -79,39 +79,6 @@
 <p class="sales-availability">Chưa nhận đơn hàng mới hoặc thu tiền. Kênh hỗ trợ công khai sẽ được bổ sung trước khi mở bán.</p>
 <p id="sales-share-status" class="sales-share-status" role="status" aria-live="polite"></p>
 <p id="payment-status" role="status">Bạn có thể xem mẫu và sao chép thông tin gói. Thanh toán thật hiện chưa bật.</p><a id="checkout" class="button dark" hidden target="_blank" rel="noopener">Mở thanh toán payOS <span class="an-ui-icon" data-an-icon="arrow" aria-hidden="true"></span></a></section>
-<section id="demo-checkout" class="an-demo-checkout" aria-labelledby="demo-heading">
- <div class="sectionhead"><div><p class="eyebrow">MÔ PHỎNG KHÔNG THU TIỀN</p><h2 id="demo-heading">Thử đặt mua.<br><em>Thử nhận sản phẩm.</em></h2></div>
- <p>Kiểm tra luồng đơn hàng từ đầu đến cuối. Đây là môi trường mô phỏng: không có thanh toán, không tạo đơn thật, không cấp tài khoản/Gold hoặc bộ cài trả phí.</p></div>
- <div class="demo-shell">
-  <div class="demo-topline"><strong>Đơn mua thử · Không phải giao dịch</strong><span>DEMO ONLY</span></div>
-  <div class="demo-form-row">
-   <label for="demo-version">Chọn gói mô phỏng</label><select id="demo-version" aria-label="Phiên bản cho đơn demo"></select>
-   <p id="demo-summary">Chọn V1, V2 hoặc V3 để thử quy trình.</p>
-  </div>
-  <div class="demo-step-actions">
-   <button type="button" id="demo-create" class="button dark">1. Tạo đơn DEMO</button>
-   <button type="button" id="demo-confirm" class="button secondary" disabled>2. Xác nhận DEMO (không thu tiền)</button>
-  </div>
-  <div id="demo-order" class="demo-order" hidden>
-   <div><small>Mã đơn mô phỏng</small><strong id="demo-order-id"></strong></div>
-   <div><small>Trạng thái</small><strong id="demo-order-status"></strong></div>
-   <div><small>Giá niêm yết</small><strong id="demo-order-price"></strong></div>
-  </div>
-  <div id="demo-files" class="demo-files" hidden>
-   <h3>3. Nhận tệp mẫu</h3>
-   <p>Chỉ gồm tối đa 12 caption mẫu, hướng dẫn và biên nhận mô phỏng. <strong>Không phải</strong> toàn bộ bộ cài hay sản phẩm đã thanh toán.</p>
-   <div id="demo-delivery" class="demo-downloads"></div>
-   <button type="button" id="demo-copy-receipt" class="sales-action">Sao chép mã biên nhận DEMO</button>
-  </div>
-  <details class="demo-restore"><summary>Khôi phục lượt demo bằng mã biên nhận</summary>
-   <label for="demo-receipt-input">Mã biên nhận DEMO (có hạn 60 phút)</label>
-   <textarea id="demo-receipt-input" rows="2" spellcheck="false" autocomplete="off" placeholder="Dán mã demo đã sao chép, không nhập mã mua hàng thật"></textarea>
-   <button id="demo-restore" type="button" class="sales-action">Kiểm tra và mở lại bản mẫu</button>
-  </details>
-  <p id="demo-expires" class="demo-expiry" role="status" hidden></p>
-  <p id="demo-status" role="status" aria-live="polite">Chọn gói rồi tạo đơn DEMO. Không gửi dữ liệu cá nhân và không phát sinh thanh toán.</p>
- </div>
-</section>
 <section id="compare" class="an-version-comparison" aria-labelledby="version-compare-title">
   <div class="sectionhead an-compare-sectionhead"><div><p class="eyebrow">ĐỐI CHIẾU THÔNG TIN THẬT</p><h2 id="version-compare-title">Khác nhau ở đâu?<br><em>Xem từng tiêu chí.</em></h2></div><p>Mọi con số trong bảng được đối chiếu từ dữ liệu GitHub. Tách rõ tính năng có khai báo trong mã và chức năng đã thử trên thiết bị thật.</p></div>
   <div id="version-compare-controls" class="an-compare-controls"></div>
@@ -162,7 +129,44 @@
     <article class="policy-card"><span class="policy-icon" aria-hidden="true"><span class="an-ui-icon" data-an-icon="refresh" aria-hidden="true"></span></span><h3>Đổi, hoàn &amp; hỗ trợ</h3><p>Thanh toán trực tuyến đang tắt; điều kiện đổi hoặc hoàn tiền và phạm vi hỗ trợ chưa được công bố. Các chính sách này cần được hoàn thiện trước khi nhận đơn hàng.</p></article>
   </div>
   <p class="policy-disclaimer">Cửa hàng An không có liên kết chính thức với Locket Labs, Inc. hoặc Shadow Launch Technology Limited. Tên và nhãn hiệu của bên thứ ba thuộc về chủ sở hữu tương ứng.</p>
-</section><section class="workspace" id="activation"><div><p class="eyebrow">TIẾP TỤC BỘ CÀI</p><h2>Có mã rồi?<br>Vào không gian của bạn.</h2><p>Dán mã đã nhận để mở các bước cài đặt.</p></div><form id="unlock"><label for="code">Mã của bạn</label><input id="code" required autocomplete="off" spellcheck="false" placeholder="Dán mã của bạn"><button class="button dark">Kích hoạt mã →</button><p id="access-message" role="alert"></p></form></section>
+</section><details class="store-qa-tools" id="store-qa-tools">
+  <summary>Kiểm thử kỹ thuật: đơn DEMO (không phải đặt mua)</summary>
+  <p class="store-qa-tools-intro">Khu vực này dành cho kiểm thử hệ thống. Không thu tiền, không cấp sản phẩm đầy đủ hay quyền truy cập trả phí.</p>
+<section id="demo-checkout" class="an-demo-checkout" aria-labelledby="demo-heading">
+ <div class="sectionhead"><div><p class="eyebrow">MÔ PHỎNG KHÔNG THU TIỀN</p><h2 id="demo-heading">Thử đặt mua.<br><em>Thử nhận sản phẩm.</em></h2></div>
+ <p>Kiểm tra luồng đơn hàng từ đầu đến cuối. Đây là môi trường mô phỏng: không có thanh toán, không tạo đơn thật, không cấp tài khoản/Gold hoặc bộ cài trả phí.</p></div>
+ <div class="demo-shell">
+  <div class="demo-topline"><strong>Đơn mua thử · Không phải giao dịch</strong><span>DEMO ONLY</span></div>
+  <div class="demo-form-row">
+   <label for="demo-version">Chọn gói mô phỏng</label><select id="demo-version" aria-label="Phiên bản cho đơn demo"></select>
+   <p id="demo-summary">Chọn V1, V2 hoặc V3 để thử quy trình.</p>
+  </div>
+  <div class="demo-step-actions">
+   <button type="button" id="demo-create" class="button dark">1. Tạo đơn DEMO</button>
+   <button type="button" id="demo-confirm" class="button secondary" disabled>2. Xác nhận DEMO (không thu tiền)</button>
+  </div>
+  <div id="demo-order" class="demo-order" hidden>
+   <div><small>Mã đơn mô phỏng</small><strong id="demo-order-id"></strong></div>
+   <div><small>Trạng thái</small><strong id="demo-order-status"></strong></div>
+   <div><small>Giá niêm yết</small><strong id="demo-order-price"></strong></div>
+  </div>
+  <div id="demo-files" class="demo-files" hidden>
+   <h3>3. Nhận tệp mẫu</h3>
+   <p>Chỉ gồm tối đa 12 caption mẫu, hướng dẫn và biên nhận mô phỏng. <strong>Không phải</strong> toàn bộ bộ cài hay sản phẩm đã thanh toán.</p>
+   <div id="demo-delivery" class="demo-downloads"></div>
+   <button type="button" id="demo-copy-receipt" class="sales-action">Sao chép mã biên nhận DEMO</button>
+  </div>
+  <details class="demo-restore"><summary>Khôi phục lượt demo bằng mã biên nhận</summary>
+   <label for="demo-receipt-input">Mã biên nhận DEMO (có hạn 60 phút)</label>
+   <textarea id="demo-receipt-input" rows="2" spellcheck="false" autocomplete="off" placeholder="Dán mã demo đã sao chép, không nhập mã mua hàng thật"></textarea>
+   <button id="demo-restore" type="button" class="sales-action">Kiểm tra và mở lại bản mẫu</button>
+  </details>
+  <p id="demo-expires" class="demo-expiry" role="status" hidden></p>
+  <p id="demo-status" role="status" aria-live="polite">Chọn gói rồi tạo đơn DEMO. Không gửi dữ liệu cá nhân và không phát sinh thanh toán.</p>
+ </div>
+</section>
+</details>
+<section class="workspace" id="activation"><div><p class="eyebrow">TIẾP TỤC BỘ CÀI</p><h2>Có mã rồi?<br>Vào không gian của bạn.</h2><p>Dán mã đã nhận để mở các bước cài đặt.</p></div><form id="unlock"><label for="code">Mã của bạn</label><input id="code" required autocomplete="off" spellcheck="false" placeholder="Dán mã của bạn"><button class="button dark">Kích hoạt mã →</button><p id="access-message" role="alert"></p></form></section>
 <template id="installation-template"><section id="downloads" hidden><p class="eyebrow">KHÔNG GIAN CÀI ĐẶT</p><h2>Từng bước, thật dễ.</h2><p id="demo-note" class="notice" hidden>Đây là phiên xem thử. Các nút tải không gọi máy chủ và không thu tiền.</p>
 <div id="apple" hidden class="account"><h3>01 · Tải Shadowrocket</h3><p>Chỉ đăng nhập tài khoản tải ứng dụng trong <b>Phương tiện & Mục mua</b>. Giữ tài khoản iCloud cá nhân của bạn.</p><label for="apple-email">Tài khoản tải ứng dụng</label><input id="apple-email" readonly><label for="apple-password">Mật khẩu</label><div class="passwordrow"><input id="apple-password" type="password" readonly><button id="reveal" type="button" disabled>Hiện</button><button id="copy-password" type="button" disabled>Sao chép</button></div><p id="copy-status" role="status"></p><details id="signout"><summary>Cách đăng nhập và đăng xuất sau khi tải</summary><ol><li>Vào Cài đặt iPhone → tên của bạn → Phương tiện & Mục mua → Đăng xuất.</li><li>Đăng nhập tài khoản tải ứng dụng được cung cấp. Nếu cần mã xác minh, liên hệ người bán.</li><li>Mở App Store, tải Shadowrocket từ mục ứng dụng đã mua của tài khoản.</li><li>Quay lại Phương tiện & Mục mua → Đăng xuất, rồi đăng nhập tài khoản cá nhân.</li></ol><p>Thực hiện đăng xuất trên iPhone sau khi tải xong.</p><label><input id="signedout" type="checkbox"> Tôi đã tự đăng xuất tài khoản tải ứng dụng</label></details></div>
 <div id="cards"></div><details class="guide" open><summary>Cài đặt theo thứ tự</summary><ol>

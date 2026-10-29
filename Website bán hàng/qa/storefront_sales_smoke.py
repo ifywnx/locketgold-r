@@ -25,6 +25,11 @@ with sync_playwright() as p:
           return s.every((id,i)=>i===0||document.getElementById(id).compareDocumentPosition(document.getElementById(s[i-1]))&2)
         }""")  # all early sections occur before roadmap
         assert page.locator("#sales-share-status").count()==1
+        # Visitors see plans and comparison before optional engineering tools.
+        assert page.locator("#store-qa-tools").get_attribute("open") is None
+        assert page.locator("#demo-checkout").is_hidden()
+        assert page.evaluate("""() => document.getElementById('compare').compareDocumentPosition(document.getElementById('store-qa-tools')) & Node.DOCUMENT_POSITION_FOLLOWING""")
+        assert page.locator("#demo-checkout").count()==1
         assert page.evaluate("window.IFYWNX_CONFIG.paymentsEnabled===false")
         # Customer can share the version; no order gets created.
         page.locator("#packages [data-plan=v2]").click()

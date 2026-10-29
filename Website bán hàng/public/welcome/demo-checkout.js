@@ -10,6 +10,12 @@
  const price=n=>new Intl.NumberFormat('vi-VN').format(n)+'đ';
  const box=$('demo-checkout'),message=$('demo-status'),select=$('demo-version');
  if(!box||!message||!select)return;
+ // This test-only flow stays behind a disclosure, outside the purchase journey.
+ const qaDetails=$('store-qa-tools');
+ const showDemo=()=>{
+   if(qaDetails&&(new URLSearchParams(location.search).get('demo')==='1'||location.hash==='#demo-checkout'))qaDetails.open=true;
+ };
+ showDemo();window.addEventListener('hashchange',showDemo);
  const PENDING='an-store-demo-pending-v1',RECEIPT='an-store-demo-receipt-v1';
  const store={
    get(k){try{return sessionStorage.getItem(k)}catch{return null}},
