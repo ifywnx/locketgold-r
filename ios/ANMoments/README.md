@@ -2,23 +2,26 @@
 
 Independent SwiftUI photo-moment app. **Not** an extracted Locket binary, Gold bypass, or Telegram-gated mod.
 
+Read **GOLD_FEATURES.md** for the Gold-inspired feature matrix and honest device-test status.
+
 ## What is already implemented
 
-- Native iOS photo capture using camera and Photos picker
-- Local-only working gallery, history, emoji reactions, photo sharing via iOS Share Sheet
+- Native iOS photo/video capture and Photos picker; original video recording/import up to 60 seconds
+- Local-only gallery, history, emoji reactions, photo/video sharing through iOS Share Sheet
 - Manual local friend labels (local mode only, NOT genuine remote friendships)
 - Email OTP via Supabase when configured
-- Real friendship invitations and acceptance through SQL RPC
+- Real friendship invitations/acceptance, unfriend and custom username through SQL RPC
 - Private Supabase Storage image upload, database-backed moments, recipient visibility enforced with RLS
-- Manual refresh of shared moments, cloud emoji reactions, unfriend, delete your own cloud moments
-- Optional WidgetKit/App Groups reference code
+- Manual refresh of shared photos/videos, cloud emoji reactions, viewed-by receipts, unfriend, delete your own cloud moments
+- Custom camera themes, custom badges, generated alternate icons, local streak restoration
+- Optional WidgetKit/App Groups reference code with colored borders
 
 ## Important limitations (do not mistake these for implemented features)
 
 - No automatic realtime/push refresh: app retrieves changes when opened/refreshed
 - Local friend labels never deliver images to another iPhone
 - Widget requires Apple App Groups capability, device build and testing; excluded from the default project
-- No video capture, video recap, chat, account deletion, blocking/reporting, or full Locket Gold features
+- No video recap, chat, account deletion, blocking/reporting, or connection to official Locket Gold subscriptions
 - No professional security audit, no verified Xcode device build in this environment
 - A new Supabase project, schema, and publishable key are required for real sharing
 - No copyrighted Locket assets, proprietary code, or hidden API endpoints have been copied
@@ -29,10 +32,8 @@ Requirements: Xcode 26+, macOS with Xcode Command Line Tools, Homebrew.
 
 In Terminal:
 
-    brew install xcodegen
     cd ios/ANMoments
-    xcodegen generate
-    open ANMoments.xcodeproj
+    zsh OPEN_XCODE.command
 
 In Xcode:
 1. Select target **ANMoments** > Signing & Capabilities.
