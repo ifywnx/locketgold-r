@@ -7,11 +7,14 @@ import Supabase
 final class CloudService: ObservableObject {
     let enabled = BackendConfig.isConfigured
     private let client: SupabaseClient?
+    private let momentPageSize = 100
     var sharedClient: SupabaseClient? { client }
 
     @Published var userID: UUID?
     @Published var myProfile: RemoteProfile?
     @Published var moments: [RemoteMoment] = []
+    @Published var hasMoreMoments = false
+    @Published var loadingMoreMoments = false
     @Published var friends: [RemoteProfile] = []
     @Published var requests: [FriendRequest] = []
     @Published var reactions: [UUID: String] = [:]
@@ -77,6 +80,8 @@ final class CloudService: ObservableObject {
             userID = nil
             myProfile = nil
             moments = []
+            hasMoreMoments = false
+            loadingMoreMoments = false
             friends = []
             requests = []
             reactions = [:]
@@ -144,7 +149,9 @@ final class CloudService: ObservableObject {
             var loadedMoments: [RemoteMoment] = try await client.from("moments")
                 .select("id,author_id,storage_path,media_kind,caption,created_at")
                 .order("created_at", ascending: false)
-                .limit(100).execute().value
+                .range(from: 0, to: momentPageSize - 1)
+                .execute().value
+            hasMoreMoments = loadedMoments.count == momentPageSize
 
             for index in loadedMoments.indices {
                 loadedMoments[index].signedURL = try? await client.storage.from("moments")
@@ -179,6 +186,55 @@ final class CloudService: ObservableObject {
             }
         } catch {
             errorMessage = error.localizedDescription
+        }
+    }
+
+    /// Loads the next page of authorized moments. RLS remains the source of
+    /// truth: this query can return only moments visible to the signed-in user.
+    func loadMoreMoments() async {
+        guard let client, hasMoreMoments, !loadingMoreMoments else { return }
+        loadingMoreMoments = true
+        defer { loadingMoreMoments = false }
+
+        let offset = moments.count
+        do {
+            let page: [RemoteMoment] = try await client.from("moments")
+                .select("id,author_id,storage_path,media_kind,caption,created_at")
+                .order("created_at", ascending: false)
+                .range(from: offset, to: offset + momentPageSize - 1)
+                .execute().value
+
+            guard !page.isEmpty else {
+                hasMoreMoments = false
+                return
+            }
+
+            let existingIDs = Set(moments.map(\.id))
+            var newMoments = page.filter { !existingIDs.contains($0.id) }
+            for index in newMoments.indices {
+                newMoments[index].signedURL = try? await client.storage.from("moments")
+                    .createSignedURL(path: newMoments[index].storage_path, expiresIn: 3600)
+            }
+
+            var namesOfAuthors = authorNames
+            var badgesOfAuthors = authorBadges
+            let knownAuthorIDs = Set(namesOfAuthors.keys)
+            let newAuthorIDs = Set(newMoments.map(\.author_id)).subtracting(knownAuthorIDs)
+            for authorID in newAuthorIDs {
+                if let profile: RemoteProfile = try? await client.from("profiles")
+                    .select("id,handle,display_name,badge_style")
+                    .eq("id", value: authorID.uuidString)
+                    .single().execute().value {
+                    namesOfAuthors[authorID] = profile.display_name
+                    badgesOfAuthors[authorID] = profile.badge_style ?? "heart"
+                }
+            }
+            authorNames = namesOfAuthors
+            authorBadges = badgesOfAuthors
+            moments.append(contentsOf: newMoments)
+            hasMoreMoments = page.count == momentPageSize && !newMoments.isEmpty
+        } catch {
+            errorMessage = "Không tải thêm được lịch sử: \(error.localizedDescription)"
         }
     }
 
