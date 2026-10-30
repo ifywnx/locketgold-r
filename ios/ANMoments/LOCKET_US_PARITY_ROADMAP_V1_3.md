@@ -17,7 +17,7 @@ The feature target is based on public Locket materials:
 
 Publicly described Locket Gold benefits include custom app icons, Camera Roll upload, unlimited friends, longer videos, streak restoration, no ads, a custom badge, and camera themes. The public app listing describes close-friend photo sharing, Home Screen widgets, reactions, photo history, video recaps, and separate widgets for a best friend or crush.
 
-## Current source status (AN Moments 1.2)
+## Current source status (AN Moments 1.2 + parity work)
 
 "Source exists" does not mean it has passed a device or production test.
 
@@ -28,7 +28,7 @@ Publicly described Locket Gold benefits include custom app icons, Camera Roll up
 | Captions and photo stickers | Implemented | Needs device QA |
 | Private sharing to selected friends | Implemented with Supabase schema/RPC | Needs isolated backend and RLS tests |
 | Reactions to moments | Implemented | Needs two-account QA |
-| Photo history and calendar | Implemented; cloud refresh currently loads up to 100 moments | Pagination required |
+| Photo history and calendar | Implemented; source now pages through 100 authorized moments at a time | Verify with more than 100 records |
 | Manual video recap | Implemented for up to 15 photos | Monthly automatic recap not implemented |
 | Camera themes and profile badges | Implemented | Needs device QA |
 | Alternate app icons | Three icon variants generated | Needs signing/device QA |
@@ -36,7 +36,7 @@ Publicly described Locket Gold benefits include custom app icons, Camera Roll up
 | Streak restoration | Local restoration exists; cloud streak support is separate | Needs unified, server-authoritative testing |
 | Chat and group chat | Implemented in source | Realtime works only while chat is open; needs two-device QA |
 | Chat media attachments | Implemented in source | Not end-to-end encrypted |
-| Home Screen widget | Optional WidgetKit target exists | Not part of the default build script |
+| Home Screen widget | Optional WidgetKit target exists; a dedicated unsigned build/open script was added | Compile and install with App Groups |
 | Best-friend/crush widget selection | One app-level favorite sender is stored | Per-widget configuration required |
 | Background widget refresh | Not implemented as a verified production path | APNs/WidgetKit work required |
 | Remote notifications | Token registration and server function source exist | Apple credentials, deployment, and delivery tests missing |
@@ -50,12 +50,12 @@ Publicly described Locket Gold benefits include custom app icons, Camera Roll up
 
 ### P0 — Make the existing iOS app verifiable
 
-1. Build the app and WidgetKit extension with Xcode on macOS.
+1. Build the app and WidgetKit extension with Xcode on macOS; CI is configured to attempt both unsigned builds.
 2. Fix compiler errors before adding more surface area.
 3. Install on two iPhones and verify sign-in, friend requests, photo/video sharing, reactions, chat, media attachments, history, and account switching.
 4. Apply migrations to a new dedicated Supabase project; never reuse ORBIT/VIRGO production data.
 5. Run negative RLS tests with an unrelated third account.
-6. Fix cloud history pagination and verify large media handling.
+6. Verify history pagination with more than 100 moments, refreshes, and concurrent new posts; verify large media handling.
 
 ### P1 — Close the visible feature gaps
 
