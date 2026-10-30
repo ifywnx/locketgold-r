@@ -1,4 +1,4 @@
-name: AN Moments iOS (unsigned build)
+name: AN Moments iOS (unsigned app + widget builds)
 
 on:
   pull_request:
@@ -12,12 +12,14 @@ permissions:
 jobs:
   compile:
     runs-on: macos-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
       - name: Xcode version
         run: xcodebuild -version
       - name: Install project generator
         run: brew install xcodegen
-      - name: Parse Swift, generate icons and build without signing
+      - name: Build app target without signing
         run: zsh ios/ANMoments/TEST_ON_MAC.command
+      - name: Build app and WidgetKit extension without signing
+        run: zsh ios/ANMoments/TEST_WITH_WIDGET.command
