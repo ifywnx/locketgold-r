@@ -1,57 +1,51 @@
-# AN Moments — Gold-like capabilities
+# AN Moments — Gold-equivalent feature inventory
 
-**This is an independently written SwiftUI app.** It neither enables nor impersonates Locket Gold on the official Locket service. No Telegram login, license bypass, original Locket binary, or proprietary private API is included.
+**AN Moments is an independently written SwiftUI app.** It does not enable or impersonate Locket Gold on the official Locket service. It does not patch the Locket IPA, log into Locket, call Locket private APIs, or bypass a paid entitlement.
 
-Reference for official Gold feature inventory (published May 5, 2026):
-https://help.locket.com/en/articles/11057185-what-is-locket-gold-and-what-features-are-included
+Public reference: https://help.locket.com/en/articles/11057185-what-is-locket-gold-and-what-features-are-included
 
-| Feature analogous to Locket Gold | AN Moments code location | Status |
-| --- | --- | --- |
-| Custom app icons | scripts/generate_icons.swift, project.yml, SettingsView.swift | Source added; iPhone build required |
-| Photos from Camera Roll | CaptureView.swift | Source added; local first, optional cloud |
-| Unlimited friends | FriendsView.swift, Backend/schema.sql | No app-level hard cap; backend capacity/performance not validated |
-| Longer videos | VideoMedia.swift, CaptureView.swift, CloudService.swift | 60-second record/import, 100 MB maximum; device + server test required |
-| Streak restoration | StreakEngine.swift, StreakView.swift | Local prototype, 1 complimentary restoration; does not sync across devices |
-| No ads | Entire AN Moments source | No ad SDK integrated |
-| Custom profile badge | AppearanceSettings.swift, SettingsView.swift, profiles.badge_style | Source added, not an official Locket Gold verification badge |
-| Camera themes | AppearanceSettings.swift, CaptureView.swift | 6 locally selectable themes |
-| Longer captions | CaptureView.swift, Backend/schema.sql | 2,000-character limit in UI/DB |
-| Who viewed a post | CloudService.swift, moment_views RLS + FeedView.swift | Only explicit recipients; receipts recorded when opened in feed; server must be configured |
-| Colored widget borders | WidgetBridge.swift, Widget/ANMomentsWidget.swift | Optional WidgetKit extension; requires App Groups |
-| Custom username | CloudService.swift, SettingsView.swift | Cloud only; unique 3–24-character handle |
+## Feature matrix
 
-## Crucial differences / incomplete work
+| Capability inspired by public Locket Gold benefits | AN Moments source | Current status |
+|---|---|---|
+| Custom app icons | `scripts/generate_icons.swift`, `project.yml`, `SettingsView.swift` | Three original icons; requires build and device signing |
+| Camera Roll upload | `CaptureView.swift`, `VideoMedia.swift` | Photos and videos can be selected; device QA required |
+| Unlimited friends | `FriendsView.swift`, `Backend/schema.sql` | No 20-friend cap is declared in current app/schema; backend capacity and performance not validated |
+| Longer videos | `VideoMedia.swift`, `CaptureView.swift`, `CloudService.swift` | Current cap is 60 seconds and 100 MB; extended duration remains a gap |
+| Streak restoration | `StreakView.swift`, `CloudStreakView.swift`, `streak_extensions.sql` | Local and cloud source paths exist; cloud mode needs migration, RLS, and cross-device QA |
+| No ads | App source and dependency manifest | No ad SDK is included in current source; recheck release dependency output |
+| Custom profile badge | `AppearanceSettings.swift`, `SettingsView.swift`, `profiles.badge_style` | Heart/star/crown/flower/none styles; not an official Locket badge |
+| Camera themes | `AppearanceSettings.swift`, `CaptureView.swift` | Six local themes |
+| Captions and stickers | `CaptureView.swift`, `PhotoEditorView.swift` | 2,000-character caption limit; text/emoji stickers on images |
+| Viewer list and reactions | `CloudService.swift`, `moment_views`, `FeedView.swift` | Source exists; requires isolated Supabase and two-account QA |
+| Best-friend widget | `WidgetPreferenceView.swift`, `WidgetBridge.swift`, `Widget/ANMomentsWidget.swift` | One app-level favorite sender; WidgetKit target is optional and requires App Groups |
+| Photo history | `CloudService.loadMoreMoments()`, `FeedView.swift`, `MemoriesView.swift` | Source now loads 100 authorized records per page; verify with more than 100 records |
+| Video recap | `RecapExporter.swift`, `CloudRecapView.swift` | Manual recap from up to 15 photos; automatic monthly recap is not implemented |
+| Chat and group chat | `SocialHubView.swift`, `SocialService.swift` | Source exists; two-device Realtime QA required |
+| Private chat media | `ChatAttachmentService.swift`, `media_extensions.sql` | Image/video attachments; not end-to-end encrypted |
 
-- This does **NOT** alter or unlock the existing Locket application, account, or paid subscription.
-- Realtime background updates and APNs/WidgetKit push notifications are not implemented. Local photo-based video recap and direct/group text-chat source are available, but not yet device-tested.
-- Blocking/report submission exists, but no running moderation worker or actual account-deletion service. Deletion requests are queued only.
-- The widget prototype is intentionally optional because it requires signing with App Groups. The main app runs without it.
-- There is no independently verified Xcode build, iPhone camera test, video codec test, or two-account Supabase E2E test yet.
-- Recording on a device is limited to 60 seconds; imported movies longer than 60 seconds are rejected rather than silently trimmed.
-- The streak restoration is a local visual/logic feature only, not a server-issued restoration.
-- Photo/video sharing between devices requires a new Supabase project, the migration in Backend/schema.sql, working email OTP, and testing RLS with two identities.
+## Gaps before a comparable release
 
-## Build with icons
+- Extended video duration and upload flow with server-side validation, upload progress, cancellation, and storage quotas.
+- Per-widget friend selection for multiple Best Friend/Crush-style widgets.
+- Tested background/remote widget refresh and push delivery.
+- Automatic monthly recap generation.
+- Chat reactions and voice notes.
+- End-to-end encryption, complete media archive export, production moderation, abuse rate limits, and Android.
+- Successful Xcode builds, physical-device QA, dedicated Supabase deployment, RLS negative tests, TestFlight signing, and privacy review.
 
-After cloning branch feature/an-moments-ios on a Mac with Xcode:
+## Build and test
 
-    cd ios/ANMoments
-    zsh OPEN_XCODE.command
+From `ios/ANMoments` on a Mac with Xcode:
 
-This script installs XcodeGen if needed, generates 1024px custom icons locally, writes the Xcode project, and opens Xcode. Select your Apple Personal Team, choose your physical iPhone, then press Command+R.
+```bash
+zsh TEST_ON_MAC.command
+zsh TEST_WITH_WIDGET.command
+zsh OPEN_XCODE_WITH_WIDGET.command
+```
 
-The source package does not contain copyrighted Locket icons. Mac-generated icons use original solid-color heart graphics.
+The widget-enabled build is an unsigned compile. Installing the widget requires matching App Groups entitlements and a signing profile supported by the selected Apple Developer Team. APNs delivery additionally requires server credentials and deployment.
 
-## Testing priorities
+## Product boundary
 
-1. Run \`zsh TEST_ON_MAC.command\` for an unsigned iOS target build. It may reveal compile problems; none have been independently verified here.
-2. Run app on an iPhone: photo, imported photo, 60-second video and audio recording, media playback, icon switching.
-3. Test camera themes, badge states, local streak summary and single restoration credit.
-4. Configure a NEW Supabase project, run schema.sql then social_extensions.sql, test OTP, two-user invitations, image/video sharing, chat/group chat, blocking and RLS.
-5. Enable optional WidgetKit extension only after confirming App Groups signing; test borders and photo refresh on a real device.
-6. Conduct independent security/privacy QA before inviting non-test users.
-
-References:
-- Apple alternate icons: https://developer.apple.com/documentation/xcode/configuring-your-app-to-use-alternate-app-icons
-- WidgetKit refresh: https://developer.apple.com/documentation/widgetkit/keeping-a-widget-up-to-date
-- Supabase upload: https://supabase.com/docs/reference/swift/storage-from-upload
+AN Moments can provide its own features without a Locket Gold subscription. Those are AN Moments features, not Locket Gold entitlements; they do not grant access to Locket's servers, accounts, or paid content.
