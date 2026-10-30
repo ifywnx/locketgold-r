@@ -54,6 +54,11 @@ struct MemoriesView: View {
                                     .clipShape(RoundedRectangle(cornerRadius: 18))
                                 }
                                 .buttonStyle(.plain)
+                                .onAppear {
+                                    if moment.id == cloud.moments.last?.id {
+                                        Task { await cloud.loadMoreMoments() }
+                                    }
+                                }
                             }
                         } else {
                             ForEach(album.moments) { moment in
@@ -78,6 +83,24 @@ struct MemoriesView: View {
                             }
                         }
                     }
+                    if cloud.enabled && cloud.loadingMoreMoments {
+                        ProgressView("Đang tải thêm kỷ niệm...")
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                    } else if cloud.enabled && cloud.hasMoreMoments {
+                        Text("Cuộn xuống để tải thêm kỷ niệm")
+                            .font(.caption)
+                            .foregroundStyle(Theme.muted)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                    } else if cloud.enabled && !cloud.moments.isEmpty {
+                        Text("Bạn đã xem hết lịch sử hiện có.")
+                            .font(.caption)
+                            .foregroundStyle(Theme.muted)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                    }
+
                     if (cloud.enabled ? cloud.moments.isEmpty : album.moments.isEmpty) {
                         ContentUnavailableView(
                             "Chưa có kỷ niệm",
@@ -89,6 +112,7 @@ struct MemoriesView: View {
                 .padding(20)
             }
             .background(Theme.cream.ignoresSafeArea())
+            .refreshable { await cloud.refresh() }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     HStack(spacing: 14) {
