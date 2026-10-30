@@ -100,8 +100,30 @@ struct FeedView: View {
                             .padding(16)
                             .background(.white, in: RoundedRectangle(cornerRadius: 28))
                             .onAppear {
-                                Task { await cloud.recordView(moment) }
+                                Task {
+                                    await cloud.recordView(moment)
+                                    if moment.id == cloud.moments.last?.id {
+                                        await cloud.loadMoreMoments()
+                                    }
+                                }
                             }
+                        }
+                        if cloud.loadingMoreMoments {
+                            ProgressView("Đang tải thêm lịch sử...")
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 14)
+                        } else if cloud.hasMoreMoments {
+                            Text("Cuộn xuống để tải thêm khoảnh khắc")
+                                .font(.caption)
+                                .foregroundStyle(Theme.muted)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 14)
+                        } else if !cloud.moments.isEmpty {
+                            Text("Bạn đã xem hết lịch sử hiện có.")
+                                .font(.caption)
+                                .foregroundStyle(Theme.muted)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 14)
                         }
                     } else {
                         if album.moments.isEmpty { emptyState }
