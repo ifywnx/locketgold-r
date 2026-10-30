@@ -10,7 +10,7 @@ An iOS source implementation is NOT an activation of Locket Gold.
 | iPhone photo & 60s video | CaptureView, VideoMedia, LocalAlbum | local works without backend after build |
 | 2,000-character captions | CaptureView, schema.sql | bound by server validation |
 | Text and emoji stickers | PhotoEditorView | images only |
-| Photo history and day calendar | MemoriesView, MomentsCalendarView | only first 100 cloud moments loaded |
+| Photo history and day calendar | MemoriesView, MomentsCalendarView, CloudService.loadMoreMoments | paginates 100 authorized cloud moments per request; verify beyond 100 |
 | Cloud/private image or video sharing | CloudService, schema.sql | create isolated Supabase project |
 | Share to chosen friends | CloudService.publishData | explicit recipients |
 | Share to entire chosen chat group | GroupMoments, media_extensions.sql | snapshot of group members at send time |
@@ -56,7 +56,9 @@ reported. Do not claim parity or production readiness.
 
 ## Dependencies and independent verification
 
-- Use \`TEST_ON_MAC.command\` on your Mac to get actual compiler errors.
+- Use `TEST_ON_MAC.command` for the app-only unsigned build.
+- Use `TEST_WITH_WIDGET.command` to compile the app and WidgetKit extension together.
+- Use `OPEN_XCODE_WITH_WIDGET.command` to open the widget-enabled Xcode project.
 - Apply SQL in RELEASE_CHECKLIST_V1_2.md order to a separate new Supabase project.
 - Run three-user RLS negative tests and full two-device feature QA.
 - Do not merge PR #18 until the above checks pass.
