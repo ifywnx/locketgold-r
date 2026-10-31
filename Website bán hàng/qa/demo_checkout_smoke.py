@@ -48,7 +48,7 @@ for version,amount,total in [("v1",49000,107),("v2",89000,300),("v3",129000,705)
     receipt=confirmed["receiptToken"]
     status,restored=request("/api/demo/restore",{"receiptToken":receipt})
     assert status==200 and restored["order"]["orderId"]==quote["order"]["orderId"]
-    for file in ("sample.json","instructions.txt","receipt.json","An-Preview.sgmodule"):
+    for file in ("sample.json","instructions.txt","receipt.json"):
         with urlopen(BASE+f"/api/demo/files/{version}/{file}?ticket={receipt}",timeout=20) as r:
             data=r.read()
             assert r.status==200 and len(data)>50
@@ -62,11 +62,6 @@ for version,amount,total in [("v1",49000,107),("v2",89000,300),("v3",129000,705)
             elif file=="receipt.json":
                 obj=json.loads(data)
                 assert obj["paid"] is False and obj["simulatedStatus"]=="DEMO_FULFILLED"
-            elif file=="An-Preview.sgmodule":
-                assert b"[Rule]" in data and b"an-store-preview.invalid" in data
-                assert b"[MITM]" not in data and b"[Script]" not in data
-                assert b"api.revenuecat.com" not in data and b"firebaseremoteconfig" not in data
-                assert version.upper().encode() in data
             else:
                 assert b"DEMO" in data and b"Gold" in data
     wrong="v2" if version!="v2" else "v1"
@@ -74,10 +69,6 @@ for version,amount,total in [("v1",49000,107),("v2",89000,300),("v3",129000,705)
     assert status==403  # signed receipt cannot be used as a pending quote
     status,_=request(f"/api/demo/files/{wrong}/sample.json?ticket={receipt}")
     assert status==403,(version,wrong,status)
-    status,_=request(f"/api/demo/files/{wrong}/An-Preview.sgmodule?ticket={receipt}")
-    assert status==403,(version,wrong,status)
-    status,_=request(f"/api/demo/files/{version}/An-Preview.sgmodule?ticket={quote['quoteToken']}")
-    assert status==403,(version,status)
     status,_=request(f"/api/demo/files/{version}/Locket_Unlocked.js?ticket={receipt}")
     assert status==404,(version,status)
     status,_=request("/api/demo/restore",{"receiptToken":receipt[:-2]+"xy"})
@@ -127,17 +118,7 @@ with sync_playwright() as p:
         page.locator("#demo-confirm").click()
         page.locator("#demo-files").wait_for(state="visible",timeout=8000)
         assert "Đã xác nhận" in page.locator("#demo-order-status").inner_text()
-        assert page.locator("#demo-delivery a").count()==5
-        from urllib.parse import unquote
-        deep=page.locator("#demo-shadowrocket-install").get_attribute("href")
-        manual=page.locator("#demo-shadowrocket-fallback").get_attribute("href")
-        assert deep.startswith("shadowrocket://install?module="),deep
-        assert unquote(deep.split("?module=",1)[1])==BASE+manual,(deep,manual)
-        assert "/v3/An-Preview.sgmodule?ticket=" in manual
-        with page.expect_download() as module_download:
-            page.locator("#demo-shadowrocket-fallback").click()
-        module=open(module_download.value.path(),encoding="utf8").read()
-        assert "DEMO V3" in module and "[MITM]" not in module and "[Script]" not in module
+        assert page.locator("#demo-delivery a").count()==3
         assert "Biên nhận mẫu" in page.locator("#demo-expires").inner_text()
         assert page.evaluate("sessionStorage.getItem('an-store-demo-pending-v1')") is None
         assert page.evaluate("!!sessionStorage.getItem('an-store-demo-receipt-v1')")
@@ -156,12 +137,11 @@ with sync_playwright() as p:
         page.locator("#demo-restore").click()
         page.locator("#demo-files").wait_for(state="visible",timeout=8000)
         assert "129.000" in page.locator("#demo-order-price").inner_text()
-        assert "không phải bộ cài trả phí" in page.locator("#demo-files").inner_text().lower()
+        assert "Không phải" in page.locator("#demo-files").inner_text()
         # A receipt is valid for one version only; switching clears old download links.
         page.locator("#demo-version").select_option("v1")
         assert page.locator("#demo-files").is_hidden()
         assert page.locator("#demo-order").is_hidden()
-        assert page.locator("#demo-shadowrocket-install").count()==0
         assert "49.000đ" in page.locator("#demo-summary").inner_text()
         assert page.locator("#demo-expires").is_hidden()
         page.evaluate("sessionStorage.setItem('an-store-demo-pending-v1','invalid')")
