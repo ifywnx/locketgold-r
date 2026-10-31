@@ -73,17 +73,6 @@
  };
  const links=(version,token)=>{
    const list=$('demo-delivery');list.replaceChildren();
-   const moduleUrl='/api/demo/files/'+encodeURIComponent(version)+'/An-Preview.sgmodule?ticket='+encodeURIComponent(token);
-   // The import deep-link and fallback point to the same signed, version-bound resource.
-   const install=document.createElement('a');
-   install.id='demo-shadowrocket-install';install.className='demo-download';
-   install.textContent='Thử nhập '+version.toUpperCase()+' vào Shadowrocket →';
-   install.href='shadowrocket://install?module='+encodeURIComponent(new URL(moduleUrl,location.origin).href);
-   const manual=document.createElement('a');
-   manual.id='demo-shadowrocket-fallback';manual.className='demo-download';
-   manual.textContent='Tải tệp .sgmodule nếu Shadowrocket không tự mở';
-   manual.href=moduleUrl;manual.rel='noreferrer';
-   list.append(install,manual);
    for(const [name,label] of [
      ['sample.json','Tải 12 caption mẫu '+version.toUpperCase()],
      ['instructions.txt','Tải hướng dẫn demo'],['receipt.json','Tải biên nhận demo']
