@@ -1,5 +1,4 @@
 import {demoAvailable,parseDemo,demoProduct} from '../../../../../../lib/demo-checkout';
-import {safePreviewModule} from '../../../../../../lib/demo-preview-module';
 import previewV1 from '../../../../../../public/welcome/v1-caption-data.json';
 import previewV2 from '../../../../../../public/welcome/v2-caption-data.json';
 import previewV3 from '../../../../../../public/welcome/caption-data.json';
@@ -11,7 +10,7 @@ const headers={
 };
 export async function GET(r:Request,{params}:{params:Promise<{version:string,file:string}>}){
  const {version,file}=await params;
- if(!demoProduct(version)||!['sample.json','instructions.txt','receipt.json','An-Preview.sgmodule'].includes(file))
+ if(!demoProduct(version)||!['sample.json','instructions.txt','receipt.json'].includes(file))
   return new Response('Not found',{status:404,headers});
  if(!demoAvailable())return new Response('Demo disabled',{status:503,headers});
  const ticket=new URL(r.url).searchParams.get('ticket');
@@ -21,10 +20,7 @@ export async function GET(r:Request,{params}:{params:Promise<{version:string,fil
  if(result.ticket.version!==version)return new Response('Wrong version',{status:403,headers});
  const v=demoProduct(version)!;
  let content:string;let mime='text/plain; charset=utf-8';
- if(file==='An-Preview.sgmodule'){
-  // Signed fulfilled DEMO ticket, never a pending quote or paid asset.
-  content=safePreviewModule(version)!;
- }else if(file==='sample.json'){
+ if(file==='sample.json'){
   const samples=previews[version as keyof typeof previews].slice(0,Math.min(12,v.captionCount));
   content=JSON.stringify({demo:true,version,package:v.name,listedPriceVnd:v.priceVnd,
     fullCaptionCount:v.captionCount,deliveredSampleCount:samples.length,
@@ -45,7 +41,6 @@ export async function GET(r:Request,{params}:{params:Promise<{version:string,fil
    '',
    'Đây là lượt mua GIẢ LẬP; hệ thống không thu tiền.',
    'File sample.json chỉ chứa tối đa 12 mẫu để kiểm tra luồng giao hàng.',
-   'File An-Preview.sgmodule chỉ thử nhập Shadowrocket, không sửa lưu lượng Locket.',
    'Không chứa mã cài thật, Gold, tài khoản, mật khẩu hoặc quyền trả phí.',
    'Đơn thật và hệ thống mã kích hoạt cũ hoàn toàn độc lập.',
    'Sau khi mã demo hết hạn, hãy chạy lại quy trình từ đầu.'
