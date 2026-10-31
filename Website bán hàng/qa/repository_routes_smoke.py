@@ -30,7 +30,6 @@ for version in ('v1','v2','v3'):
     code,module,_=read(f'/api/install-test/{version}/An-Preview.sgmodule')
     assert code==200 and b'an-store-preview.invalid' in module
     assert b'[MITM]' not in module and b'[Script]' not in module
-    assert b'[MITM]' not in module and b'[Script]' not in module
     for filename in ('Locket_Unlocked.js','Locket_An.js','An-Locket.sgmodule','An-Locket-DNS.mobileconfig'):
         try:
             read(f'/api/install-test/{version}/{filename}')
