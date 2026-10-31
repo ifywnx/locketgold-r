@@ -1,0 +1,375 @@
+-- AN Moments private photo sharing MVP
+-- Run in a NEW Supabase project using SQL Editor.
+-- Never expose the service_role key in the iOS app.
+create extension if not exists pgcrypto;
+
+create table if not exists public.profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  handle text unique not null check (handle ~ '^[a-z0-9_]{3,24}$'),
+  display_name text not null default 'Người bạn' check (char_length(display_name) between 1 and 80),
+  badge_style text not null default 'heart' check (badge_style in ('heart','star','crown','flower','none')),
+  created_at timestamptz not null default now()
+);
+
+alter table public.profiles add column if not exists badge_style text not null default 'heart';
+
+create table if not exists public.friend_requests (
+  id uuid primary key default gen_random_uuid(),
+  from_user uuid not null references public.profiles(id) on delete cascade,
+  to_user uuid not null references public.profiles(id) on delete cascade,
+  status text not null default 'pending' check (status in ('pending', 'accepted', 'declined')),
+  created_at timestamptz not null default now(),
+  check (from_user <> to_user)
+);
+
+create unique index if not exists friend_requests_pending_uniq
+  on public.friend_requests (from_user, to_user) where status = 'pending';
+
+create table if not exists public.friendships (
+  user_id uuid not null references public.profiles(id) on delete cascade,
+  friend_id uuid not null references public.profiles(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key(user_id, friend_id),
+  check(user_id <> friend_id)
+);
+
+create table if not exists public.moments (
+  id uuid primary key default gen_random_uuid(),
+  author_id uuid not null references public.profiles(id) on delete cascade,
+  storage_path text unique not null,
+  media_kind text not null default 'photo' check (media_kind in ('photo','video')),
+  caption text not null default '' check (char_length(caption) <= 2000),
+  created_at timestamptz not null default now(),
+  check(storage_path like (author_id::text || '/%'))
+);
+
+create table if not exists public.moment_recipients (
+  moment_id uuid not null references public.moments(id) on delete cascade,
+  recipient_id uuid not null references public.profiles(id) on delete cascade,
+  created_at timestamptz not null default now(),
+  primary key(moment_id, recipient_id)
+);
+
+create table if not exists public.reactions (
+  moment_id uuid not null references public.moments(id) on delete cascade,
+  sender_id uuid not null references public.profiles(id) on delete cascade,
+  emoji text not null check (emoji in ('❤️','😂','🥰','🔥')),
+  updated_at timestamptz not null default now(),
+  primary key(moment_id, sender_id)
+);
+
+-- Idempotent migration when the schema predates Gold-like media support.
+alter table public.moments add column if not exists media_kind text not null default 'photo';
+alter table public.moments drop constraint if exists moments_caption_check;
+alter table public.moments add constraint moments_caption_check check (char_length(caption) <= 2000);
+create index if not exists idx_moments_author on public.moments(author_id, created_at desc);
+create index if not exists idx_recipients_user on public.moment_recipients(recipient_id);
+
+-- New users receive an opaque, unique handle, not their private email.
+create or replace function public.on_new_account()
+returns trigger language plpgsql security definer set search_path = ''
+as $$
+begin
+  insert into public.profiles(id, handle, display_name)
+  values (
+    new.id,
+    'u_' || left(replace(new.id::text, '-', ''), 16),
+    'Người bạn'
+  )
+  on conflict (id) do nothing;
+  return new;
+end;
+$$;
+
+drop trigger if exists an_moments_on_user_created on auth.users;
+create trigger an_moments_on_user_created
+  after insert on auth.users
+  for each row execute function public.on_new_account();
+
+-- Backfill existing test users for the first installation.
+insert into public.profiles(id, handle, display_name)
+select u.id, 'u_' || left(replace(u.id::text, '-', ''), 16),
+       'Người bạn'
+from auth.users u
+on conflict (id) do nothing;
+
+alter table public.profiles enable row level security;
+alter table public.friend_requests enable row level security;
+alter table public.friendships enable row level security;
+alter table public.moments enable row level security;
+alter table public.moment_recipients enable row level security;
+alter table public.reactions enable row level security;
+
+create policy "reaction_select_for_viewers" on public.reactions
+  for select to authenticated
+  using (
+    exists (
+      select 1 from public.moments m where m.id = moment_id
+    )
+  );
+create policy "reaction_insert_self_on_visible_moment" on public.reactions
+  for insert to authenticated
+  with check (
+    sender_id = (select auth.uid())
+    and exists (select 1 from public.moments m where m.id = moment_id)
+  );
+create policy "reaction_update_self" on public.reactions
+  for update to authenticated using (sender_id = (select auth.uid()))
+  with check (sender_id = (select auth.uid()));
+
+-- Profile handles are discoverable; email is never exposed in this table.
+-- Only the user, friends, and people who sent this user an invite
+-- can retrieve a profile. Search/invite by exact handle runs via server RPC.
+create policy "profiles_read_authenticated" on public.profiles
+  for select to authenticated using (
+    id = (select auth.uid())
+    or exists (
+      select 1 from public.friendships f
+      where f.user_id = (select auth.uid()) and f.friend_id = profiles.id
+    )
+    or exists (
+      select 1 from public.friend_requests r
+      where r.to_user = (select auth.uid()) and r.from_user = profiles.id
+    )
+  );
+create policy "profiles_edit_self" on public.profiles
+  for update to authenticated using (id = (select auth.uid()))
+  with check (id = (select auth.uid()));
+
+-- Requests and friendship edges are controlled exclusively by vetted RPCs.
+create policy "requests_read_participants" on public.friend_requests
+  for select to authenticated
+  using (from_user = (select auth.uid()) or to_user = (select auth.uid()));
+create policy "friends_read_self" on public.friendships
+  for select to authenticated using (user_id = (select auth.uid()));
+
+-- Recipients can read only their own recipient edge. This avoids RLS recursion.
+create policy "recipient_read_self" on public.moment_recipients
+  for select to authenticated using (recipient_id = (select auth.uid()));
+create policy "recipient_insert_by_author_to_friend" on public.moment_recipients
+  for insert to authenticated
+  with check (
+    exists (
+      select 1 from public.moments m
+      where m.id = moment_id and m.author_id = (select auth.uid())
+    )
+    and exists (
+      select 1 from public.friendships f
+      where f.user_id = (select auth.uid()) and f.friend_id = recipient_id
+    )
+  );
+
+-- A moment is visible only to its author or an explicit recipient.
+create policy "moment_read_author_or_recipient" on public.moments
+  for select to authenticated
+  using (
+    author_id = (select auth.uid())
+    or exists (
+      select 1 from public.moment_recipients mr
+      where mr.moment_id = id and mr.recipient_id = (select auth.uid())
+    )
+  );
+
+create policy "moment_insert_author" on public.moments
+  for insert to authenticated
+  with check (author_id = (select auth.uid()));
+create policy "moment_delete_author" on public.moments
+  for delete to authenticated
+  using (author_id = (select auth.uid()));
+
+-- Join by handle with consent; no public exposure of user email.
+create or replace function public.request_friend(recipient_handle text)
+returns void language plpgsql security definer set search_path = ''
+as $$
+declare
+  recipient uuid;
+begin
+  if auth.uid() is null then raise exception 'Authentication required'; end if;
+  select id into recipient from public.profiles where handle = lower(trim(recipient_handle));
+  if recipient is null then raise exception 'Username not found'; end if;
+  if recipient = auth.uid() then raise exception 'Cannot add yourself'; end if;
+  if exists(select 1 from public.friendships where user_id = auth.uid() and friend_id = recipient)
+     then raise exception 'Already friends'; end if;
+  if exists(select 1 from public.friend_requests
+            where status = 'pending'
+              and ((from_user = auth.uid() and to_user = recipient)
+                or (to_user = auth.uid() and from_user = recipient)))
+     then raise exception 'Invitation already pending'; end if;
+  insert into public.friend_requests(from_user,to_user) values(auth.uid(),recipient);
+end;
+$$;
+
+create or replace function public.accept_friend(request_id uuid)
+returns void language plpgsql security definer set search_path = ''
+as $$
+declare
+  pending record;
+begin
+  if auth.uid() is null then raise exception 'Authentication required'; end if;
+  select * into pending
+  from public.friend_requests
+  where id = request_id and to_user = auth.uid() and status = 'pending'
+  for update;
+  if not found then raise exception 'Request not found'; end if;
+  update public.friend_requests set status='accepted' where id = request_id;
+  insert into public.friendships(user_id, friend_id)
+  values (pending.from_user, pending.to_user), (pending.to_user, pending.from_user)
+  on conflict do nothing;
+end;
+$$;
+
+revoke all on function public.request_friend(text) from public;
+revoke all on function public.accept_friend(uuid) from public;
+grant execute on function public.request_friend(text) to authenticated;
+grant execute on function public.accept_friend(uuid) to authenticated;
+
+
+-- Revoking friendships is symmetric. Any party can unlink their own connection.
+create or replace function public.remove_friend(other_user uuid)
+returns void language plpgsql security definer set search_path = ''
+as $$
+begin
+  if auth.uid() is null then raise exception 'Authentication required'; end if;
+  delete from public.friendships f
+   where (f.user_id = auth.uid() and f.friend_id = other_user)
+      or (f.friend_id = auth.uid() and f.user_id = other_user);
+end;
+$$;
+revoke all on function public.remove_friend(uuid) from public;
+grant execute on function public.remove_friend(uuid) to authenticated;
+
+-- Publish an entire moment in one transaction. SECURITY DEFINER is explicitly
+-- restricted to authenticated users and validates author, path and friendships.
+create or replace function public.publish_moment(
+  p_id uuid,
+  p_path text,
+  p_caption text,
+  p_recipients uuid[],
+  p_media_kind text
+)
+returns void language plpgsql security definer set search_path = ''
+as $$
+begin
+  if auth.uid() is null then raise exception 'Authentication required'; end if;
+  if p_path not like (auth.uid()::text || '/%') then raise exception 'Invalid upload path'; end if;
+  if length(coalesce(p_caption, '')) > 2000 then raise exception 'Caption too long'; end if;
+  if p_media_kind not in ('photo','video') then raise exception 'Invalid media'; end if;
+  if (p_media_kind = 'photo' and p_path not like '%.jpg')
+     or (p_media_kind = 'video' and p_path not like '%.mov')
+     then raise exception 'Invalid media extension'; end if;
+  if exists (
+    select 1 from unnest(coalesce(p_recipients, array[]::uuid[])) as recipient
+    where recipient = auth.uid()
+       or not exists (
+         select 1 from public.friendships f
+         where f.user_id = auth.uid() and f.friend_id = recipient
+       )
+  ) then raise exception 'Recipient is not your friend'; end if;
+
+  insert into public.moments(id, author_id, storage_path, caption, media_kind)
+    values (p_id, auth.uid(), p_path, coalesce(p_caption, ''), p_media_kind);
+
+  insert into public.moment_recipients(moment_id, recipient_id)
+    select p_id, distinct_recipient
+    from (
+      select distinct unnest(coalesce(p_recipients, array[]::uuid[])) as distinct_recipient
+    ) x;
+end;
+$$;
+drop function if exists public.publish_moment(uuid,text,text,uuid[]);
+revoke all on function public.publish_moment(uuid,text,text,uuid[],text) from public;
+grant execute on function public.publish_moment(uuid,text,text,uuid[],text) to authenticated;
+
+-- Private image bucket, never a public read bucket.
+insert into storage.buckets(id, name, public, file_size_limit, allowed_mime_types)
+values ('moments', 'moments', false, 104857600, array['image/jpeg','video/quicktime'])
+on conflict (id) do update set
+  public = false,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
+
+create policy "storage_upload_own_folder" on storage.objects
+  for insert to authenticated
+  with check (
+    bucket_id = 'moments'
+    and (storage.foldername(name))[1] = (select auth.uid())::text
+  );
+
+create policy "storage_read_author_or_explicit_recipient" on storage.objects
+  for select to authenticated
+  using (
+    bucket_id = 'moments'
+    and (
+      (storage.foldername(name))[1] = (select auth.uid())::text
+      or exists (
+        select 1 from public.moments m
+        join public.moment_recipients r on r.moment_id = m.id
+        where m.storage_path = name
+          and r.recipient_id = (select auth.uid())
+      )
+    )
+  );
+
+create policy "storage_delete_own_folder" on storage.objects
+  for delete to authenticated
+  using (
+    bucket_id = 'moments'
+    and (storage.foldername(name))[1] = (select auth.uid())::text
+  );
+
+
+-- View receipts: only an actual recipient can register a view.
+create table if not exists public.moment_views (
+  moment_id uuid not null references public.moments(id) on delete cascade,
+  viewer_id uuid not null references public.profiles(id) on delete cascade,
+  viewed_at timestamptz not null default now(),
+  primary key(moment_id, viewer_id)
+);
+alter table public.moment_views enable row level security;
+
+create policy "view_receipt_select_author_or_viewer" on public.moment_views
+  for select to authenticated using (
+    viewer_id = (select auth.uid()) or
+    exists (
+      select 1 from public.moments m
+      where m.id = moment_id and m.author_id = (select auth.uid())
+    )
+  );
+
+create or replace function public.record_moment_view(p_moment uuid)
+returns void language plpgsql security definer set search_path = ''
+as $$
+begin
+  if auth.uid() is null then raise exception 'Authentication required'; end if;
+  if not exists(
+    select 1 from public.moments m
+    join public.moment_recipients r on r.moment_id = m.id
+    where m.id = p_moment and r.recipient_id = auth.uid()
+  ) then raise exception 'Moment not shared with this account'; end if;
+  insert into public.moment_views(moment_id, viewer_id) values(p_moment, auth.uid())
+  on conflict (moment_id, viewer_id) do nothing;
+end;
+$$;
+revoke all on function public.record_moment_view(uuid) from public;
+grant execute on function public.record_moment_view(uuid) to authenticated;
+
+
+-- Supabase Data API 2026: RLS alone is insufficient when API table exposure
+-- is opt-in. Explicitly grant table privileges to authenticated role.
+grant usage on schema public to authenticated;
+grant select on public.profiles, public.friend_requests, public.friendships,
+  public.moments, public.moment_recipients, public.reactions,
+  public.moment_views to authenticated;
+grant update (handle, display_name, badge_style) on public.profiles to authenticated;
+grant insert, delete on public.moments to authenticated;
+grant insert on public.moment_recipients to authenticated;
+grant insert, update (emoji) on public.reactions to authenticated;
+
+-- No grant on auth.users or storage.objects is given here.
+-- All client access remains bounded by RLS in addition to privileges.
+
+-- Hardening reminder:
+-- 1. Configure email OTP template with {{ .Token }}.
+-- 2. Apply rate limiting and abuse controls before public launch.
+-- 3. Add account deletion / content moderation / report-and-block flows.
+-- 4. Test RLS with two different authenticated identities.

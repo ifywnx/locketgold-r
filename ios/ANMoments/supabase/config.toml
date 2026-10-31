@@ -1,0 +1,7 @@
+[functions.delete-account]
+verify_jwt = true
+
+[functions.notify-event]
+# The platform does not validate a user JWT for server webhooks.
+# notify-event itself REQUIRES a valid secret apikey via withSupabase.
+verify_jwt = false

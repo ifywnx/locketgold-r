@@ -1,0 +1,23 @@
+name: AN Moments iOS (unsigned build)
+
+on:
+  pull_request:
+    paths:
+      - 'ios/ANMoments/**'
+      - '.github/workflows/an-moments-ios.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Xcode version
+        run: xcodebuild -version
+      - name: Install project generator
+        run: brew install xcodegen
+      - name: Parse Swift, generate icons and build without signing
+        run: zsh ios/ANMoments/TEST_ON_MAC.command
